@@ -7,10 +7,17 @@ import org.junit.jupiter.api.Test;
 import io.vavr.collection.List;
 
 public class AstListTest {
+    private static final List<AstExp> LIST = List.of(new AstInt(42), new AstSymbol("something"), new AstList(List.empty()));
+
     @Test
     public void value() {
-        var list = List.of(new AstInt(42), new AstSymbol("something"), new AstList(List.empty()));
-        var sut = new AstList(list);
-        assertEquals(list, sut.value());
+        var sut = new AstList(LIST);
+        assertEquals(LIST, sut.value());
+    }
+
+    @Test
+    public void tostring() {
+        var sut = new AstList(LIST);
+        assertEquals(sut.toString(), "(42 something ())");
     }
 }

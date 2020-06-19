@@ -10,4 +10,10 @@ public class AstSymbolTest {
         var sut = new AstSymbol("some-value");
         assertEquals("some-value", sut.value());
     }
+
+    @Test
+    public void tostring() {
+        var sut = new AstSymbol("some-value");
+        assertEquals("some-value", sut.toString());
+    }
 }

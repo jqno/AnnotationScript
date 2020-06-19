@@ -28,4 +28,9 @@ public final class AstList implements AstExp {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        return "(" + value.map(e -> e.toString()).mkString(" ") + ")";
+    }
 }

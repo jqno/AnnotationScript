@@ -12,7 +12,7 @@ import nl.jqno.annotationscript.Annotations.*;
 
 public class TokenizerTest {
     @Test
-    void tokenizeValidInput() {
+    public void tokenizeValidInput() {
         @Begin@Sym("if")@Int(1)@End
         class Input {}
 
@@ -22,7 +22,7 @@ public class TokenizerTest {
     }
 
     @Test
-    void ignoreOtherAnnotations() {
+    public void ignoreOtherAnnotations() {
         @Begin@IgnoreThis@End
         class Input {}
 

@@ -10,4 +10,10 @@ public class AstIntTest {
         var sut = new AstInt(42);
         assertEquals(42, sut.value());
     }
+
+    @Test
+    public void tostring() {
+        var sut = new AstInt(42);
+        assertEquals("42", sut.toString());
+    }
 }
