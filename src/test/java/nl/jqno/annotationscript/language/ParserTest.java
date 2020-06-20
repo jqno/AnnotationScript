@@ -48,6 +48,13 @@ public class ParserTest {
     }
 
     @Test
+    public void parseEmptyList() {
+        var actual = parse("(", ")");
+        var expected = new AstList(List.empty());
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void throwsOnNoInput() {
         var e = assertThrows(ParseException.class, () ->
             parse()
