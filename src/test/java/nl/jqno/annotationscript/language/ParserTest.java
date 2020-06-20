@@ -1,6 +1,7 @@
 package nl.jqno.annotationscript.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,7 @@ import nl.jqno.annotationscript.language.ast.*;
 public class ParserTest {
     @Test
     public void parseValidTokens() {
-        var input = List.of("(", "begin", "(", "define", "r", "10", ")", "(", "*", "pi", "(", "*", "r", "r", ")", ")", ")");
-        var sut = new Parser(input);
-        var actual = sut.parse();
+        var actual = parse("(", "begin", "(", "define", "r", "10", ")", "(", "*", "pi", "(", "*", "r", "r", ")", ")", ")");
 
         var expected = new AstList(List.of(
             new AstSymbol("begin"),
@@ -33,5 +32,42 @@ public class ParserTest {
         ));
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void throwsOnNoInput() {
+        var e = assertThrows(ParseException.class, () ->
+            parse()
+        );
+        assertEquals("no input", e.getMessage());
+    }
+
+    @Test
+    public void throwsOnUnexpectedEndOfInput() {
+        var e = assertThrows(ParseException.class, () ->
+            parse("(", "begin")
+        );
+        assertEquals("unexpected EOF", e.getMessage());
+    }
+
+    @Test
+    public void throwsOnUnexpectedCloseParen() {
+        var e = assertThrows(ParseException.class, () ->
+            parse(")")
+        );
+        assertEquals("unexpected )", e.getMessage());
+    }
+
+    @Test
+    public void throwsOnNotAllInputConsumed() {
+        var e = assertThrows(ParseException.class, () ->
+            parse("(", "begin", ")", "stuff")
+        );
+        assertEquals("unexpected end of program", e.getMessage());
+    }
+
+    private AstExp parse(String... input) {
+        var sut = new Parser(List.of(input));
+        return sut.parse();
     }
 }

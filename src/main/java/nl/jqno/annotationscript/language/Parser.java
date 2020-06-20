@@ -16,7 +16,11 @@ public class Parser {
         if (allTokens.size() == 0) {
             throw new ParseException("no input");
         }
-        return readFromTokens(allTokens)._1;
+        var parsed = readFromTokens(allTokens);
+        if (parsed._2.size() > 0) {
+            throw new ParseException("unexpected end of program");
+        }
+        return parsed._1;
     }
 
     private Tuple2<AstExp, List<String>> readFromTokens(List<String> tokens) {
