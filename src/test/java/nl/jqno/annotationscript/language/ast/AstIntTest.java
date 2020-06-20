@@ -9,6 +9,7 @@ public class AstIntTest {
     public void value() {
         var sut = new AstInt(42);
         assertEquals(42, sut.value());
+        assertEquals(42, sut.asInt());
     }
 
     @Test

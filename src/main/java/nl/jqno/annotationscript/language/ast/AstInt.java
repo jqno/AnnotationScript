@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstInt implements AstAtom<Integer> {
+public final class AstInt implements AstAtom {
     private final int value;
 
     public AstInt(int value) {
@@ -10,7 +10,12 @@ public final class AstInt implements AstAtom<Integer> {
     }
 
     @Override
-    public Integer value() {
+    public Object value() {
+        return value;
+    }
+
+    @Override
+    public int asInt() {
         return value;
     }
 

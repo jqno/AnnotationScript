@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstSymbol implements AstAtom<String> {
+public final class AstSymbol implements AstAtom {
     private final String value;
 
     public AstSymbol(String value) {
@@ -11,6 +11,11 @@ public final class AstSymbol implements AstAtom<String> {
 
     @Override
     public String value() {
+        return value;
+    }
+
+    @Override
+    public String asSymbol() {
         return value;
     }
 

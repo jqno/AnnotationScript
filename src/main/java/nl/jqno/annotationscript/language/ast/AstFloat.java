@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstFloat implements AstAtom<Double> {
+public final class AstFloat implements AstAtom {
     private final double value;
 
     public AstFloat(double value) {
@@ -10,7 +10,12 @@ public final class AstFloat implements AstAtom<Double> {
     }
 
     @Override
-    public Double value() {
+    public Object value() {
+        return value;
+    }
+
+    @Override
+    public double asFloat() {
         return value;
     }
 

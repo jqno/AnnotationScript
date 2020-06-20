@@ -47,7 +47,7 @@ public class Parser {
         return list(accumulated.append(parsed._1), parsed._2);
     }
 
-    private AstAtom<?> atom(String token) {
+    private AstAtom atom(String token) {
         try {
             return new AstInt(Integer.parseInt(token));
         }

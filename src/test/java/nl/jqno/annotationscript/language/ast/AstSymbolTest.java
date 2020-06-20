@@ -9,6 +9,7 @@ public class AstSymbolTest {
     public void value() {
         var sut = new AstSymbol("some-value");
         assertEquals("some-value", sut.value());
+        assertEquals("some-value", sut.asSymbol());
     }
 
     @Test

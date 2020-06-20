@@ -1,5 +1,19 @@
 package nl.jqno.annotationscript.language.ast;
 
-public interface AstAtom<T> extends AstExp {
-    public T value();
+import nl.jqno.annotationscript.language.exceptions.EvaluationException;
+
+public interface AstAtom extends AstExp {
+    public Object value();
+
+    public default int asInt() {
+        throw new EvaluationException("not an int: " + value());
+    }
+
+    public default double asFloat() {
+        throw new EvaluationException("not a float: " + value());
+    }
+
+    public default String asSymbol() {
+        throw new EvaluationException("not a symbol: " + value());
+    }
 }
