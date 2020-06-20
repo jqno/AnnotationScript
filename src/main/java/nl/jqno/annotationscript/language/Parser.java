@@ -13,16 +13,16 @@ public class Parser {
     }
 
     public AstExp parse() {
+        if (allTokens.size() == 0) {
+            throw new ParseException("no input");
+        }
         return readFromTokens(allTokens)._1;
     }
 
     private Tuple2<AstExp, List<String>> readFromTokens(List<String> tokens) {
-        if (tokens.size() == 0) {
-            throw new ParseException("unexpected EOF");
-        }
         var token = tokens.head();
         if ("(".equals(token)) {
-            return list(tokens.tail());
+            return list(List.empty(), tokens.tail());
         }
         if (")".equals(token)) {
             throw new ParseException("unexpected )");
@@ -30,19 +30,16 @@ public class Parser {
         return Tuple.of(atom(token), tokens.tail());
     }
 
-    private Tuple2<AstExp, List<String>> list(List<String> remainingTokens) {
-        var result = List.<AstExp>empty();
-
-        var tokens = remainingTokens;
-        var token = tokens.head();
-        while (!")".equals(token)) {
-            var parseResult = readFromTokens(tokens);
-            result = result.append(parseResult._1);
-            tokens = parseResult._2;
-            token = tokens.head();
+    private Tuple2<AstExp, List<String>> list(List<AstExp> accumulated, List<String> tokens) {
+        if (tokens.size() == 0) {
+            throw new ParseException("unexpected EOF");
         }
-
-        return Tuple.of(new AstList(result), tokens.tail());
+        var head = tokens.head();
+        if (")".equals(head)) {
+            return Tuple.of(new AstList(accumulated), tokens.tail());
+        }
+        var parsed = readFromTokens(tokens);
+        return list(accumulated.append(parsed._1), parsed._2);
     }
 
     private AstAtom<?> atom(String token) {
