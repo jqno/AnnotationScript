@@ -50,8 +50,13 @@ public class Parser {
         try {
             return new AstInt(Integer.parseInt(token));
         }
-        catch (NumberFormatException ignored) {
-            return new AstSymbol(token);
+        catch (NumberFormatException ignored1) {
+            try {
+                return new AstFloat(Double.parseDouble(token));
+            }
+            catch (NumberFormatException ignored2) {
+                return new AstSymbol(token);
+            }
         }
     }
 }

@@ -35,6 +35,19 @@ public class ParserTest {
     }
 
     @Test
+    public void parseTypes() {
+        var actual = parse("(", "a", "42", "1.2", ")");
+
+        var expected = new AstList(List.of(
+            new AstSymbol("a"),
+            new AstInt(42),
+            new AstFloat(1.2)
+        ));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void throwsOnNoInput() {
         var e = assertThrows(ParseException.class, () ->
             parse()
