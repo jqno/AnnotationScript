@@ -20,6 +20,11 @@ public final class AstInt implements AstAtom {
     }
 
     @Override
+    public double asFloat() {
+        return value;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof AstInt)) {
             return false;

@@ -13,6 +13,12 @@ public class AstIntTest {
     }
 
     @Test
+    public void valueIsAlsoAFloat() {
+        var sut = new AstInt(42);
+        assertEquals(42.0, sut.asFloat(), 0.0001);
+    }
+
+    @Test
     public void tostring() {
         var sut = new AstInt(42);
         assertEquals("42", sut.toString());
