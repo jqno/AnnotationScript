@@ -1,4 +1,4 @@
-package nl.jqno.annotationscript.language;
+package nl.jqno.annotationscript.language.exceptions;
 
 public class ParseException extends RuntimeException {
     public ParseException(String message) {

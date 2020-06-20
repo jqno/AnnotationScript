@@ -4,6 +4,7 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.exceptions.ParseException;
 
 public class Parser {
     private final List<String> allTokens;

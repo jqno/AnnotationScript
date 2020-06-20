@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.exceptions.ParseException;
 
 public class ParserTest {
     @Test
