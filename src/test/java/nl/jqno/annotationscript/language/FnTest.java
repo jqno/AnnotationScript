@@ -24,8 +24,15 @@ public class FnTest {
 
     @Test
     public void doubleArityFnIsEvaluatedCorrectly() {
-        var sut = new Fn("+", 2, params -> new AstFloat(params.get(0).asFloat() + params.get(1).asFloat()));
-        assertEquals(new AstFloat(3), sut.evaluate(List.of(new AstInt(1), new AstInt(2))));
+        var sut = new Fn(">", 2, params -> new AstSymbol(params.get(0).asFloat() > params.get(1).asFloat() ? "true" : "false"));
+        assertEquals(new AstSymbol("false"), sut.evaluate(List.of(new AstInt(1), new AstInt(2))));
+    }
+
+    @Test
+    public void variableArityFnIsEvaluatedCorrectly() {
+        var sut = new Fn("+", Fn.VARARG, params -> new AstFloat(params.foldLeft(0.0, (acc, curr) -> acc + curr.asFloat())));
+        assertEquals(new AstFloat(1), sut.evaluate(List.of(new AstInt(1))));
+        assertEquals(new AstFloat(42), sut.evaluate(List.of(new AstInt(3), new AstInt(33), new AstInt(6))));
     }
 
     @Test
@@ -35,5 +42,14 @@ public class FnTest {
             sut.evaluate(List.of(new AstSymbol("booboo")))
         );
         assertEquals("invalid number of parameters to pi", e.getMessage());
+    }
+
+    @Test
+    public void incorrectVariableArityThrows() {
+        var sut = new Fn("head", Fn.VARARG, params -> params.head());
+        var e = assertThrows(EvaluationException.class, () ->
+            sut.evaluate(List.empty())
+        );
+        assertEquals("invalid number of parameters to head", e.getMessage());
     }
 }

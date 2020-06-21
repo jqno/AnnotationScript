@@ -7,6 +7,8 @@ import nl.jqno.annotationscript.language.ast.AstAtom;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public class Fn {
+    public static final int VARARG = -1;
+
     private final String name;
     private final int arity;
     private final Function<List<AstAtom>, AstAtom> fn;
@@ -18,7 +20,7 @@ public class Fn {
     }
 
     public AstAtom evaluate(List<AstAtom> parameters) {
-        if (parameters.size() != arity) {
+        if ((arity == VARARG && parameters.size() < 1) || (arity != VARARG && parameters.size() != arity)) {
             throw new EvaluationException("invalid number of parameters to " + name);
         }
         return fn.apply(parameters);
