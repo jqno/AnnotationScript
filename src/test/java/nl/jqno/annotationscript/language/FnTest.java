@@ -24,8 +24,8 @@ public class FnTest {
 
     @Test
     public void doubleArityFnIsEvaluatedCorrectly() {
-        var sut = new Fn(">", 2, params -> new AstSymbol(params.get(0).asFloat() > params.get(1).asFloat() ? "true" : "false"));
-        assertEquals(new AstSymbol("false"), sut.evaluate(List.of(new AstInt(1), new AstInt(2))));
+        var sut = new Fn(">", 2, params -> new AstInt(params.get(0).asFloat() > params.get(1).asFloat() ? 1 : 0));
+        assertEquals(new AstInt(0), sut.evaluate(List.of(new AstInt(11), new AstInt(42))));
     }
 
     @Test
