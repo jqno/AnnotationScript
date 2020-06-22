@@ -2,7 +2,7 @@ package nl.jqno.annotationscript;
 
 import java.lang.annotation.*;
 
-public class Annotations {
+public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Begin {}
@@ -22,4 +22,6 @@ public class Annotations {
     public @interface Sym {
         String value();
     }
+
+    private Annotations() {}
 }

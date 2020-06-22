@@ -36,12 +36,6 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void successfullyEvaluateEmptyList() {
-        var actual = sut.eval(new AstList(List.empty()), env);
-        assertEquals(new AstList(List.empty()), actual);
-    }
-
-    @Test
     public void successfullyEvaluateIf1() {
         var actual = sut.eval(new AstList(List.of(new AstSymbol("if"), new AstInt(1), new AstInt(1), new AstInt(2))), env);
         assertEquals(new AstInt(1), actual);
@@ -66,6 +60,18 @@ public class EvaluatorTest {
                         new AstList(List.of(new AstSymbol("define"), new AstSymbol("x"), new AstInt(42))),
                         new AstSymbol("x"))), env);
         assertEquals(new AstInt(42), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateEmptyList() {
+        var actual = sut.eval(new AstList(List.empty()), env);
+        assertEquals(new AstList(List.empty()), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateListThatStartsWithANumber() {
+        var actual = sut.eval(new AstList(List.of(new AstInt(42), new AstInt(42))), env);
+        assertEquals(new AstList(List.of(new AstInt(42), new AstInt(42))), actual);
     }
 
     @Test

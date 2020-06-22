@@ -39,11 +39,6 @@ public class Tokenizer {
         else if (a instanceof Int) {
             return "" + ((Int)a).value();
         }
-        else if (a instanceof Sym) {
-            return ((Sym)a).value();
-        }
-        else {
-            throw new IllegalStateException("Unsuported annotation: " + a.getClass().getName());
-        }
+        return ((Sym)a).value();
     }
 }
