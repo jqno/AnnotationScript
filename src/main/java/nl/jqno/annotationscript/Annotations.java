@@ -3,24 +3,34 @@ package nl.jqno.annotationscript;
 import java.lang.annotation.*;
 
 public final class Annotations {
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public @interface Begin {}
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public @interface End {}
+    public static final String EMPTY = "";
 
+    @Repeatable(ProgramHolder.class)
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface Int {
-        int value();
+    public @interface One {
+        String literal() default EMPTY;
+        Two[] list() default {};
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    public @interface Sym {
-        String value();
+    public @interface Two {
+        String literal() default EMPTY;
+        Three[] list() default {};
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Three {
+        String literal() default EMPTY;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface ProgramHolder {
+        One[] value();
     }
 
     private Annotations() {}

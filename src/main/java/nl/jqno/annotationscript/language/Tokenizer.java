@@ -1,12 +1,11 @@
 package nl.jqno.annotationscript.language;
 
 import java.lang.annotation.Annotation;
+
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.Annotations;
-import nl.jqno.annotationscript.Annotations.Begin;
-import nl.jqno.annotationscript.Annotations.End;
-import nl.jqno.annotationscript.Annotations.Int;
-import nl.jqno.annotationscript.Annotations.Sym;
+import nl.jqno.annotationscript.Annotations.*;
+import nl.jqno.annotationscript.language.exceptions.TokenizeException;
 
 public class Tokenizer {
     private final Class<?> source;
@@ -18,7 +17,7 @@ public class Tokenizer {
     public List<String> tokenize() {
         return getAnnotations()
             .filter(this::isEligible)
-            .map(this::tokenizeSingleAnnotation);
+            .flatMap(this::tokenizeAnnotation);
     }
 
     private List<Annotation> getAnnotations() {
@@ -29,16 +28,34 @@ public class Tokenizer {
         return annotation.annotationType().getName().startsWith(Annotations.class.getName());
     }
 
-    private String tokenizeSingleAnnotation(Annotation a) {
-        if (a instanceof Begin) {
-            return "(";
+    private List<String> tokenizeAnnotation(Annotation a) {
+        if (a instanceof One) {
+            One one = (One)a;
+            return tokenizeSingleAnnotation(one.literal(), one.list());
         }
-        else if (a instanceof End) {
-            return ")";
+        if (a instanceof Two) {
+            Two two = (Two)a;
+            return tokenizeSingleAnnotation(two.literal(), two.list());
         }
-        else if (a instanceof Int) {
-            return "" + ((Int)a).value();
+        if (a instanceof Three) {
+            Three three = (Three)a;
+            return tokenizeSingleAnnotation(three.literal(), new Annotation[] {});
         }
-        return ((Sym)a).value();
+        return tokenizeListOfAnnotations(((ProgramHolder)a).value());
+    }
+
+    private List<String> tokenizeListOfAnnotations(Annotation[] list) {
+        var tokenized = List.of(list).flatMap(this::tokenizeAnnotation);
+        return List.of("(").appendAll(tokenized).append(")");
+    }
+
+    private List<String> tokenizeSingleAnnotation(String literal, Annotation[] list) {
+        if (!Annotations.EMPTY.equals(literal)) {
+            return List.of(literal);
+        }
+        if (list.length > 0) {
+            return tokenizeListOfAnnotations(list);
+        }
+        throw new TokenizeException("annotation has no value");
     }
 }
