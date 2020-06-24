@@ -48,6 +48,9 @@ public class Parser {
     }
 
     private AstAtom atom(String token) {
+        if (token.startsWith("'") && token.endsWith("'")) {
+            return new AstString(token.substring(1, token.length() - 1));
+        }
         try {
             return new AstInt(Integer.parseInt(token));
         }

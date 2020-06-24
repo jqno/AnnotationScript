@@ -30,6 +30,12 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void successfullyEvaluateAString() {
+        var actual = sut.eval(new AstString("yeah"), env);
+        assertEquals(new AstString("yeah"), actual);
+    }
+
+    @Test
     public void successfullyEvaluateASymbol() {
         var actual = sut.eval(new AstSymbol("pi"), env);
         assertEquals(new AstFloat(Math.PI), actual);

@@ -37,12 +37,15 @@ public class ParserTest {
 
     @Test
     public void parseTypes() {
-        var actual = parse("(", "a", "42", "1.2", ")");
+        var actual = parse("(", "a", "42", "1.2", "'str'", "'sym", "sym'", ")");
 
         var expected = new AstList(List.of(
             new AstSymbol("a"),
             new AstInt(42),
-            new AstFloat(1.2)
+            new AstFloat(1.2),
+            new AstString("str"),
+            new AstSymbol("'sym"),
+            new AstSymbol("sym'")
         ));
 
         assertEquals(expected, actual);

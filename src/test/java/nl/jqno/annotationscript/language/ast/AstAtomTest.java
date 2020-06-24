@@ -24,6 +24,12 @@ public class AstAtomTest {
     }
 
     @Test
+    public void asStringThrows() {
+        var e = assertThrows(EvaluationException.class, () -> sut.asString());
+        assertEquals("not a string: X", e.getMessage());
+    }
+
+    @Test
     public void asSymbolThrows() {
         var e = assertThrows(EvaluationException.class, () -> sut.asSymbol());
         assertEquals("not a symbol: X", e.getMessage());

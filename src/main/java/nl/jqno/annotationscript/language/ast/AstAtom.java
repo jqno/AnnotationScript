@@ -13,6 +13,10 @@ public interface AstAtom extends AstExp {
         throw new EvaluationException("not a float: " + value());
     }
 
+    public default String asString() {
+        throw new EvaluationException("not a string: " + value());
+    }
+
     public default String asSymbol() {
         throw new EvaluationException("not a symbol: " + value());
     }

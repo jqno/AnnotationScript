@@ -15,12 +15,12 @@ import nl.jqno.annotationscript.language.exceptions.TokenizeException;
 public class TokenizerTest {
     @Test
     public void tokenizeValidInput() {
-        @One(literal="if")@One(literal="1")
+        @One(literal="if")@One(literal="1")@One(literal="'one'")
         class Input {}
 
         var sut = new Tokenizer(Input.class);
         var actual = sut.tokenize();
-        assertEquals(List.of("(", "if", "1", ")"), actual);
+        assertEquals(List.of("(", "if", "1", "'one'", ")"), actual);
     }
 
     @Test
