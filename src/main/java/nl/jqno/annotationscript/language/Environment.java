@@ -18,6 +18,6 @@ public class Environment {
     }
 
     public Environment add(String symbol, AstAtom atom) {
-        return new Environment(env.put(symbol, new Fn(symbol, 0, params -> atom)));
+        return new Environment(env.put(symbol, new Fn(params -> atom)));
     }
 }

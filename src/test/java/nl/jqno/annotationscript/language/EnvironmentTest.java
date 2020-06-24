@@ -15,7 +15,7 @@ import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 public class EnvironmentTest {
 
     private static final Map<String, Fn> ENV = HashMap.of(
-        "pi", new Fn("pi", 0, params -> new AstFloat(Math.PI))
+        "pi", new Fn(params -> new AstFloat(Math.PI))
     );
 
     @Test

@@ -12,9 +12,9 @@ public class EvaluatorTest {
 
     private final Evaluator sut = new Evaluator();
     private final Environment env = new Environment(HashMap.of(
-        "begin", new Fn("begin", Fn.VARARG, params -> params.last()),
-        "pi", new Fn("pi", 0, params -> new AstFloat(Math.PI)),
-        "+", new Fn("+", Fn.VARARG, params -> new AstFloat(params.foldLeft(0.0, (acc, curr) -> acc + curr.asFloat())))
+        "begin", new Fn(params -> params.last()),
+        "pi", new Fn(params -> new AstFloat(Math.PI)),
+        "+", new Fn(params -> new AstFloat(params.foldLeft(0.0, (acc, curr) -> acc + curr.asFloat())))
     ));
 
     @Test
