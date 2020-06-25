@@ -16,6 +16,12 @@ public class AstListTest {
     }
 
     @Test
+    public void alternateConstructor() {
+        var sut = new AstList(new AstInt(42), new AstSymbol("something"), new AstList(List.empty()));
+        assertEquals(LIST, sut.value());
+    }
+
+    @Test
     public void tostring() {
         var sut = new AstList(LIST);
         assertEquals(sut.toString(), "(42 something ())");

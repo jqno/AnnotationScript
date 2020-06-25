@@ -43,28 +43,28 @@ public class EvaluatorTest {
 
     @Test
     public void successfullyEvaluateIf1() {
-        var actual = sut.eval(new AstList(List.of(new AstSymbol("if"), new AstInt(1), new AstInt(1), new AstInt(2))), env);
+        var actual = sut.eval(new AstList(new AstSymbol("if"), new AstInt(1), new AstInt(1), new AstInt(2)), env);
         assertEquals(new AstInt(1), actual);
     }
 
     @Test
     public void successfullyEvaluateIfWhatever() {
-        var actual = sut.eval(new AstList(List.of(new AstSymbol("if"), new AstSymbol("pi"), new AstInt(1), new AstInt(2))), env);
+        var actual = sut.eval(new AstList(new AstSymbol("if"), new AstSymbol("pi"), new AstInt(1), new AstInt(2)), env);
         assertEquals(new AstInt(1), actual);
     }
 
     @Test
     public void successfullyEvaluateIf0() {
-        var actual = sut.eval(new AstList(List.of(new AstSymbol("if"), new AstInt(0), new AstInt(1), new AstInt(2))), env);
+        var actual = sut.eval(new AstList(new AstSymbol("if"), new AstInt(0), new AstInt(1), new AstInt(2)), env);
         assertEquals(new AstInt(2), actual);
     }
 
     @Test
     public void successfullyEvaluateDefine() {
-        var actual = sut.eval(new AstList(List.of(
-                        new AstSymbol("begin"),
-                        new AstList(List.of(new AstSymbol("define"), new AstSymbol("x"), new AstInt(42))),
-                        new AstSymbol("x"))), env);
+        var actual = sut.eval(new AstList(
+                new AstSymbol("begin"),
+                new AstList(new AstSymbol("define"), new AstSymbol("x"), new AstInt(42)),
+                new AstSymbol("x")), env);
         assertEquals(new AstInt(42), actual);
     }
 
@@ -76,13 +76,13 @@ public class EvaluatorTest {
 
     @Test
     public void successfullyEvaluateListThatStartsWithANumber() {
-        var actual = sut.eval(new AstList(List.of(new AstInt(42), new AstInt(42))), env);
-        assertEquals(new AstList(List.of(new AstInt(42), new AstInt(42))), actual);
+        var actual = sut.eval(new AstList(new AstInt(42), new AstInt(42)), env);
+        assertEquals(new AstList(new AstInt(42), new AstInt(42)), actual);
     }
 
     @Test
     public void successfullyEvaluateProc() {
-        var actual = sut.eval(new AstList(List.of(new AstSymbol("+"), new AstInt(1), new AstInt(2), new AstInt(3), new AstInt(4))), env);
+        var actual = sut.eval(new AstList(new AstSymbol("+"), new AstInt(1), new AstInt(2), new AstInt(3), new AstInt(4)), env);
         assertEquals(new AstFloat(10), actual);
     }
 }

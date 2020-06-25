@@ -11,6 +11,10 @@ public final class AstList implements AstExp {
         this.value = value;
     }
 
+    public AstList(AstExp first, AstExp... rest) {
+        this(List.of(rest).prepend(first));
+    }
+
     public List<AstExp> value() {
         return value;
     }

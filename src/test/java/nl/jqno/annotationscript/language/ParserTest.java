@@ -14,23 +14,19 @@ public class ParserTest {
     public void parseValidTokens() {
         var actual = parse("(", "begin", "(", "define", "r", "10", ")", "(", "*", "pi", "(", "*", "r", "r", ")", ")", ")");
 
-        var expected = new AstList(List.of(
+        var expected = new AstList(
             new AstSymbol("begin"),
-            new AstList(List.of(
-                    new AstSymbol("define"),
-                    new AstSymbol("r"),
-                    new AstInt(10)
-            )),
-            new AstList(List.of(
+            new AstList(
+                new AstSymbol("define"),
+                new AstSymbol("r"),
+                new AstInt(10)),
+            new AstList(
+                new AstSymbol("*"),
+                new AstSymbol("pi"),
+                new AstList(
                     new AstSymbol("*"),
-                    new AstSymbol("pi"),
-                    new AstList(List.of(
-                            new AstSymbol("*"),
-                            new AstSymbol("r"),
-                            new AstSymbol("r")
-                    ))
-            ))
-        ));
+                    new AstSymbol("r"),
+                    new AstSymbol("r"))));
 
         assertEquals(expected, actual);
     }
@@ -39,14 +35,13 @@ public class ParserTest {
     public void parseTypes() {
         var actual = parse("(", "a", "42", "1.2", "'str'", "'sym", "sym'", ")");
 
-        var expected = new AstList(List.of(
+        var expected = new AstList(
             new AstSymbol("a"),
             new AstInt(42),
             new AstFloat(1.2),
             new AstString("str"),
             new AstSymbol("'sym"),
-            new AstSymbol("sym'")
-        ));
+            new AstSymbol("sym'"));
 
         assertEquals(expected, actual);
     }
