@@ -60,6 +60,12 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void successfullyEvaluateIfWithSymbols() {
+        var actual = sut.eval(new AstList(new AstSymbol("if"), new AstInt(1), new AstSymbol("pi"), new AstSymbol("pi")), env);
+        assertEquals(new AstFloat(Math.PI), actual);
+    }
+
+    @Test
     public void successfullyEvaluateDefine() {
         var actual = sut.eval(new AstList(
                 new AstSymbol("begin"),
@@ -75,14 +81,30 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void successfullyEvaluateListThatStartsWithANumber() {
-        var actual = sut.eval(new AstList(new AstInt(42), new AstInt(42)), env);
-        assertEquals(new AstList(new AstInt(42), new AstInt(42)), actual);
-    }
-
-    @Test
     public void successfullyEvaluateProc() {
         var actual = sut.eval(new AstList(new AstSymbol("+"), new AstInt(1), new AstInt(2), new AstInt(3), new AstInt(4)), env);
         assertEquals(new AstFloat(10), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateProcWhereProcNameMustBeEvaluatedFirst() {
+        var expression = new AstList(
+            new AstList(new AstSymbol("if"), new AstInt(1), new AstSymbol("+"), new AstSymbol("*")),
+            new AstInt(4),
+            new AstInt(2));
+        var actual = sut.eval(expression, env);
+        assertEquals(new AstFloat(6), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateProcWhereProcNameMustBeEvaluatedFirstRecursively() {
+        var expression = new AstList(
+            new AstList(new AstSymbol("if"), new AstInt(1),
+                new AstList(new AstSymbol("if"), new AstInt(1), new AstSymbol("+"), new AstSymbol("-")),
+                new AstList(new AstSymbol("if"), new AstInt(0), new AstSymbol("*"), new AstSymbol("/"))),
+            new AstInt(4),
+            new AstInt(2));
+        var actual = sut.eval(expression, env);
+        assertEquals(new AstFloat(6), actual);
     }
 }
