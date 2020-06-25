@@ -15,7 +15,7 @@ import nl.jqno.annotationscript.language.exceptions.TokenizeException;
 public class TokenizerTest {
     @Test
     public void tokenizeValidInput() {
-        @One(literal="if")@One(literal="1")@One(literal="'one'")
+        @Zero(literal="if")@Zero(literal="1")@Zero(literal="'one'")
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -25,12 +25,12 @@ public class TokenizerTest {
 
     @Test
     public void tokenizeRecursiveValidInput() {
-        @One(literal="begin")
-        @One(list={@Two(literal="define"), @Two(literal="r"), @Two(literal="10")})
-        @One(list={
-            @Two(literal="*"),
-            @Two(literal="pi"),
-            @Two(list={@Three(literal="*"), @Three(literal="r"), @Three(literal="r")})})
+        @Zero(literal="begin")
+        @Zero(list={@One(literal="define"), @One(literal="r"), @One(literal="10")})
+        @Zero(list={
+            @One(literal="*"),
+            @One(literal="pi"),
+            @One(list={@Two(literal="*"), @Two(literal="r"), @Two(literal="r")})})
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -42,8 +42,19 @@ public class TokenizerTest {
     }
 
     @Test
+    public void tokenizeDeepInput() {
+        @Zero(list=@One(list=@Two(list=@Three(literal="😜"))))
+        class Input {}
+
+        var sut = new Tokenizer(Input.class);
+        var actual = sut.tokenize();
+        var expected = List.of("(", "(", "(", "😜", ")", ")", ")");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void throwOnUninitializedAnnotation() {
-        @One(literal="non-empty")@One
+        @Zero(literal="non-empty")@Zero
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -53,7 +64,7 @@ public class TokenizerTest {
 
     @Test
     public void ignoreOtherAnnotations() {
-        @One(literal="if")@IgnoreThis@One(literal="1")
+        @Zero(literal="if")@IgnoreThis@Zero(literal="1")
         class Input {}
 
         var sut = new Tokenizer(Input.class);

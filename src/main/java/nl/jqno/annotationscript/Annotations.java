@@ -9,6 +9,13 @@ public final class Annotations {
     @Repeatable(ProgramHolder.class)
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
+    public @interface Zero {
+        String literal() default EMPTY;
+        One[] list() default {};
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
     public @interface One {
         String literal() default EMPTY;
         Two[] list() default {};
@@ -30,7 +37,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface ProgramHolder {
-        One[] value();
+        Zero[] value();
     }
 
     private Annotations() {}

@@ -10,12 +10,12 @@ public class AnnotationScriptTest {
 
     @Test
     public void calculation() {
-        @One(literal="begin")
-        @One(list={@Two(literal="define"), @Two(literal="r"), @Two(literal="10")})
-        @One(list={
-            @Two(literal="*"),
-            @Two(literal="pi"),
-            @Two(list={@Three(literal="*"), @Three(literal="r"), @Three(literal="r")})})
+        @Zero(literal="begin")
+        @Zero(list={@One(literal="define"), @One(literal="r"), @One(literal="10")})
+        @Zero(list={
+            @One(literal="*"),
+            @One(literal="pi"),
+            @One(list={@Two(literal="*"), @Two(literal="r"), @Two(literal="r")})})
         class Input {}
 
         var actual = (double)AnnotationScript.run(Input.class);

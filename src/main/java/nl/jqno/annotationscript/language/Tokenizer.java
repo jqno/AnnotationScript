@@ -29,17 +29,21 @@ public class Tokenizer {
     }
 
     private List<String> tokenizeAnnotation(Annotation a) {
+        if (a instanceof Zero) {
+            Zero ann = (Zero)a;
+            return tokenizeSingleAnnotation(ann.literal(), ann.list());
+        }
         if (a instanceof One) {
-            One one = (One)a;
-            return tokenizeSingleAnnotation(one.literal(), one.list());
+            One ann = (One)a;
+            return tokenizeSingleAnnotation(ann.literal(), ann.list());
         }
         if (a instanceof Two) {
-            Two two = (Two)a;
-            return tokenizeSingleAnnotation(two.literal(), two.list());
+            Two ann = (Two)a;
+            return tokenizeSingleAnnotation(ann.literal(), ann.list());
         }
         if (a instanceof Three) {
-            Three three = (Three)a;
-            return tokenizeSingleAnnotation(three.literal(), new Annotation[] {});
+            Three ann = (Three)a;
+            return tokenizeSingleAnnotation(ann.literal(), new Annotation[] {});
         }
         return tokenizeListOfAnnotations(((ProgramHolder)a).value());
     }
