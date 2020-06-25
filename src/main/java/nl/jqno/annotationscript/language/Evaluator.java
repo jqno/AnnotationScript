@@ -43,13 +43,13 @@ public class Evaluator {
                 var evaluations = list
                     .drop(1)
                     .foldLeft(
-                            Tuple.<List<AstAtom>, Environment>of(List.empty(), env),
-                            (acc, curr) -> {
-                                var accList = acc._1;
-                                var accEnv = acc._2;
-                                var result = evaluate(curr, accEnv);
-                                return Tuple.of(accList.append((AstAtom)result._1), result._2);
-                            })
+                        Tuple.<List<AstAtom>, Environment>of(List.empty(), env),
+                        (acc, curr) -> {
+                            var accList = acc._1;
+                            var accEnv = acc._2;
+                            var result = evaluate(curr, accEnv);
+                            return Tuple.of(accList.append((AstAtom)result._1), result._2);
+                        })
                     ._1;
                 var fn = env.lookup(fnName);
                 return Tuple.of(fn.evaluate(evaluations), env);
