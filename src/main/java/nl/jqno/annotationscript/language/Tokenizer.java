@@ -31,19 +31,19 @@ public class Tokenizer {
     private List<String> tokenizeAnnotation(Annotation a) {
         if (a instanceof Zero) {
             Zero ann = (Zero)a;
-            return tokenizeSingleAnnotation(ann.literal(), ann.list());
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
         }
         if (a instanceof One) {
             One ann = (One)a;
-            return tokenizeSingleAnnotation(ann.literal(), ann.list());
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
         }
         if (a instanceof Two) {
             Two ann = (Two)a;
-            return tokenizeSingleAnnotation(ann.literal(), ann.list());
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
         }
         if (a instanceof Three) {
             Three ann = (Three)a;
-            return tokenizeSingleAnnotation(ann.literal(), new Annotation[] {});
+            return tokenizeSingleAnnotation(ann.value(), new Annotation[] {});
         }
         return tokenizeListOfAnnotations(((ProgramHolder)a).value());
     }
@@ -53,9 +53,9 @@ public class Tokenizer {
         return List.of("(").appendAll(tokenized).append(")");
     }
 
-    private List<String> tokenizeSingleAnnotation(String literal, Annotation[] list) {
-        if (!Annotations.EMPTY.equals(literal)) {
-            return List.of(literal);
+    private List<String> tokenizeSingleAnnotation(String value, Annotation[] list) {
+        if (!Annotations.EMPTY.equals(value)) {
+            return List.of(value);
         }
         if (list.length > 0) {
             return tokenizeListOfAnnotations(list);

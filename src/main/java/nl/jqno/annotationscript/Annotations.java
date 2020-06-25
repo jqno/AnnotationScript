@@ -10,28 +10,28 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Zero {
-        String literal() default EMPTY;
+        String value() default EMPTY;
         One[] list() default {};
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface One {
-        String literal() default EMPTY;
+        String value() default EMPTY;
         Two[] list() default {};
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Two {
-        String literal() default EMPTY;
+        String value() default EMPTY;
         Three[] list() default {};
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Three {
-        String literal() default EMPTY;
+        String value() default EMPTY;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

@@ -4,11 +4,11 @@ import nl.jqno.annotationscript.Annotations.*;
 
 public class AnnotationsTest {
 
-    @Zero(literal="begin")
-    @Zero(list={@One(literal="define"), @One(literal="r"), @One(literal="10")})
+    @Zero("begin")
+    @Zero(list={@One("define"), @One("r"), @One("10")})
     @Zero(list={
-        @One(literal="*"),
-        @One(literal="pi"),
-        @One(list={@Two(literal="*"), @Two(literal="r"), @Two(literal="r")})})
+        @One("*"),
+        @One("pi"),
+        @One(list={@Two("*"), @Two("r"), @Two("r")})})
     public static class Holder {}
 }

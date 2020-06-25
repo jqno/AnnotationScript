@@ -15,7 +15,7 @@ import nl.jqno.annotationscript.language.exceptions.TokenizeException;
 public class TokenizerTest {
     @Test
     public void tokenizeValidInput() {
-        @Zero(literal="if")@Zero(literal="1")@Zero(literal="'one'")
+        @Zero("if")@Zero("1")@Zero("'one'")
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -25,12 +25,12 @@ public class TokenizerTest {
 
     @Test
     public void tokenizeRecursiveValidInput() {
-        @Zero(literal="begin")
-        @Zero(list={@One(literal="define"), @One(literal="r"), @One(literal="10")})
+        @Zero("begin")
+        @Zero(list={@One("define"), @One("r"), @One("10")})
         @Zero(list={
-            @One(literal="*"),
-            @One(literal="pi"),
-            @One(list={@Two(literal="*"), @Two(literal="r"), @Two(literal="r")})})
+            @One("*"),
+            @One("pi"),
+            @One(list={@Two("*"), @Two("r"), @Two("r")})})
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -43,7 +43,7 @@ public class TokenizerTest {
 
     @Test
     public void tokenizeDeepInput() {
-        @Zero(list=@One(list=@Two(list=@Three(literal="😜"))))
+        @Zero(list=@One(list=@Two(list=@Three("😜"))))
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -54,7 +54,7 @@ public class TokenizerTest {
 
     @Test
     public void throwOnUninitializedAnnotation() {
-        @Zero(literal="non-empty")@Zero
+        @Zero("non-empty")@Zero
         class Input {}
 
         var sut = new Tokenizer(Input.class);
@@ -64,7 +64,7 @@ public class TokenizerTest {
 
     @Test
     public void ignoreOtherAnnotations() {
-        @Zero(literal="if")@IgnoreThis@Zero(literal="1")
+        @Zero("if")@IgnoreThis@Zero("1")
         class Input {}
 
         var sut = new Tokenizer(Input.class);
