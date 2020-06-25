@@ -43,12 +43,16 @@ public class TokenizerTest {
 
     @Test
     public void tokenizeDeepInput() {
-        @Zero(list=@One(list=@Two(list=@Three("😜"))))
+        @Zero(list=@One(list=@Two(list=@Three(list=@Four(list=@Five(list=@Six(list=
+            @Seven(list=@Eight(list=@Nine(list=@Ten(list=@Eleven("😜")))))    
+        )))))))
         class Input {}
 
         var sut = new Tokenizer(Input.class);
         var actual = sut.tokenize();
-        var expected = List.of("(", "(", "(", "😜", ")", ")", ")");
+        var expected = List.of("(", "(", "(", "(", "(", "(", "(",
+                "(",  "(", "(", "(", "😜", ")", ")", ")", ")",
+                ")", ")", ")", ")", ")", ")", ")");
         assertEquals(expected, actual);
     }
 

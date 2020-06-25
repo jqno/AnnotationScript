@@ -28,6 +28,9 @@ public class Tokenizer {
         return annotation.annotationType().getName().startsWith(Annotations.class.getName());
     }
 
+    // CHECKSTYLE OFF: CyclomaticComplexity
+    // CHECKSTYLE OFF: ExecutableStatementCount
+    // CHECKSTYLE OFF: NPathComplexity
     private List<String> tokenizeAnnotation(Annotation a) {
         if (a instanceof Zero) {
             Zero ann = (Zero)a;
@@ -43,10 +46,45 @@ public class Tokenizer {
         }
         if (a instanceof Three) {
             Three ann = (Three)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Four) {
+            Four ann = (Four)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Five) {
+            Five ann = (Five)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Six) {
+            Six ann = (Six)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Seven) {
+            Seven ann = (Seven)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Eight) {
+            Eight ann = (Eight)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Nine) {
+            Nine ann = (Nine)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Ten) {
+            Ten ann = (Ten)a;
+            return tokenizeSingleAnnotation(ann.value(), ann.list());
+        }
+        if (a instanceof Eleven) {
+            Eleven ann = (Eleven)a;
             return tokenizeSingleAnnotation(ann.value(), new Annotation[] {});
         }
         return tokenizeListOfAnnotations(((ProgramHolder)a).value());
     }
+    // CHECKSTYLE OFF: NPathComplexity
+    // CHECKSTYLE OFF: ExecutableStatementCount
+    // CHECKSTYLE OFF: CyclomaticComplexity
 
     private List<String> tokenizeListOfAnnotations(Annotation[] list) {
         var tokenized = List.of(list).flatMap(this::tokenizeAnnotation);
