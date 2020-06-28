@@ -1,7 +1,6 @@
 package nl.jqno.annotationscript.language;
 
 import io.vavr.collection.Map;
-import nl.jqno.annotationscript.language.ast.AstAtom;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public class Environment {
@@ -17,7 +16,7 @@ public class Environment {
             .getOrElseThrow(() -> new EvaluationException("unknown symbol: " + symbol));
     }
 
-    public Environment add(String symbol, AstAtom atom) {
-        return new Environment(env.put(symbol, new Fn(params -> atom)));
+    public Environment add(String symbol, Fn fn) {
+        return new Environment(env.put(symbol, fn));
     }
 }

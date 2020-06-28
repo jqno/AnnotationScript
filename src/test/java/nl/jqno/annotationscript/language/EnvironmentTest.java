@@ -15,7 +15,7 @@ import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 public class EnvironmentTest {
 
     private static final Map<String, Fn> ENV = HashMap.of(
-        "pi", new Fn(params -> new AstFloat(Math.PI))
+        "pi", Fn.value(new AstFloat(Math.PI))
     );
 
     @Test
@@ -38,7 +38,7 @@ public class EnvironmentTest {
     @Test
     public void successfulAdd() {
         var sut = new Environment(ENV);
-        var actual = sut.add("r", new AstInt(10));
+        var actual = sut.add("r", Fn.value(new AstInt(10)));
         assertEquals(new AstInt(10), actual.lookup("r").evaluate(List.empty()));
     }
 }

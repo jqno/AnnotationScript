@@ -41,7 +41,7 @@ public class Evaluator {
             case "define":
                 var symbol = ((AstAtom)list.get(1)).asSymbol();
                 var exp = (AstAtom)evaluate(list.get(2), env, followSymbols)._1;
-                return Tuple.of(exp, env.add(symbol, exp));
+                return Tuple.of(exp, env.add(symbol, Fn.value(exp)));
             case "quote":
                 return Tuple.of(list.get(1), env);
             default:
