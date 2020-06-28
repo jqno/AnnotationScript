@@ -68,10 +68,18 @@ public class EvaluatorTest {
     @Test
     public void successfullyEvaluateDefine() {
         var actual = sut.eval(new AstList(
-                new AstSymbol("begin"),
-                new AstList(new AstSymbol("define"), new AstSymbol("x"), new AstInt(42)),
-                new AstSymbol("x")), env);
+            new AstSymbol("begin"),
+            new AstList(new AstSymbol("define"), new AstSymbol("x"), new AstInt(42)),
+            new AstSymbol("x")), env);
         assertEquals(new AstInt(42), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateQuote() {
+        var expression = new AstList(new AstSymbol("if"), new AstInt(1), new AstInt(2), new AstInt(3));
+        var quotedExpression = new AstList(new AstSymbol("quote"), expression);
+        var actual = sut.eval(quotedExpression, env);
+        assertEquals(expression, actual);
     }
 
     @Test
