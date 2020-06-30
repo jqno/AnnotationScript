@@ -45,7 +45,7 @@ public class GlobalEnvironmentTest {
         assertEquals(new AstFloat(Math.PI), evaluate("pi"));
     }
 
-    private AstAtom evaluate(String symbol, AstAtom... params) {
+    private AstExp evaluate(String symbol, AstExp... params) {
         var sut = ENV.lookup(symbol);
         return sut.evaluate(List.of(params));
     }

@@ -19,6 +19,11 @@ public final class AstLambda implements AstExp {
     }
 
     @Override
+    public Object value() {
+        return null;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof AstLambda)) {
             return false;

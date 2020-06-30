@@ -57,12 +57,12 @@ public class Evaluator {
         var fn = env.lookup(head.asSymbol());
         var params = tail
             .foldLeft(
-                Tuple.<List<AstAtom>, Environment>of(List.empty(), env),
+                Tuple.<List<AstExp>, Environment>of(List.empty(), env),
                 (acc, curr) -> {
                     var accList = acc._1;
                     var accEnv = acc._2;
                     var result = evaluate(curr, accEnv, followSymbols);
-                    return Tuple.of(accList.append((AstAtom)result._1), result._2);
+                    return Tuple.of(accList.append(result._1), result._2);
                 })
             ._1;
         return Tuple.of(fn.evaluate(params), env);
