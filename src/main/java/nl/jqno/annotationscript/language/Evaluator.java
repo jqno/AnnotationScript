@@ -42,6 +42,10 @@ public class Evaluator {
                 var symbol = ((AstAtom)list.get(1)).asSymbol();
                 var exp = (AstAtom)evaluate(list.get(2), env, followSymbols)._1;
                 return Tuple.of(exp, env.add(symbol, Fn.value(exp)));
+            case "lambda":
+                var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
+                var body = list.get(2);
+                return Tuple.of(new AstLambda(params, body, env), env);
             case "quote":
                 return Tuple.of(list.get(1), env);
             default:
