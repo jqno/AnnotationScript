@@ -47,7 +47,7 @@ public class Parser {
         return list(accumulated.append(parsed._1), parsed._2);
     }
 
-    private AstAtom atom(String token) {
+    private AstExp atom(String token) {
         if (token.startsWith("'") && token.endsWith("'")) {
             return new AstString(token.substring(1, token.length() - 1));
         }

@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstFloat implements AstAtom {
+public final class AstFloat implements AstExp {
     private final double value;
 
     public AstFloat(double value) {

@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstSymbol implements AstAtom {
+public final class AstSymbol implements AstExp {
     private final String value;
 
     public AstSymbol(String value) {

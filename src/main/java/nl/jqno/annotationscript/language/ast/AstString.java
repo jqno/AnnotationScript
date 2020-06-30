@@ -2,7 +2,7 @@ package nl.jqno.annotationscript.language.ast;
 
 import java.util.Objects;
 
-public final class AstString implements AstAtom {
+public final class AstString implements AstExp {
     private final String value;
 
     public AstString(String value) {

@@ -34,13 +34,13 @@ public class Evaluator {
         }
         switch (((AstSymbol)head).asSymbol()) {
             case "if":
-                var test = (AstAtom)(evaluate(list.get(1), env, followSymbols)._1);
+                var test = evaluate(list.get(1), env, followSymbols)._1;
                 var isFalse = test.value().equals(0);
                 var branch = isFalse ? list.get(3) : list.get(2);
                 return Tuple.of(evaluate(branch, env, followSymbols)._1, env);
             case "define":
-                var symbol = ((AstAtom)list.get(1)).asSymbol();
-                var exp = (AstAtom)evaluate(list.get(2), env, followSymbols)._1;
+                var symbol = list.get(1).asSymbol();
+                var exp = evaluate(list.get(2), env, followSymbols)._1;
                 return Tuple.of(exp, env.add(symbol, Fn.value(exp)));
             case "lambda":
                 var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
