@@ -30,9 +30,9 @@ public class Evaluator {
         var head = list.head();
         if (head instanceof AstList) {
             var procHead = evaluate(head, env, false);
-            return evaluateProc((AstSymbol)procHead._1, list.tail(), procHead._2, followSymbols);
+            return evaluateProc(procHead._1, list.tail(), procHead._2, followSymbols);
         }
-        switch (((AstSymbol)head).asSymbol()) {
+        switch (head.asSymbol()) {
             case "if":
                 var test = evaluate(list.get(1), env, followSymbols)._1;
                 var isFalse = test.value().equals(0);
@@ -49,11 +49,11 @@ public class Evaluator {
             case "quote":
                 return Tuple.of(list.get(1), env);
             default:
-                return evaluateProc((AstSymbol)head, list.tail(), env, followSymbols);
+                return evaluateProc(head, list.tail(), env, followSymbols);
         }
     }
 
-    private Tuple2<AstExp, Environment> evaluateProc(AstSymbol head, List<AstExp> tail, Environment env, boolean followSymbols) {
+    private Tuple2<AstExp, Environment> evaluateProc(AstExp head, List<AstExp> tail, Environment env, boolean followSymbols) {
         var fn = env.lookup(head.asSymbol());
         var params = tail
             .foldLeft(
