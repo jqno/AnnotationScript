@@ -1,6 +1,7 @@
 package nl.jqno.annotationscript.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -40,5 +41,23 @@ public class EnvironmentTest {
         var sut = new Environment(ENV);
         var actual = sut.add("r", Fn.value(new AstInt(10)));
         assertEquals(new AstInt(10), actual.lookup("r").evaluate(List.empty()));
+    }
+
+    @Test
+    public void successfulMerge() {
+        var sut = new Environment(ENV);
+        var otherEnv = new Environment(HashMap.of("e", Fn.value(new AstFloat(Math.E))));
+        var merged = sut.merge(otherEnv);
+        assertNotNull(merged.lookup("pi"));
+        assertNotNull(merged.lookup("e"));
+    }
+
+    @Test
+    public void successfulMergeWhereThisOverridesThat() {
+        var sut = new Environment(ENV);
+        var otherEnv = new Environment(HashMap.of("pi", Fn.value(new AstFloat(Math.E))));
+        var merged = sut.merge(otherEnv);
+        var pi = merged.lookup("pi");
+        assertEquals(new AstFloat(Math.PI), pi.evaluate(List.empty()));
     }
 }

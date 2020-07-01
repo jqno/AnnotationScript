@@ -19,4 +19,8 @@ public class Environment {
     public Environment add(String symbol, Fn fn) {
         return new Environment(env.put(symbol, fn));
     }
+
+    public Environment merge(Environment other) {
+        return new Environment(env.merge(other.env));
+    }
 }
