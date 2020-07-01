@@ -19,7 +19,7 @@ public final class AstLambda implements AstExp {
     }
 
     public Fn asFn(Evaluator eval, Environment currentEnv) {
-        return Fn.proc(params -> eval.eval(body, buildEnv(params, currentEnv)));
+        return Fn.proc(args -> eval.eval(body, buildEnv(args, currentEnv)));
     }
     
     private Environment buildEnv(List<AstExp> arguments, Environment currentEnv) {
