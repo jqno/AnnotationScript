@@ -41,6 +41,11 @@ public class Evaluator {
             case "define":
                 var symbol = list.get(1).asSymbol();
                 var exp = evaluate(list.get(2), env, followSymbols)._1;
+                if (exp instanceof AstLambda) {
+                    var lambda = (AstLambda)exp;
+                    var fn = lambda.asFn(this, env);
+                    return Tuple.of(lambda, env.add(symbol, fn));
+                }
                 return Tuple.of(exp, env.add(symbol, Fn.value(exp)));
             case "lambda":
                 var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);

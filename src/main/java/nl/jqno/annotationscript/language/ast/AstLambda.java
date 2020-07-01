@@ -18,6 +18,16 @@ public final class AstLambda implements AstExp {
         this.capturedEnv = capturedEnv;
     }
 
+    public Fn asFn(Evaluator eval, Environment currentEnv) {
+        return Fn.proc(params -> eval.eval(body, buildEnv(params, currentEnv)));
+    }
+    
+    private Environment buildEnv(List<AstExp> arguments, Environment currentEnv) {
+        var zero = currentEnv.merge(capturedEnv);
+        return params.zip(arguments)
+            .foldLeft(zero, (acc, curr) -> acc.add(curr._1.asSymbol(), Fn.value(curr._2)));
+    }
+
     @Override
     public Object value() {
         return null;

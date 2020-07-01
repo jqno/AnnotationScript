@@ -89,6 +89,21 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void successfullyEvaluateDefinedLambda() {
+        var program = new AstList(
+            new AstSymbol("begin"),
+            new AstList(new AstSymbol("define"),
+                new AstSymbol("add-two"),
+                new AstList(
+                    new AstSymbol("lambda"),
+                    new AstList(new AstSymbol("n")),
+                    new AstList(new AstSymbol("+"), new AstSymbol("n"), new AstInt(2)))),
+            new AstList(new AstSymbol("add-two"), new AstInt(4)));
+        var actual = sut.eval(program, env);
+        assertEquals(new AstFloat(6), actual);
+    }
+
+    @Test
     public void successfullyEvaluateQuote() {
         var expression = new AstList(new AstSymbol("if"), new AstInt(1), new AstInt(2), new AstInt(3));
         var quotedExpression = new AstList(new AstSymbol("quote"), expression);
