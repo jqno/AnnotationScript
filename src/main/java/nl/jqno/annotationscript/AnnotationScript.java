@@ -12,7 +12,7 @@ public final class AnnotationScript {
         var tokens = new Tokenizer(source).tokenize();
         var parsed = new Parser(tokens).parse();
         var evaluated = new Evaluator().eval(parsed, environment);
-        return evaluated.value();
+        return evaluated;
     }
 
     private AnnotationScript() {}

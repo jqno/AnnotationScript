@@ -9,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
-import nl.jqno.annotationscript.language.ast.AstFloat;
-import nl.jqno.annotationscript.language.ast.AstInt;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public class EnvironmentTest {
 
     private static final Map<String, Fn> ENV = HashMap.of(
-        "pi", Fn.value(new AstFloat(Math.PI))
+        "pi", new Fn(params -> Math.PI)
     );
 
     @Test
@@ -39,14 +37,14 @@ public class EnvironmentTest {
     @Test
     public void successfulAdd() {
         var sut = new Environment(ENV);
-        var actual = sut.add("r", Fn.value(new AstInt(10)));
-        assertEquals(new AstInt(10), actual.lookup("r").evaluate(List.empty()));
+        var actual = sut.add("r", new Fn(params -> 10));
+        assertEquals(10, actual.lookup("r").evaluate(List.empty()));
     }
 
     @Test
     public void successfulMerge() {
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("e", Fn.value(new AstFloat(Math.E))));
+        var otherEnv = new Environment(HashMap.of("e", new Fn(params -> Math.E)));
         var merged = sut.merge(otherEnv);
         assertNotNull(merged.lookup("pi"));
         assertNotNull(merged.lookup("e"));
@@ -55,9 +53,9 @@ public class EnvironmentTest {
     @Test
     public void successfulMergeWhereThisOverridesThat() {
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("pi", Fn.value(new AstFloat(Math.E))));
+        var otherEnv = new Environment(HashMap.of("pi", new Fn(params -> Math.E)));
         var merged = sut.merge(otherEnv);
         var pi = merged.lookup("pi");
-        assertEquals(new AstFloat(Math.PI), pi.evaluate(List.empty()));
+        assertEquals(Math.PI, pi.evaluate(List.empty()));
     }
 }
