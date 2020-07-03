@@ -59,7 +59,7 @@ public class Evaluator {
     }
 
     private Tuple2<AstExp, Environment> evaluateProc(AstExp head, List<AstExp> tail, Environment env, boolean followSymbols) {
-        var fn = env.lookup(head.asSymbol());
+        var fn = head instanceof AstLambda ? ((AstLambda)head).asFn(this, env) : env.lookup(head.asSymbol());
         var params = tail
             .foldLeft(
                 Tuple.<List<AstExp>, Environment>of(List.empty(), env),

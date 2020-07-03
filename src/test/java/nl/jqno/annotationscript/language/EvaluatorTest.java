@@ -75,7 +75,7 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void successfullyEvaluateLambda() {
+    public void successfullyEvaluateLambdaExpression() {
         var lambda = new AstLambda(
             List.of(new AstSymbol("x"), new AstSymbol("y")),
             new AstList(new AstSymbol("+"), new AstSymbol("x"), new AstSymbol("y")),
@@ -101,6 +101,22 @@ public class EvaluatorTest {
             new AstList(new AstSymbol("add-two"), new AstInt(4)));
         var actual = sut.eval(program, env);
         assertEquals(new AstFloat(6), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateLambdaInvocation() {
+        // (+ ((lambda (n) (+ n 2)) 4) 10)
+        var program = new AstList(
+            new AstSymbol("+"),
+            new AstList(
+                new AstList(
+                    new AstSymbol("lambda"),
+                    new AstList(new AstSymbol("n")),
+                    new AstList(new AstSymbol("+"), new AstSymbol("n"), new AstInt(2))),
+                new AstInt(4)),
+            new AstInt(10));
+        var actual = sut.eval(program, env);
+        assertEquals(new AstFloat(16), actual);
     }
 
     @Test
