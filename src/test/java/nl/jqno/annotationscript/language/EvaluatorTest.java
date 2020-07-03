@@ -90,9 +90,13 @@ public class EvaluatorTest {
 
     @Test
     public void successfullyEvaluateDefinedLambda() {
+        // (begin
+        //   (define add-two (lambda (n) (+ n 2)))
+        //   (add-two 4))
         var program = new AstList(
             new AstSymbol("begin"),
-            new AstList(new AstSymbol("define"),
+            new AstList(
+                new AstSymbol("define"),
                 new AstSymbol("add-two"),
                 new AstList(
                     new AstSymbol("lambda"),
@@ -117,6 +121,25 @@ public class EvaluatorTest {
             new AstInt(10));
         var actual = sut.eval(program, env);
         assertEquals(new AstFloat(16), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateLambdaInHigherOrderFunction() {
+        // (begin
+        //   (define apply (lambda (f x y) (f x y)))
+        //   (apply + 1 2))
+        var program = new AstList(
+                new AstSymbol("begin"),
+                new AstList(
+                    new AstSymbol("define"),
+                    new AstSymbol("apply"),
+                    new AstList(
+                        new AstSymbol("lambda"),
+                        new AstList(new AstSymbol("f"), new AstSymbol("x"), new AstSymbol("y")),
+                        new AstList(new AstSymbol("f"), new AstSymbol("x"), new AstSymbol("y")))),
+                new AstList(new AstSymbol("apply"), new AstSymbol("+"), new AstInt(1), new AstInt(2)));
+        var actual = sut.eval(program, env);
+        assertEquals(new AstFloat(3), actual);
     }
 
     @Test
