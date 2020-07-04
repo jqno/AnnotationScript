@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Test;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.fn.Fn;
 
 public class EvaluatorTest {
 
     private final Evaluator sut = new Evaluator();
     private final Environment env = new Environment(HashMap.of(
-        "begin", Fn.proc(params -> params.last()),
+        "begin", Fn.builtin(params -> params.last()),
         "pi", Fn.value(Math.PI),
-        "+", Fn.proc(params -> params.foldLeft(0.0, (acc, curr) -> acc + (float)curr))
+        "+", Fn.builtin(params -> params.foldLeft(0.0, (acc, curr) -> acc + (float)curr))
     ));
 
     @Test

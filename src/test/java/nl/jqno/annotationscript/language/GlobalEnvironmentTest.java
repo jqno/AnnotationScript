@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.List;
+import nl.jqno.annotationscript.language.fn.Value;
 
 public class GlobalEnvironmentTest {
     private static final Environment ENV = GlobalEnvironment.build();

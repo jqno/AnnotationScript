@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.HashMap;
-import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
+import nl.jqno.annotationscript.language.fn.Fn;
 
 public class EnvironmentTest {
 

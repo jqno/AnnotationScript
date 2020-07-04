@@ -1,4 +1,4 @@
-package nl.jqno.annotationscript.language;
+package nl.jqno.annotationscript.language.fn;
 
 public final class Value implements Fn {
     private final Object value;
