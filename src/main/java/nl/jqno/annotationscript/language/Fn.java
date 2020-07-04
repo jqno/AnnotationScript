@@ -4,14 +4,22 @@ import java.util.function.Function;
 
 import io.vavr.collection.List;
 
-public final class Fn {
-    private final Function<List<Object>, Object> fn;
+public interface Fn {
 
-    public Fn(Function<List<Object>, Object> fn) {
-        this.fn = fn;
+    public default Object value() {
+        throw new IllegalStateException("This Fn is not a value");
     }
 
-    public Object evaluate(List<Object> parameters) {
-        return fn.apply(parameters);
+    public default Object evaluate(List<Object> parameters) {
+        throw new IllegalStateException("This Fn is not a proc");
+    }
+
+    public static Fn proc(Function<List<Object>, Object> fn) {
+        return new Proc(fn);
+    }
+
+    public static Fn value(Object value) {
+        return new Value(value);
     }
 }
+

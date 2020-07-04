@@ -46,6 +46,9 @@ public class GlobalEnvironmentTest {
 
     private Object evaluate(String symbol, Object... params) {
         var sut = ENV.lookup(symbol);
+        if (sut instanceof Value) {
+            return sut.value();
+        }
         return sut.evaluate(List.of(params));
     }
 }
