@@ -10,7 +10,7 @@ public final class AstString implements AstExp {
     }
 
     @Override
-    public Object value() {
+    public String value() {
         return value;
     }
 

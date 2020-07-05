@@ -10,7 +10,7 @@ public final class AstFloat implements AstExp {
     }
 
     @Override
-    public Object value() {
+    public Double value() {
         return value;
     }
 

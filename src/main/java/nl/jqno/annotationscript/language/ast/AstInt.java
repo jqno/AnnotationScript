@@ -10,7 +10,7 @@ public final class AstInt implements AstExp {
     }
 
     @Override
-    public Object value() {
+    public Integer value() {
         return value;
     }
 
