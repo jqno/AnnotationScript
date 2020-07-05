@@ -70,7 +70,7 @@ public class Evaluator {
     private Tuple2<Object, Environment> evaluateLambda(List<AstExp> list, Environment env) {
         var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
         var body = list.get(2);
-        var result = new Lambda(params, body, env);
+        var result = Fn.lambda(params, body, env);
         return Tuple.of(result, env);
     }
 

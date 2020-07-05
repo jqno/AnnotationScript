@@ -9,7 +9,7 @@ import nl.jqno.annotationscript.language.Evaluator;
 public final class Builtin implements Fn {
     private final Function<List<Object>, Object> fn;
 
-    public Builtin(Function<List<Object>, Object> fn) {
+    Builtin(Function<List<Object>, Object> fn) {
         this.fn = fn;
     }
 

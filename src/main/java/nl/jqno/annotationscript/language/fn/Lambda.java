@@ -11,7 +11,7 @@ public final class Lambda implements Fn {
     private final AstExp body;
     private final Environment capturedEnv;
 
-    public Lambda(List<AstSymbol> params, AstExp body, Environment capturedEnv) {
+    Lambda(List<AstSymbol> params, AstExp body, Environment capturedEnv) {
         this.params = params;
         this.body = body;
         this.capturedEnv = capturedEnv;
