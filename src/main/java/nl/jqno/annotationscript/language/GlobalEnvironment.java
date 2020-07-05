@@ -1,5 +1,7 @@
 package nl.jqno.annotationscript.language;
 
+import java.util.Objects;
+
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
@@ -11,6 +13,12 @@ public final class GlobalEnvironment {
         Tuple.of("-", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc - toDouble(curr)))),
         Tuple.of("*", Fn.builtin(params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr)))),
         Tuple.of("/", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr)))),
+        Tuple.of("%", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc % toDouble(curr)))),
+        Tuple.of(">", Fn.builtin(params -> toDouble(params.get(0)) > toDouble(params.get(1)) ? 1 : 0)),
+        Tuple.of("<", Fn.builtin(params -> toDouble(params.get(0)) < toDouble(params.get(1)) ? 1 : 0)),
+        Tuple.of(">=", Fn.builtin(params -> toDouble(params.get(0)) >= toDouble(params.get(1)) ? 1 : 0)),
+        Tuple.of("<=", Fn.builtin(params -> toDouble(params.get(0)) <= toDouble(params.get(1)) ? 1 : 0)),
+        Tuple.of("=", Fn.builtin(params -> Objects.equals(params.get(0), params.get(1)) ? 1 : 0)),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
         Tuple.of("pi", Fn.val(Math.PI))
     );

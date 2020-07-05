@@ -35,6 +35,50 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void modulo() {
+        assertEquals(1.0, evaluate("%", 1));
+        assertEquals(2.0, evaluate("%", 17, 6, 3));
+    }
+
+    @Test
+    public void greaterThan() {
+        assertEquals(1, evaluate(">", 10, 4));
+        assertEquals(0, evaluate(">", 10, 10));
+        assertEquals(0, evaluate(">", 4, 10));
+    }
+
+    @Test
+    public void lessThan() {
+        assertEquals(1, evaluate("<", 4, 10));
+        assertEquals(0, evaluate("<", 10, 10));
+        assertEquals(0, evaluate("<", 10, 4));
+    }
+
+    @Test
+    public void greaterThanOrEqualTo() {
+        assertEquals(1, evaluate(">=", 10, 4));
+        assertEquals(1, evaluate(">=", 10, 10));
+        assertEquals(0, evaluate(">=", 4, 10));
+    }
+
+    @Test
+    public void lessThanOrEqualTo() {
+        assertEquals(1, evaluate("<=", 4, 10));
+        assertEquals(1, evaluate("<=", 10, 10));
+        assertEquals(0, evaluate("<=", 10, 4));
+    }
+
+    @Test
+    public void equalTo() {
+        assertEquals(1, evaluate("=", 10, 10));
+        assertEquals(0, evaluate("=", 10, 4));
+        assertEquals(1, evaluate("=", "a", "a"));
+        assertEquals(0, evaluate("=", "a", "b"));
+        assertEquals(1, evaluate("=", "'a'", "'a'"));
+        assertEquals(0, evaluate("=", "'a'", "'b'"));
+    }
+
+    @Test
     public void begin() {
         assertEquals(1, evaluate("begin", 1));
         assertEquals("z", evaluate("begin", "x", "y", "z"));
