@@ -52,7 +52,7 @@ public class Evaluator {
     }
 
     private Tuple2<Object, Environment> evaluateProc(List<AstExp> list, Environment env) {
-        var proc = evaluate(list.head(), env)._1;
+        var proc = (Fn)evaluate(list.head(), env)._1;
         var args = list
             .tail()
             .foldLeft(Tuple.<List<Object>, Environment>of(List.empty(), env), (acc, curr) -> {
@@ -60,10 +60,6 @@ public class Evaluator {
                 return Tuple.of(acc._1.append(result._1), result._2);
             })
             ._1;
-        if (proc instanceof Fn) {
-            var fn = (Fn)proc;
-            return Tuple.of(fn.evaluate(args, env, this), env);
-        }
-        return null;
+        return Tuple.of(proc.evaluate(args, env, this), env);
     }
 }
