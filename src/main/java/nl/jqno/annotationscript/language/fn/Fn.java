@@ -20,7 +20,7 @@ public interface Fn {
         return new Builtin(fn);
     }
 
-    public static Fn value(Object value) {
+    public static Fn val(Object value) {
         return new Value(value);
     }
 }

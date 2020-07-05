@@ -63,7 +63,7 @@ public class Evaluator {
     private Tuple2<Object, Environment> evaluateDefine(List<AstExp> list, Environment env) {
         var symbol = list.get(1).asSymbol();
         var exp = evaluate(list.get(2), env)._1;
-        var fn = exp instanceof Fn ? (Fn)exp : Fn.value(exp);
+        var fn = exp instanceof Fn ? (Fn)exp : Fn.val(exp);
         return Tuple.of(exp, env.add(symbol, fn));
     }
 

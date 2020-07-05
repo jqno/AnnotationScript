@@ -12,7 +12,7 @@ public final class GlobalEnvironment {
         Tuple.of("*", Fn.builtin(params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr)))),
         Tuple.of("/", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr)))),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
-        Tuple.of("pi", Fn.value(Math.PI))
+        Tuple.of("pi", Fn.val(Math.PI))
     );
 
     public static Environment build() {
