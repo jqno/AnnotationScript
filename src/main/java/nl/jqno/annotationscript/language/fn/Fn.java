@@ -7,15 +7,16 @@ import nl.jqno.annotationscript.language.Environment;
 import nl.jqno.annotationscript.language.Evaluator;
 import nl.jqno.annotationscript.language.ast.AstExp;
 import nl.jqno.annotationscript.language.ast.AstSymbol;
+import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public interface Fn {
 
     public default Object value() {
-        throw new IllegalStateException("This Fn is not a value");
+        throw new EvaluationException("This Fn is not a value");
     }
 
     public default Object evaluate(List<Object> parameters, Environment currentEnv, Evaluator evaluator) {
-        throw new IllegalStateException("This Fn is not a builtin or lambda");
+        throw new EvaluationException("This Fn is not a builtin or lambda");
     }
 
     public static Fn builtin(Function<List<Object>, Object> fn) {
