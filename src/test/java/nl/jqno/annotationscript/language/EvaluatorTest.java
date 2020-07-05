@@ -15,7 +15,7 @@ public class EvaluatorTest {
     private final Environment env = new Environment(HashMap.of(
         "begin", Fn.builtin(params -> params.last()),
         "pi", Fn.value(Math.PI),
-        "+", Fn.builtin(params -> params.foldLeft(0.0, (acc, curr) -> acc + (float)curr))
+        "+", Fn.builtin(params -> params.foldLeft(0.0, (acc, curr) -> acc + Double.valueOf(curr.toString())))
     ));
 
     @Test
@@ -146,7 +146,7 @@ public class EvaluatorTest {
     @Test
     public void successfullyEvaluateProc() {
         var actual = sut.eval(new AstList(new AstSymbol("+"), new AstInt(1), new AstInt(2), new AstInt(3), new AstInt(4)), env);
-        assertEquals(10, actual);
+        assertEquals(10.0, actual);
     }
 
     @Test
@@ -156,7 +156,7 @@ public class EvaluatorTest {
             new AstInt(4),
             new AstInt(2));
         var actual = sut.eval(expression, env);
-        assertEquals(6, actual);
+        assertEquals(6.0, actual);
     }
 
     @Test
@@ -168,6 +168,6 @@ public class EvaluatorTest {
             new AstInt(4),
             new AstInt(2));
         var actual = sut.eval(expression, env);
-        assertEquals(6, actual);
+        assertEquals(6.0, actual);
     }
 }
