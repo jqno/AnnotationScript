@@ -14,11 +14,11 @@ public final class GlobalEnvironment {
         Tuple.of("*", Fn.builtin(params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr)))),
         Tuple.of("/", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr)))),
         Tuple.of("%", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc % toDouble(curr)))),
-        Tuple.of(">", Fn.builtin(params -> toDouble(params.get(0)) > toDouble(params.get(1)) ? 1 : 0)),
-        Tuple.of("<", Fn.builtin(params -> toDouble(params.get(0)) < toDouble(params.get(1)) ? 1 : 0)),
-        Tuple.of(">=", Fn.builtin(params -> toDouble(params.get(0)) >= toDouble(params.get(1)) ? 1 : 0)),
-        Tuple.of("<=", Fn.builtin(params -> toDouble(params.get(0)) <= toDouble(params.get(1)) ? 1 : 0)),
-        Tuple.of("=", Fn.builtin(params -> Objects.equals(params.get(0), params.get(1)) ? 1 : 0)),
+        Tuple.of(">", Fn.builtin(params -> bool(toDouble(params.get(0)) > toDouble(params.get(1))))),
+        Tuple.of("<", Fn.builtin(params -> bool(toDouble(params.get(0)) < toDouble(params.get(1))))),
+        Tuple.of(">=", Fn.builtin(params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1))))),
+        Tuple.of("<=", Fn.builtin(params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1))))),
+        Tuple.of("=", Fn.builtin(params -> bool(Objects.equals(params.get(0), params.get(1))))),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
         Tuple.of("pi", Fn.val(Math.PI)),
         // CHECKSTYLE OFF: Regexp
@@ -32,6 +32,10 @@ public final class GlobalEnvironment {
     }
 
     private GlobalEnvironment() {}
+
+    private static int bool(boolean b) {
+        return b ? 1 : 0;
+    }
 
     private static double toDouble(Object x) {
         return Double.valueOf(x.toString());
