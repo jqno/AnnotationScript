@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.List;
+import io.vavr.control.Option;
 import nl.jqno.annotationscript.language.fn.Value;
 
 public class GlobalEnvironmentTest {
@@ -80,9 +81,63 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void append() {
+        assertEquals(List.of(1, 2, 3, 42), evaluate("append", 42, List.of(1, 2, 3)));
+        assertEquals(List.of(42), evaluate("append", 42, List.empty()));
+    }
+
+    @Test
     public void begin() {
         assertEquals(1, evaluate("begin", 1));
         assertEquals("z", evaluate("begin", "x", "y", "z"));
+    }
+
+    @Test
+    public void cons() {
+        assertEquals(List.of(42, 1, 2, 3), evaluate("cons", 42, List.of(1, 2, 3)));
+        assertEquals(List.of(42), evaluate("cons", 42, List.empty()));
+    }
+
+    @Test
+    public void head() {
+        assertEquals(1, evaluate("head", List.of(1, 2, 3)));
+        assertEquals(null, evaluate("head", List.empty()));
+        assertEquals(null, evaluate("head"));
+        assertEquals(null, evaluate("head", "not-a-list"));
+    }
+
+    @Test
+    public void length() {
+        assertEquals(3, evaluate("length", List.of(1, 2, 3)));
+        assertEquals(0, evaluate("length", List.empty()));
+        assertNull(evaluate("length"));
+        assertNull(evaluate("length", "not-a-list"));
+    }
+
+    @Test
+    public void list() {
+        assertEquals(List.of(1, 2, 3), evaluate("list", 1, 2, 3));
+        assertEquals(List.empty(), evaluate("list"));
+    }
+
+    @Test
+    public void listp() {
+        assertEquals(1, evaluate("list?", List.of(1, 2, 3)));
+        assertEquals(1, evaluate("list?", List.empty()));
+        assertEquals(0, evaluate("list?", "not-a-list"));
+        assertEquals(0, evaluate("list?", 1));
+    }
+
+    @Test
+    public void null_() {
+        assertNull(evaluate("null"));
+    }
+
+    @Test
+    public void nullp() {
+        assertEquals(1, evaluate("null?", Option.none().getOrNull())); // avoid warnings caused by typing `null` directly
+        assertEquals(0, evaluate("null?", "null"));
+        assertEquals(0, evaluate("null?", 1));
     }
 
     @Test
@@ -98,6 +153,15 @@ public class GlobalEnvironmentTest {
     @Test
     public void printlnErr() {
         assertNull(evaluate("println-err", "We're just going to assume", "that this actually printed something", "to System.err"));
+    }
+
+    @Test
+    public void tail() {
+        assertEquals(List.of(2, 3), evaluate("tail", List.of(1, 2, 3)));
+        assertEquals(List.empty(), evaluate("tail", List.of(1)));
+        assertEquals(List.empty(), evaluate("tail", List.empty()));
+        assertEquals(null, evaluate("tail"));
+        assertEquals(null, evaluate("tail", "not-a-list"));
     }
 
     private Object evaluate(String symbol, Object... params) {
