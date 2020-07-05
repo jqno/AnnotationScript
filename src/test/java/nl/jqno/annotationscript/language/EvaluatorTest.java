@@ -91,7 +91,7 @@ public class EvaluatorTest {
                     new AstList(new AstSymbol("+"), new AstSymbol("n"), new AstInt(2)))),
             new AstList(new AstSymbol("add-two"), new AstInt(4)));
         var actual = sut.eval(program, env);
-        assertEquals(6, actual);
+        assertEquals(6.0, actual);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class EvaluatorTest {
                 new AstInt(4)),
             new AstInt(10));
         var actual = sut.eval(program, env);
-        assertEquals(16, actual);
+        assertEquals(16.0, actual);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class EvaluatorTest {
                         new AstList(new AstSymbol("f"), new AstSymbol("x"), new AstSymbol("y")))),
                 new AstList(new AstSymbol("apply"), new AstSymbol("+"), new AstInt(1), new AstInt(2)));
         var actual = sut.eval(program, env);
-        assertEquals(3, actual);
+        assertEquals(3.0, actual);
     }
 
     @Test

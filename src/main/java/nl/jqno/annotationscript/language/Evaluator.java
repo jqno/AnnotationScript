@@ -37,8 +37,13 @@ public class Evaluator {
             case "define":
                 var symbol = list.get(1).asSymbol();
                 var exp = evaluate(list.get(2), env)._1;
-                var fn = exp instanceof AstExp ? Fn.exp((AstExp)exp) : Fn.value(exp);
+                var fn = exp instanceof Fn ? (Fn)exp : Fn.value(exp);
                 return Tuple.of(exp, env.add(symbol, fn));
+            case "lambda":
+                var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
+                var body = list.get(2);
+                var result = new Lambda(params, body, env);
+                return Tuple.of(result, env);
             case "quote":
                 return Tuple.of(list.get(1), env);
             default:
@@ -57,7 +62,7 @@ public class Evaluator {
             ._1;
         if (proc instanceof Fn) {
             var fn = (Fn)proc;
-            return Tuple.of(fn.evaluate(args), env);
+            return Tuple.of(fn.evaluate(args, env, this), env);
         }
         return null;
     }

@@ -50,6 +50,6 @@ public class GlobalEnvironmentTest {
         if (sut instanceof Value) {
             return sut.value();
         }
-        return sut.evaluate(List.of(params));
+        return sut.evaluate(List.of(params), ENV, null);
     }
 }
