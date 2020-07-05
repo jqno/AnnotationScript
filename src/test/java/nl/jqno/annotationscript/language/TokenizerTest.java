@@ -57,6 +57,27 @@ public class TokenizerTest {
     }
 
     @Test
+    public void tokenizeIncludes() {
+        @Zero("define")@Zero("r")@Zero("10")
+        class InputDefine {}
+
+        @Zero("*")@Zero("r")@Zero("r")
+        class InputMultiply {}
+
+        @Zero("begin")
+        @Zero(include=InputDefine.class)
+        @Zero(list={@One("*"), @One("pi"), @One(include=InputMultiply.class)})
+        class Input {}
+
+        var sut = new Tokenizer(Input.class);
+        var actual = sut.tokenize();
+        var expected = List.of("(", "begin", 
+                "(", "define", "r", "10", ")",
+                "(", "*", "pi", "(", "*", "r", "r", ")", ")", ")");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void throwOnUninitializedAnnotation() {
         @Zero("non-empty")@Zero
         class Input {}
