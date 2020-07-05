@@ -4,72 +4,89 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.fn.*;
 
 public class Evaluator {
-    public AstExp eval(AstExp x, Environment env) {
-        return evaluate(x, env, true)._1;
+    public Object eval(AstExp exp, Environment env) {
+        return evaluate(exp, env)._1;
     }
 
-    private Tuple2<AstExp, Environment> evaluate(AstExp x, Environment env, boolean followSymbols) {
-        if (x instanceof AstList) {
-            return evaluateList((AstList)x, env, followSymbols);
+    public Tuple2<Object, Environment> evaluate(AstExp exp, Environment env) {
+        if (exp instanceof AstSymbol) {
+            return evaluateSymbol(exp, env);
         }
-        if (followSymbols && x instanceof AstSymbol) {
-            var symbol = (AstSymbol)x;
-            return Tuple.of(env.lookup(symbol.asSymbol()).evaluate(List.of()), env);
+        if (exp instanceof AstInt || exp instanceof AstFloat || exp instanceof AstString) {
+            return evaluateAtom(exp, env);
         }
-
-        return Tuple.of(x, env);
+        return evaluateList(exp, env);
     }
 
-    private Tuple2<AstExp, Environment> evaluateList(AstList x, Environment env, boolean followSymbols) {
-        var list = x.value();
+    private Tuple2<Object, Environment> evaluateSymbol(AstExp exp, Environment env) {
+        var fn = env.lookup(exp.asSymbol());
+        if (fn instanceof Value) {
+            return Tuple.of(fn.value(), env);
+        }
+        return Tuple.of(fn, env);
+    }
+
+    private Tuple2<Object, Environment> evaluateAtom(AstExp exp, Environment env) {
+        return Tuple.of(exp.value(), env);
+    }
+
+    private Tuple2<Object, Environment> evaluateList(AstExp exp, Environment env) {
+        var list = ((AstList)exp).value();
         if (list.size() == 0) {
-            return Tuple.of(x, env);
+            return Tuple.of(list, env);
         }
-        var head = list.head();
-        if (head instanceof AstList) {
-            var procHead = evaluate(head, env, false);
-            return evaluateProc(procHead._1, list.tail(), procHead._2, followSymbols);
-        }
-        switch (head.asSymbol()) {
+        var head = list.head() instanceof AstSymbol ? list.head().asSymbol() : "";
+        switch (head) {
             case "if":
-                var test = evaluate(list.get(1), env, followSymbols)._1;
-                var isFalse = test.value().equals(0);
-                var branch = isFalse ? list.get(3) : list.get(2);
-                return Tuple.of(evaluate(branch, env, followSymbols)._1, env);
+                return evaluateIf(list, env);
             case "define":
-                var symbol = list.get(1).asSymbol();
-                var exp = evaluate(list.get(2), env, followSymbols)._1;
-                if (exp instanceof AstLambda) {
-                    var lambda = (AstLambda)exp;
-                    var fn = lambda.asFn(this, env);
-                    return Tuple.of(lambda, env.add(symbol, fn));
-                }
-                return Tuple.of(exp, env.add(symbol, Fn.value(exp)));
+                return evaluateDefine(list, env);
             case "lambda":
-                var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
-                var body = list.get(2);
-                return Tuple.of(new AstLambda(params, body, env), env);
+                return evaluateLambda(list, env);
             case "quote":
-                return Tuple.of(list.get(1), env);
+                return evaluateQuote(list, env);
             default:
-                return evaluateProc(head, list.tail(), env, followSymbols);
+                return evaluateProc(list, env);
         }
     }
 
-    private Tuple2<AstExp, Environment> evaluateProc(AstExp head, List<AstExp> tail, Environment env, boolean followSymbols) {
-        var fn = head instanceof AstLambda ? ((AstLambda)head).asFn(this, env) : env.lookup(head.asSymbol());
-        var params = tail
-            .foldLeft(
-                Tuple.<List<AstExp>, Environment>of(List.empty(), env),
-                (acc, curr) -> {
-                    var accList = acc._1;
-                    var accEnv = acc._2;
-                    var result = evaluate(curr, accEnv, followSymbols);
-                    return Tuple.of(accList.append(result._1), result._2);
-                })
+    private Tuple2<Object, Environment> evaluateIf(List<AstExp> list, Environment env) {
+        var test = evaluate(list.get(1), env)._1;
+        var isFalse = test.equals(0);
+        var branch = isFalse ? list.get(3) : list.get(2);
+        return Tuple.of(evaluate(branch, env)._1, env);
+    }
+
+    private Tuple2<Object, Environment> evaluateDefine(List<AstExp> list, Environment env) {
+        var symbol = list.get(1).asSymbol();
+        var exp = evaluate(list.get(2), env)._1;
+        var fn = exp instanceof Fn ? (Fn)exp : Fn.val(exp);
+        return Tuple.of(exp, env.add(symbol, fn));
+    }
+
+    private Tuple2<Object, Environment> evaluateLambda(List<AstExp> list, Environment env) {
+        var params = ((AstList)list.get(1)).value().map(v -> (AstSymbol)v);
+        var body = list.get(2);
+        var result = new Lambda(params, body, env);
+        return Tuple.of(result, env);
+    }
+
+    private Tuple2<Object, Environment> evaluateQuote(List<AstExp> list, Environment env) {
+        return Tuple.of(list.get(1), env);
+    }
+
+    private Tuple2<Object, Environment> evaluateProc(List<AstExp> list, Environment env) {
+        var fn = (Fn)evaluate(list.head(), env)._1;
+        var args = list
+            .tail()
+            .foldLeft(Tuple.<List<Object>, Environment>of(List.empty(), env), (acc, curr) -> {
+                var result = evaluate(curr, acc._2);
+                return Tuple.of(acc._1.append(result._1), result._2);
+            })
             ._1;
-        return Tuple.of(fn.evaluate(params), env);
+        return Tuple.of(fn.evaluate(args, env, this), env);
     }
 }

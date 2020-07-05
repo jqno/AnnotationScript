@@ -2,6 +2,7 @@ package nl.jqno.annotationscript.language;
 
 import io.vavr.collection.Map;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
+import nl.jqno.annotationscript.language.fn.Fn;
 
 public class Environment {
     private final Map<String, Fn> env;
