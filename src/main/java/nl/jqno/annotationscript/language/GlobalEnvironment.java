@@ -20,7 +20,11 @@ public final class GlobalEnvironment {
         Tuple.of("<=", Fn.builtin(params -> toDouble(params.get(0)) <= toDouble(params.get(1)) ? 1 : 0)),
         Tuple.of("=", Fn.builtin(params -> Objects.equals(params.get(0), params.get(1)) ? 1 : 0)),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
-        Tuple.of("pi", Fn.val(Math.PI))
+        Tuple.of("pi", Fn.val(Math.PI)),
+        // CHECKSTYLE OFF: Regexp
+        Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
+        Tuple.of("println-err", Fn.builtin(params -> { System.err.println(params.mkString(" ")); return null; }))
+        // CHECKSTYLE ON: Regexp
     );
 
     public static Environment build() {

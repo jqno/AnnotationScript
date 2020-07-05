@@ -1,6 +1,7 @@
 package nl.jqno.annotationscript.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -87,6 +88,16 @@ public class GlobalEnvironmentTest {
     @Test
     public void pi() {
         assertEquals(Math.PI, evaluate("pi"));
+    }
+
+    @Test
+    public void println() {
+        assertNull(evaluate("println", "We're just going to assume", "that this actually printed something"));
+    }
+
+    @Test
+    public void printlnErr() {
+        assertNull(evaluate("println-err", "We're just going to assume", "that this actually printed something", "to System.err"));
     }
 
     private Object evaluate(String symbol, Object... params) {
