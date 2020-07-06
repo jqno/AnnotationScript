@@ -81,6 +81,12 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void abs() {
+        assertEquals(1.0, evaluate("abs", -1.0));
+        assertEquals(1.0, evaluate("abs", 1.0));
+    }
+
+    @Test
     public void append() {
         assertEquals(List.of(1, 2, 3, 42), evaluate("append", 42, List.of(1, 2, 3)));
         assertEquals(List.of(42), evaluate("append", 42, List.empty()));
@@ -129,6 +135,28 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void max() {
+        assertEquals(42.0, evaluate("max", 6, 42, 3));
+        assertEquals(42.0, evaluate("max", 42));
+    }
+
+    @Test
+    public void min() {
+        assertEquals(3.0, evaluate("min", 6, 42, 3));
+        assertEquals(42.0, evaluate("max", 42));
+    }
+
+    @Test
+    public void not() {
+        assertEquals(1, evaluate("not", 0));
+        assertEquals(1, evaluate("not", 0.0));
+        assertEquals(0, evaluate("not", 1));
+        assertEquals(0, evaluate("not", 2));
+        assertEquals(0, evaluate("not", "something"));
+        assertEquals(0, evaluate("not", List.empty()));
+    }
+
+    @Test
     public void null_() {
         assertNull(evaluate("null"));
     }
@@ -153,6 +181,12 @@ public class GlobalEnvironmentTest {
     @Test
     public void printlnErr() {
         assertNull(evaluate("println-err", "We're just going to assume", "that this actually printed something", "to System.err"));
+    }
+
+    @Test
+    public void round() {
+        assertEquals(42.0, evaluate("round", 42.42));
+        assertEquals(42.0, evaluate("round", 41.52));
     }
 
     @Test

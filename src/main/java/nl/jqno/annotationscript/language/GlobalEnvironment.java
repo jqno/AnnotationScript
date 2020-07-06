@@ -21,6 +21,7 @@ public final class GlobalEnvironment {
         Tuple.of(">=", Fn.builtin(params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1))))),
         Tuple.of("<=", Fn.builtin(params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1))))),
         Tuple.of("=", Fn.builtin(params -> bool(Objects.equals(params.get(0), params.get(1))))),
+        Tuple.of("abs", Fn.builtin(params -> Math.abs(toDouble(params.get(0))))),
         Tuple.of("append", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull())),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
         Tuple.of("cons", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull())),
@@ -28,6 +29,9 @@ public final class GlobalEnvironment {
         Tuple.of("length", Fn.builtin(params -> toList(() -> params.get(0)).map(l -> l.length()).getOrNull())),
         Tuple.of("list", Fn.builtin(params -> params)),
         Tuple.of("list?", Fn.builtin(params -> bool(params.get(0) instanceof List))),
+        Tuple.of("max", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr))))),
+        Tuple.of("min", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr))))),
+        Tuple.of("not", Fn.builtin(params -> params.get(0).equals(0.0) || params.get(0).equals(0) ? 1 : 0)),
         Tuple.of("null", Fn.val(null)),
         Tuple.of("null?", Fn.builtin(params -> bool(params.get(0) == null))),
         Tuple.of("pi", Fn.val(Math.PI)),
@@ -35,6 +39,7 @@ public final class GlobalEnvironment {
         Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
         Tuple.of("println-err", Fn.builtin(params -> { System.err.println(params.mkString(" ")); return null; })),
         // CHECKSTYLE ON: Regexp
+        Tuple.of("round", Fn.builtin(params -> toDouble(Math.round(toDouble(params.get(0)))))),
         Tuple.of("tail", Fn.builtin(params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull()))
     );
 
