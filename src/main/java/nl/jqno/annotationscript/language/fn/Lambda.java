@@ -18,6 +18,11 @@ public final class Lambda implements Fn {
     }
 
     @Override
+    public boolean isProcedure() {
+        return true;
+    }
+
+    @Override
     public Object evaluate(List<Object> arguments, Environment currentEnv, Evaluator evaluator) {
         var zero = currentEnv.merge(capturedEnv);
         var combinedEnv = params.zip(arguments)

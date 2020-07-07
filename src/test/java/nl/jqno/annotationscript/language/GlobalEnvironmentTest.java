@@ -93,6 +93,15 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void atomp() {
+        assertEquals(1, evaluate("atom?", 42));
+        assertEquals(1, evaluate("atom?", 42.0));
+        assertEquals(1, evaluate("atom?", "'string'"));
+        assertEquals(0, evaluate("atom?", "symbol"));
+        assertEquals(0, evaluate("atom?", List.empty()));
+    }
+
+    @Test
     public void begin() {
         assertEquals(1, evaluate("begin", 1));
         assertEquals("z", evaluate("begin", "x", "y", "z"));
@@ -169,6 +178,15 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void numberp() {
+        assertEquals(1, evaluate("number?", 1));
+        assertEquals(1, evaluate("number?", 1.0));
+        assertEquals(0, evaluate("number?", "not-a-number"));
+        assertEquals(0, evaluate("number?", "'not-a-number'"));
+        assertEquals(0, evaluate("number?", List.empty()));
+    }
+
+    @Test
     public void pi() {
         assertEquals(Math.PI, evaluate("pi"));
     }
@@ -187,6 +205,20 @@ public class GlobalEnvironmentTest {
     public void round() {
         assertEquals(42.0, evaluate("round", 42.42));
         assertEquals(42.0, evaluate("round", 41.52));
+    }
+
+    @Test
+    public void stringp() {
+        assertEquals(1, evaluate("string?", "'string'"));
+        assertEquals(0, evaluate("string?", "symbol"));
+        assertEquals(0, evaluate("string?", 42));
+    }
+
+    @Test
+    public void symbolp() {
+        assertEquals(1, evaluate("symbol?", "symbol"));
+        assertEquals(0, evaluate("symbol?", "'string'"));
+        assertEquals(0, evaluate("symbol?", 42));
     }
 
     @Test

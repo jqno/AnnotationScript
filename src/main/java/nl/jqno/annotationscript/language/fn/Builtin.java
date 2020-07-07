@@ -14,6 +14,11 @@ public final class Builtin implements Fn {
     }
 
     @Override
+    public boolean isProcedure() {
+        return true;
+    }
+
+    @Override
     public Object evaluate(List<Object> parameters, Environment currentEnv, Evaluator evaluator) {
         return fn.apply(parameters);
     }

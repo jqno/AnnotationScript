@@ -8,7 +8,12 @@ import org.junit.jupiter.api.Test;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public class FnTest {
-    private final Fn sut = new Fn() {};
+    private final Fn sut = new Fn() {
+        @Override
+        public boolean isProcedure() {
+            return false;
+        }
+    };
 
     @Test
     public void value() {

@@ -8,6 +8,11 @@ public final class Value implements Fn {
     }
 
     @Override
+    public boolean isProcedure() {
+        return false;
+    }
+
+    @Override
     public Object value() {
         return value;
     }

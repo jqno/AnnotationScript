@@ -11,6 +11,8 @@ import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public interface Fn {
 
+    public boolean isProcedure();
+
     public default Object value() {
         throw new EvaluationException("This Fn is not a value");
     }

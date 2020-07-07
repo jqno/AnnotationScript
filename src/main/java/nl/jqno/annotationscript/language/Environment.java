@@ -1,6 +1,7 @@
 package nl.jqno.annotationscript.language;
 
 import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 import nl.jqno.annotationscript.language.fn.Fn;
 
@@ -11,10 +12,12 @@ public class Environment {
         this.env = env;
     }
 
+    public Option<Fn> lookupOption(String symbol) {
+        return env.get(symbol);
+    }
+
     public Fn lookup(String symbol) {
-        return env
-            .get(symbol)
-            .getOrElseThrow(() -> new EvaluationException("unknown symbol: " + symbol));
+        return lookupOption(symbol).getOrElseThrow(() -> new EvaluationException("unknown symbol: " + symbol));
     }
 
     public Environment add(String symbol, Fn fn) {

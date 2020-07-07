@@ -23,6 +23,7 @@ public final class GlobalEnvironment {
         Tuple.of("=", Fn.builtin(params -> bool(Objects.equals(params.get(0), params.get(1))))),
         Tuple.of("abs", Fn.builtin(params -> Math.abs(toDouble(params.get(0))))),
         Tuple.of("append", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull())),
+        Tuple.of("atom?", Fn.builtin(params -> bool(isNumber(params.get(0)) || isString(params.get(0))))),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
         Tuple.of("cons", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull())),
         Tuple.of("head", Fn.builtin(params -> toList(() -> params.get(0)).flatMap(l -> l.headOption()).getOrNull())),
@@ -34,12 +35,15 @@ public final class GlobalEnvironment {
         Tuple.of("not", Fn.builtin(params -> params.get(0).equals(0.0) || params.get(0).equals(0) ? 1 : 0)),
         Tuple.of("null", Fn.val(null)),
         Tuple.of("null?", Fn.builtin(params -> bool(params.get(0) == null))),
+        Tuple.of("number?", Fn.builtin(params -> bool(isNumber(params.get(0))))),
         Tuple.of("pi", Fn.val(Math.PI)),
         // CHECKSTYLE OFF: Regexp
         Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
         Tuple.of("println-err", Fn.builtin(params -> { System.err.println(params.mkString(" ")); return null; })),
         // CHECKSTYLE ON: Regexp
         Tuple.of("round", Fn.builtin(params -> toDouble(Math.round(toDouble(params.get(0)))))),
+        Tuple.of("string?", Fn.builtin(params -> bool(isString(params.get(0))))),
+        Tuple.of("symbol?", Fn.builtin(params -> bool(isSymbol(params.get(0))))),
         Tuple.of("tail", Fn.builtin(params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull()))
     );
 
@@ -69,5 +73,25 @@ public final class GlobalEnvironment {
         catch (RuntimeException ignored) {
             return Option.none();
         }
+    }
+
+    private static boolean isNumber(Object object) {
+        return object instanceof Integer || object instanceof Double;
+    }
+
+    private static boolean isString(Object object) {
+        if (object instanceof String) {
+            var s = (String)object;
+            return s.startsWith("'") && s.endsWith("'");
+        }
+        return false;
+    }
+
+    private static boolean isSymbol(Object object) {
+        if (object instanceof String) {
+            var s = (String)object;
+            return !s.startsWith("'") && !s.endsWith("'");
+        }
+        return false;
     }
 }
