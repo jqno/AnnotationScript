@@ -96,7 +96,7 @@ public final class GlobalEnvironment {
     private static boolean isSymbol(Object object) {
         if (object instanceof String) {
             var s = (String)object;
-            return !s.startsWith("'") && !s.endsWith("'");
+            return !(s.startsWith("'") && s.endsWith("'"));
         }
         return false;
     }

@@ -234,6 +234,8 @@ public class GlobalEnvironmentTest {
     @Test
     public void stringp() {
         assertEquals(1, evaluate("string?", "'string'"));
+        assertEquals(0, evaluate("string?", "'symbol"));
+        assertEquals(0, evaluate("string?", "symbol'"));
         assertEquals(0, evaluate("string?", "symbol"));
         assertEquals(0, evaluate("string?", 42));
     }
@@ -241,6 +243,8 @@ public class GlobalEnvironmentTest {
     @Test
     public void symbolp() {
         assertEquals(1, evaluate("symbol?", "symbol"));
+        assertEquals(1, evaluate("symbol?", "'symbol"));
+        assertEquals(1, evaluate("symbol?", "symbol'"));
         assertEquals(0, evaluate("symbol?", "'string'"));
         assertEquals(0, evaluate("symbol?", 42));
     }
