@@ -105,6 +105,12 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void apply() {
+        assertEquals(42.0, evaluate("apply", ENV.lookup("+"), List.of(10, 32)));
+        assertEquals(1, evaluate("apply", ENV.lookup("number?"), List.of(42)));
+    }
+
+    @Test
     public void atomp() {
         assertEquals(1, evaluate("atom?", 42));
         assertEquals(1, evaluate("atom?", 42.0));
@@ -123,6 +129,11 @@ public class GlobalEnvironmentTest {
     public void cons() {
         assertEquals(List.of(42, 1, 2, 3), evaluate("cons", 42, List.of(1, 2, 3)));
         assertEquals(List.of(42), evaluate("cons", 42, List.empty()));
+    }
+
+    @Test
+    public void foldLeft() {
+        assertEquals(42.0, evaluate("fold-left", ENV.lookup("+"), 10, List.of(8, 4, 12, 8)));
     }
 
     @Test
@@ -153,6 +164,11 @@ public class GlobalEnvironmentTest {
         assertEquals(1, evaluate("list?", List.empty()));
         assertEquals(0, evaluate("list?", "not-a-list"));
         assertEquals(0, evaluate("list?", 1));
+    }
+
+    @Test
+    public void map() {
+        assertEquals(List.of(1, 0, 1), evaluate("map", ENV.lookup("number?"), List.of(1, "two", 3.0)));
     }
 
     @Test
@@ -233,6 +249,11 @@ public class GlobalEnvironmentTest {
         assertEquals(0, evaluate("procedure?", "undefined-symbol"));
         assertEquals(0, evaluate("procedure?", 0));
         assertEquals(0, evaluate("procedure?", "'begin'"));
+    }
+
+    @Test
+    public void range() {
+        assertEquals(List.of(3, 4, 5, 6), evaluate("range", 3, 7));
     }
 
     @Test
