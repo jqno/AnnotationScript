@@ -226,6 +226,16 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void procedurep() {
+        assertEquals(1, evaluate("procedure?", "begin"));
+        assertEquals(1, evaluate("procedure?", "+"));
+        assertEquals(0, evaluate("procedure?", "pi"));
+        assertEquals(0, evaluate("procedure?", "undefined-symbol"));
+        assertEquals(0, evaluate("procedure?", 0));
+        assertEquals(0, evaluate("procedure?", "'begin'"));
+    }
+
+    @Test
     public void round() {
         assertEquals(42.0, evaluate("round", 42.42));
         assertEquals(42.0, evaluate("round", 41.52));

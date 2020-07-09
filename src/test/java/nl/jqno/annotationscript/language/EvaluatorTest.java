@@ -175,16 +175,6 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void successfullyEvaluateProcedurep() {
-        assertEquals(1, sut.eval(new AstList(new AstSymbol("procedure?"), new AstSymbol("begin")), env));
-        assertEquals(1, sut.eval(new AstList(new AstSymbol("procedure?"), new AstSymbol("+")), env));
-        assertEquals(0, sut.eval(new AstList(new AstSymbol("procedure?"), new AstSymbol("pi")), env));
-        assertEquals(0, sut.eval(new AstList(new AstSymbol("procedure?"), new AstSymbol("undefined-symbol")), env));
-        assertEquals(0, sut.eval(new AstList(new AstSymbol("procedure?"), new AstInt(0)), env));
-        assertEquals(0, sut.eval(new AstList(new AstSymbol("procedure?"), new AstString("not-a-symbol")), env));
-    }
-
-    @Test
     public void successfullyEvaluateEmptyList() {
         var actual = sut.eval(new AstList(List.empty()), env);
         assertEquals(List.empty(), actual);

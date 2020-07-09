@@ -51,9 +51,6 @@ public class Evaluator {
                 return evaluateLambda(list, env);
             case "quote":
                 return evaluateQuote(list, env);
-            case "procedure?":
-                // Kind of a lazy hack not to define this in GlobalEnvironment, but we need access to `env` to do this
-                return evaluateProcedurep(list, env);
             default:
                 return evaluateProc(list, env);
         }
@@ -91,18 +88,6 @@ public class Evaluator {
 
     private Tuple2<Object, Environment> evaluateQuote(List<AstExp> list, Environment env) {
         return Tuple.of(list.get(1), env);
-    }
-
-    private Tuple2<Object, Environment> evaluateProcedurep(List<AstExp> list, Environment env) {
-        var p = list.get(1);
-        if (p instanceof AstSymbol) {
-            var sym = (AstSymbol)p;
-            var result = env.lookupOption(sym.asSymbol())
-                .map(fn -> fn.isProcedure())
-                .getOrElse(false);
-            return Tuple.of(result ? 1 : 0, env);
-        }
-        return Tuple.of(0, env);
     }
 
     private Tuple2<Object, Environment> evaluateProc(List<AstExp> list, Environment env) {

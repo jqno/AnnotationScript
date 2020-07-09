@@ -1,7 +1,7 @@
 package nl.jqno.annotationscript.language.fn;
 
-import java.util.function.Function;
-
+import io.vavr.Function1;
+import io.vavr.Function3;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.Environment;
 import nl.jqno.annotationscript.language.Evaluator;
@@ -21,12 +21,16 @@ public interface Fn {
         throw new EvaluationException("This Fn is not a builtin or lambda");
     }
 
-    public static Fn builtin(Function<List<Object>, Object> fn) {
+    public static Fn val(Object value) {
+        return new Value(value);
+    }
+
+    public static Fn builtin(Function1<List<Object>, Object> fn) {
         return new Builtin(fn);
     }
 
-    public static Fn val(Object value) {
-        return new Value(value);
+    public static Fn builtin(Function3<List<Object>, Environment, Evaluator, Object> fn) {
+        return new Builtin(fn);
     }
 
     public static Fn lambda(List<AstSymbol> params, AstExp body, Environment capturedEnv) {

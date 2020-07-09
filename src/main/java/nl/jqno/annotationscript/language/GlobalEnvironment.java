@@ -43,6 +43,8 @@ public final class GlobalEnvironment {
         Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
         Tuple.of("println-err", Fn.builtin(params -> { System.err.println(params.mkString(" ")); return null; })),
         // CHECKSTYLE ON: Regexp
+        Tuple.of("procedure?", Fn.builtin((params, env, eval) ->
+            bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false)))),
         Tuple.of("round", Fn.builtin(params -> toDouble(Math.round(toDouble(params.get(0)))))),
         Tuple.of("string?", Fn.builtin(params -> bool(isString(params.get(0))))),
         Tuple.of("symbol?", Fn.builtin(params -> bool(isSymbol(params.get(0))))),
