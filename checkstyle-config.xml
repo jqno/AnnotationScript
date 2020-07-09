@@ -49,7 +49,6 @@
         <module name="HiddenField">
             <property name="ignoreConstructorParameter" value="true"/>
         </module>
-        <module name="HideUtilityClassConstructor"/>
         <module name="IllegalImport"/>
         <module name="IllegalThrows"/>
         <module name="IllegalToken">
@@ -118,7 +117,6 @@
             <property name="format" value="TODO"/>
         </module>
         <module name="TypeName"/>
-        <module name="UncommentedMain"/>
         <module name="UnnecessaryParentheses"/>
         <module name="UnusedImports"/>
         <module name="UpperEll"/>
