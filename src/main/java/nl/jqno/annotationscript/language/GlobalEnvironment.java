@@ -3,6 +3,8 @@ package nl.jqno.annotationscript.language;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import io.vavr.Function1;
+import io.vavr.Function3;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
@@ -11,44 +13,44 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
     private static final List<Tuple2<String, Fn>> GLOBAL = List.of(
-        Tuple.of("+", Fn.builtin(params -> params.foldLeft(0.0, (acc, curr) -> acc + toDouble(curr)))),
-        Tuple.of("-", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc - toDouble(curr)))),
-        Tuple.of("*", Fn.builtin(params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr)))),
-        Tuple.of("/", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr)))),
-        Tuple.of("%", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc % toDouble(curr)))),
-        Tuple.of(">", Fn.builtin(params -> bool(toDouble(params.get(0)) > toDouble(params.get(1))))),
-        Tuple.of("<", Fn.builtin(params -> bool(toDouble(params.get(0)) < toDouble(params.get(1))))),
-        Tuple.of(">=", Fn.builtin(params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1))))),
-        Tuple.of("<=", Fn.builtin(params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1))))),
-        Tuple.of("=", Fn.builtin(params -> bool(Objects.equals(params.get(0), params.get(1))))),
-        Tuple.of("abs", Fn.builtin(params -> Math.abs(toDouble(params.get(0))))),
-        Tuple.of("and", Fn.builtin(params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr))))),
-        Tuple.of("append", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull())),
-        Tuple.of("atom?", Fn.builtin(params -> bool(isNumber(params.get(0)) || isString(params.get(0))))),
-        Tuple.of("begin", Fn.builtin(params -> params.last())),
-        Tuple.of("cons", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull())),
-        Tuple.of("head", Fn.builtin(params -> toList(() -> params.get(0)).flatMap(l -> l.headOption()).getOrNull())),
-        Tuple.of("length", Fn.builtin(params -> toList(() -> params.get(0)).map(l -> l.length()).getOrNull())),
-        Tuple.of("list", Fn.builtin(params -> params)),
-        Tuple.of("list?", Fn.builtin(params -> bool(params.get(0) instanceof List))),
-        Tuple.of("max", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr))))),
-        Tuple.of("min", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr))))),
-        Tuple.of("not", Fn.builtin(params -> bool(!isTruthy(params.get(0))))),
-        Tuple.of("null", Fn.val(null)),
-        Tuple.of("null?", Fn.builtin(params -> bool(params.get(0) == null))),
-        Tuple.of("number?", Fn.builtin(params -> bool(isNumber(params.get(0))))),
-        Tuple.of("or", Fn.builtin(params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr))))),
-        Tuple.of("pi", Fn.val(Math.PI)),
+        builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + toDouble(curr))),
+        builtin("-", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc - toDouble(curr))),
+        builtin("*", params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr))),
+        builtin("/", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr))),
+        builtin("%", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc % toDouble(curr))),
+        builtin(">", params -> bool(toDouble(params.get(0)) > toDouble(params.get(1)))),
+        builtin("<", params -> bool(toDouble(params.get(0)) < toDouble(params.get(1)))),
+        builtin(">=", params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1)))),
+        builtin("<=", params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1)))),
+        builtin("=", params -> bool(Objects.equals(params.get(0), params.get(1)))),
+        builtin("abs", params -> Math.abs(toDouble(params.get(0)))),
+        builtin("and", params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr)))),
+        builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
+        builtin("atom?", params -> bool(isNumber(params.get(0)) || isString(params.get(0)))),
+        builtin("begin", params -> params.last()),
+        builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
+        builtin("head", params -> toList(() -> params.get(0)).flatMap(l -> l.headOption()).getOrNull()),
+        builtin("length", params -> toList(() -> params.get(0)).map(l -> l.length()).getOrNull()),
+        builtin("list", params -> params),
+        builtin("list?", params -> bool(params.get(0) instanceof List)),
+        builtin("max", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr)))),
+        builtin("min", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr)))),
+        builtin("not", params -> bool(!isTruthy(params.get(0)))),
+        builtin("null", (Object)null),
+        builtin("null?", params -> bool(params.get(0) == null)),
+        builtin("number?", params -> bool(isNumber(params.get(0)))),
+        builtin("or", params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr)))),
+        builtin("pi", Math.PI),
         // CHECKSTYLE OFF: Regexp
-        Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
-        Tuple.of("println-err", Fn.builtin(params -> { System.err.println(params.mkString(" ")); return null; })),
+        builtin("println", params -> { System.out.println(params.mkString(" ")); return null; }),
+        builtin("println-err", params -> { System.err.println(params.mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
-        Tuple.of("procedure?", Fn.builtin((params, env, eval) ->
-            bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false)))),
-        Tuple.of("round", Fn.builtin(params -> toDouble(Math.round(toDouble(params.get(0)))))),
-        Tuple.of("string?", Fn.builtin(params -> bool(isString(params.get(0))))),
-        Tuple.of("symbol?", Fn.builtin(params -> bool(isSymbol(params.get(0))))),
-        Tuple.of("tail", Fn.builtin(params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull()))
+        builtin("procedure?", (params, env, eval) ->
+            bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
+        builtin("round", params -> toDouble(Math.round(toDouble(params.get(0))))),
+        builtin("string?", params -> bool(isString(params.get(0)))),
+        builtin("symbol?", params -> bool(isSymbol(params.get(0)))),
+        builtin("tail", params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull())
     );
 
     public static Environment build() {
@@ -56,6 +58,18 @@ public final class GlobalEnvironment {
     }
 
     private GlobalEnvironment() {}
+
+    private static Tuple2<String, Fn> builtin(String name, Function1<List<Object>, Object> fn) {
+        return Tuple.of(name, Fn.builtin(fn));
+    }
+
+    private static Tuple2<String, Fn> builtin(String name, Function3<List<Object>, Environment, Evaluator, Object> fn) {
+        return Tuple.of(name, Fn.builtin(fn));
+    }
+
+    private static Tuple2<String, Fn> builtin(String name, Object value) {
+        return Tuple.of(name, Fn.val(value));
+    }
 
     private static int bool(boolean b) {
         return b ? 1 : 0;
