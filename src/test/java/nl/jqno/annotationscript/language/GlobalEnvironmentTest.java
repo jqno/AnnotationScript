@@ -74,6 +74,9 @@ public class GlobalEnvironmentTest {
     public void equalTo() {
         assertEquals(1, evaluate("=", 10, 10));
         assertEquals(0, evaluate("=", 10, 4));
+        assertEquals(1, evaluate("=", 0, 0.0));
+        assertEquals(0, evaluate("=", "a", 0.0));
+        assertEquals(0, evaluate("=", 0, "b"));
         assertEquals(1, evaluate("=", "a", "a"));
         assertEquals(0, evaluate("=", "a", "b"));
         assertEquals(1, evaluate("=", "'a'", "'a'"));
@@ -233,12 +236,12 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void println() {
-        assertNull(evaluate("println", "We're just going to assume", "that this actually printed something"));
+        assertNull(evaluate("println", "We're just going to assume", "'that this actually printed something'"));
     }
 
     @Test
     public void printlnErr() {
-        assertNull(evaluate("println-err", "We're just going to assume", "that this actually printed something", "to System.err"));
+        assertNull(evaluate("println-err", "We're just going to assume", "'that this actually printed something'", "to System.err"));
     }
 
     @Test

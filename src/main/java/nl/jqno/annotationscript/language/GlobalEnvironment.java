@@ -22,7 +22,7 @@ public final class GlobalEnvironment {
         builtin("<", params -> bool(toDouble(params.get(0)) < toDouble(params.get(1)))),
         builtin(">=", params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1)))),
         builtin("<=", params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1)))),
-        builtin("=", params -> bool(Objects.equals(params.get(0), params.get(1)))),
+        builtin("=", params -> bool(isEquals(params))),
         builtin("abs", params -> Math.abs(toDouble(params.get(0)))),
         builtin("and", params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr)))),
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
@@ -46,8 +46,8 @@ public final class GlobalEnvironment {
         builtin("or", params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr)))),
         builtin("pi", Math.PI),
         // CHECKSTYLE OFF: Regexp
-        builtin("println", params -> { System.out.println(params.mkString(" ")); return null; }),
-        builtin("println-err", params -> { System.err.println(params.mkString(" ")); return null; }),
+        builtin("println", params -> { System.out.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
+        builtin("println-err", params -> { System.err.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
         builtin("procedure?", (params, env, eval) ->
             bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
@@ -78,6 +78,15 @@ public final class GlobalEnvironment {
 
     private static int bool(boolean b) {
         return b ? 1 : 0;
+    }
+
+    private static boolean isEquals(List<Object> params) {
+        Object one = params.get(0);
+        Object two = params.get(1);
+        if (one instanceof Number && two instanceof Number) {
+            return Double.compare(toDouble(one), toDouble(two)) == 0;
+        }
+        return Objects.equals(one, two);
     }
 
     private static boolean isNumber(Object object) {
@@ -114,6 +123,14 @@ public final class GlobalEnvironment {
 
     private static int toInt(Object x) {
         return Integer.valueOf(x.toString());
+    }
+
+    private static String toString(Object x) {
+        if (isString(x)) {
+            String str = (String)x;
+            return str.substring(1, str.length()-1);
+        }
+        return x.toString();
     }
 
     @SuppressWarnings("unchecked")
