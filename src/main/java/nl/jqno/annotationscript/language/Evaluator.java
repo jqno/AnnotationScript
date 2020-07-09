@@ -4,6 +4,7 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 import nl.jqno.annotationscript.language.fn.*;
 
 public class Evaluator {
@@ -42,6 +43,8 @@ public class Evaluator {
         switch (head) {
             case "if":
                 return evaluateIf(list, env);
+            case "cond":
+                return evaluateCond(list, env);
             case "define":
                 return evaluateDefine(list, env);
             case "lambda":
@@ -58,8 +61,17 @@ public class Evaluator {
 
     private Tuple2<Object, Environment> evaluateIf(List<AstExp> list, Environment env) {
         var test = evaluate(list.get(1), env)._1;
-        var isFalse = test.equals(0);
-        var branch = isFalse ? list.get(3) : list.get(2);
+        var branch = isTruthy(test) ? list.get(2) : list.get(3);
+        return Tuple.of(evaluate(branch, env)._1, env);
+    }
+
+    private Tuple2<Object, Environment> evaluateCond(List<AstExp> list, Environment env) {
+        var branch = list
+            .drop(1)
+            .sliding(2, 2)
+            .find(lst -> isTruthy(evaluate(lst.get(0), env)._1))
+            .getOrElseThrow(() -> new EvaluationException("cond has no true branch"))
+            .get(1);
         return Tuple.of(evaluate(branch, env)._1, env);
     }
 
@@ -103,5 +115,9 @@ public class Evaluator {
             })
             ._1;
         return Tuple.of(fn.evaluate(args, env, this), env);
+    }
+
+    private boolean isTruthy(Object x) {
+        return !(x.equals(0) || x.equals(0.0));
     }
 }

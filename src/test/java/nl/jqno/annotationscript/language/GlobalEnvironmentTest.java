@@ -87,6 +87,18 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void and() {
+        assertEquals(1, evaluate("and", 1, 42));
+        assertEquals(0, evaluate("and", 0, 42));
+        assertEquals(0, evaluate("and", 1, 0));
+        assertEquals(0, evaluate("and", 0, 0));
+
+        assertEquals(1, evaluate("and", 1, 42, 1, 1));
+        assertEquals(0, evaluate("and", 1, 42, 0, 1));
+        assertEquals(0, evaluate("and", 0, 0, 0, 0));
+    }
+
+    @Test
     public void append() {
         assertEquals(List.of(1, 2, 3, 42), evaluate("append", 42, List.of(1, 2, 3)));
         assertEquals(List.of(42), evaluate("append", 42, List.empty()));
@@ -184,6 +196,18 @@ public class GlobalEnvironmentTest {
         assertEquals(0, evaluate("number?", "not-a-number"));
         assertEquals(0, evaluate("number?", "'not-a-number'"));
         assertEquals(0, evaluate("number?", List.empty()));
+    }
+
+    @Test
+    public void or() {
+        assertEquals(1, evaluate("or", 1, 42));
+        assertEquals(1, evaluate("or", 0, 42));
+        assertEquals(1, evaluate("or", 1, 0));
+        assertEquals(0, evaluate("or", 0, 0));
+
+        assertEquals(1, evaluate("or", 1, 42, 1, 1));
+        assertEquals(1, evaluate("or", 0, 42, 0, 0));
+        assertEquals(0, evaluate("or", 0, 0, 0, 0));
     }
 
     @Test

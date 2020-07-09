@@ -1,12 +1,14 @@
 package nl.jqno.annotationscript.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.*;
+import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 import nl.jqno.annotationscript.language.fn.Fn;
 
 public class EvaluatorTest {
@@ -61,9 +63,44 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void successfullyEvaluateIf0Point0() {
+        var actual = sut.eval(new AstList(new AstSymbol("if"), new AstFloat(0.0), new AstInt(1), new AstInt(2)), env);
+        assertEquals(2, actual);
+    }
+
+    @Test
     public void successfullyEvaluateIfWithSymbols() {
         var actual = sut.eval(new AstList(new AstSymbol("if"), new AstInt(1), new AstSymbol("pi"), new AstSymbol("pi")), env);
         assertEquals(Math.PI, actual);
+    }
+
+    @Test
+    public void successfullyEvaluateSimpleCond() {
+        var actual = sut.eval(new AstList(new AstSymbol("cond"), new AstInt(1), new AstInt(42)), env);
+        assertEquals(42, actual);
+    }
+
+    @Test
+    public void successfullyEvaluateBigCond() {
+        var expression = new AstList(
+            new AstSymbol("cond"),
+            new AstInt(0), new AstInt(1),
+            new AstFloat(0.0), new AstInt(2),
+            new AstList(new AstSymbol("+"), new AstInt(0), new AstInt(0)), new AstInt(3),
+            new AstString("yeah"), new AstInt(4),
+            new AstInt(0), new AstInt(5));
+        var actual = sut.eval(expression, env);
+        assertEquals(4, actual);
+    }
+
+    @Test
+    public void throwWhenCondHasNoTrueBranch() {
+        var expression = new AstList(
+            new AstSymbol("cond"),
+            new AstInt(0), new AstInt(1),
+            new AstFloat(0.0), new AstInt(2));
+        var e = assertThrows(EvaluationException.class, () -> sut.eval(expression, env));
+        assertEquals("cond has no true branch", e.getMessage());
     }
 
     @Test

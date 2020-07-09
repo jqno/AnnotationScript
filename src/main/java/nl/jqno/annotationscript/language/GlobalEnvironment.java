@@ -22,6 +22,7 @@ public final class GlobalEnvironment {
         Tuple.of("<=", Fn.builtin(params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1))))),
         Tuple.of("=", Fn.builtin(params -> bool(Objects.equals(params.get(0), params.get(1))))),
         Tuple.of("abs", Fn.builtin(params -> Math.abs(toDouble(params.get(0))))),
+        Tuple.of("and", Fn.builtin(params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr))))),
         Tuple.of("append", Fn.builtin(params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull())),
         Tuple.of("atom?", Fn.builtin(params -> bool(isNumber(params.get(0)) || isString(params.get(0))))),
         Tuple.of("begin", Fn.builtin(params -> params.last())),
@@ -32,10 +33,11 @@ public final class GlobalEnvironment {
         Tuple.of("list?", Fn.builtin(params -> bool(params.get(0) instanceof List))),
         Tuple.of("max", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr))))),
         Tuple.of("min", Fn.builtin(params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr))))),
-        Tuple.of("not", Fn.builtin(params -> params.get(0).equals(0.0) || params.get(0).equals(0) ? 1 : 0)),
+        Tuple.of("not", Fn.builtin(params -> bool(!isTruthy(params.get(0))))),
         Tuple.of("null", Fn.val(null)),
         Tuple.of("null?", Fn.builtin(params -> bool(params.get(0) == null))),
         Tuple.of("number?", Fn.builtin(params -> bool(isNumber(params.get(0))))),
+        Tuple.of("or", Fn.builtin(params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr))))),
         Tuple.of("pi", Fn.val(Math.PI)),
         // CHECKSTYLE OFF: Regexp
         Tuple.of("println", Fn.builtin(params -> { System.out.println(params.mkString(" ")); return null; })),
@@ -55,6 +57,10 @@ public final class GlobalEnvironment {
 
     private static int bool(boolean b) {
         return b ? 1 : 0;
+    }
+
+    private static boolean isTruthy(Object x) {
+        return !(x.equals(0.0) || x.equals(0));
     }
 
     private static double toDouble(Object x) {
