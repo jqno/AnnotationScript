@@ -46,13 +46,23 @@ public final class GlobalEnvironment {
         builtin("or", params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr)))),
         builtin("pi", Math.PI),
         // CHECKSTYLE OFF: Regexp
-        builtin("println", params -> { System.out.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
-        builtin("println-err", params -> { System.err.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
+        builtin("println", params -> { System.out.println(params.map(p -> unwrapString(p)).mkString(" ")); return null; }),
+        builtin("println-err", params -> { System.err.println(params.map(p -> unwrapString(p)).mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
         builtin("procedure?", (params, env, eval) ->
             bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
         builtin("range", params -> List.range(toInt(params.get(0)), toInt(params.get(1)))),
         builtin("round", params -> toDouble(Math.round(toDouble(params.get(0))))),
+        builtin("str/char-at", params -> wrapString("" + unwrapString(params.get(1)).charAt(toInt(params.get(0))))),
+        builtin("str/concat", params -> wrapString(params.foldLeft("", (acc, curr) -> acc + unwrapString(curr)))),
+        builtin("str/ends-with", params -> bool(unwrapString(params.get(1)).endsWith(unwrapString(params.get(0))))),
+        builtin("str/index-of", params -> unwrapString(params.get(1)).indexOf(unwrapString(params.get(0)))),
+        builtin("str/join", params -> wrapString(toList(() -> params.get(1)).get().map(s -> unwrapString(s)).mkString(unwrapString(params.get(0))))),
+        builtin("str/length", params -> unwrapString(params.get(0)).length()),
+        builtin("str/split", params -> List.of(unwrapString(params.get(1)).split(unwrapString(params.get(0)))).map(s -> wrapString(s))),
+        builtin("str/starts-with", params -> bool(unwrapString(params.get(1)).startsWith(unwrapString(params.get(0))))),
+        builtin("str/to-lower", params -> wrapString(unwrapString(params.get(0)).toLowerCase())),
+        builtin("str/to-upper", params -> wrapString(unwrapString(params.get(0)).toUpperCase())),
         builtin("string?", params -> bool(isString(params.get(0)))),
         builtin("symbol?", params -> bool(isSymbol(params.get(0)))),
         builtin("tail", params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull())
@@ -122,15 +132,10 @@ public final class GlobalEnvironment {
     }
 
     private static int toInt(Object x) {
-        return Integer.valueOf(x.toString());
-    }
-
-    private static String toString(Object x) {
-        if (isString(x)) {
-            String str = (String)x;
-            return str.substring(1, str.length()-1);
+        if (x instanceof Double) {
+            return ((Double)x).intValue();
         }
-        return x.toString();
+        return Integer.valueOf(x.toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -145,5 +150,17 @@ public final class GlobalEnvironment {
         catch (RuntimeException ignored) {
             return Option.none();
         }
+    }
+
+    private static String unwrapString(Object x) {
+        if (isString(x)) {
+            String str = (String)x;
+            return str.substring(1, str.length()-1);
+        }
+        return x.toString();
+    }
+
+    private static String wrapString(String x) {
+        return "'" + x + "'";
     }
 }

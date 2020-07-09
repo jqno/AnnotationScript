@@ -236,12 +236,12 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void println() {
-        assertNull(evaluate("println", "We're just going to assume", "'that this actually printed something'"));
+        assertNull(evaluate("println", "'We're just going to assume'", "'that this actually printed something'"));
     }
 
     @Test
     public void printlnErr() {
-        assertNull(evaluate("println-err", "We're just going to assume", "'that this actually printed something'", "to System.err"));
+        assertNull(evaluate("println-err", "'We're just going to assume'", "'that this actually printed something'", "'to System.err'"));
     }
 
     @Test
@@ -263,6 +263,66 @@ public class GlobalEnvironmentTest {
     public void round() {
         assertEquals(42.0, evaluate("round", 42.42));
         assertEquals(42.0, evaluate("round", 41.52));
+    }
+
+    @Test
+    public void strCharAt() {
+        assertEquals("'c'", evaluate("str/char-at", 2, "'abcde'"));
+        assertEquals("'c'", evaluate("str/char-at", 2.0, "'abcde'"));
+        assertEquals("'a'", evaluate("str/char-at", 0, "'abcde'"));
+    }
+
+    @Test
+    public void strConcat() {
+        assertEquals("'Hello World!'", evaluate("str/concat", "'Hello'", "' '", "'World'", "'!'"));
+        assertEquals("'abc42xyz'", evaluate("str/concat", "'abc'", 4, 2, "'xyz'"));
+    }
+
+    @Test
+    public void strEndsWith() {
+        assertEquals(1, evaluate("str/ends-with", "'de'", "'abcde'"));
+        assertEquals(0, evaluate("str/ends-with", "'def'", "'abcde'"));
+    }
+
+    @Test
+    public void strIndexOf() {
+        assertEquals(2, evaluate("str/index-of", "'c'", "'abcde'"));
+        assertEquals(0, evaluate("str/index-of", "'a'", "'abcde'"));
+        assertEquals(-1, evaluate("str/index-of", "'x'", "'abcde'"));
+    }
+
+    @Test
+    public void strJoin() {
+        assertEquals("'a,b,c'", evaluate("str/join", "','", List.of("'a'", "'b'", "'c'")));
+        assertEquals("'a'", evaluate("str/join", "','", List.of("'a'")));
+    }
+
+    @Test
+    public void strLength() {
+        assertEquals(10, evaluate("str/length", "'abcdefghij'"));
+        assertEquals(0, evaluate("str/length", "''"));
+    }
+
+    @Test
+    public void strSplit() {
+        assertEquals(List.of("'a'", "'b'", "'c'"), evaluate("str/split", "','", "'a,b,c'"));
+        assertEquals(List.of("'abc'"), evaluate("str/split", "','", "'abc'"));
+    }
+
+    @Test
+    public void strStartsWith() {
+        assertEquals(1, evaluate("str/starts-with", "'ab'", "'abcde'"));
+        assertEquals(0, evaluate("str/starts-with", "'abx'", "'abcde'"));
+    }
+
+    @Test
+    public void strToLower() {
+        assertEquals("'abcde'", evaluate("str/to-lower", "'aBcDe'"));
+    }
+
+    @Test
+    public void strToUpper() {
+        assertEquals("'ABCDE'", evaluate("str/to-upper", "'aBcDe'"));
     }
 
     @Test
