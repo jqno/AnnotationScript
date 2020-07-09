@@ -15,7 +15,7 @@ import nl.jqno.annotationscript.language.fn.Fn;
 public class EnvironmentTest {
 
     private static final Map<String, Fn> ENV = HashMap.of(
-        "pi", Fn.val(Math.PI)
+        "pi", Fn.val("pi", Math.PI)
     );
 
     @Test
@@ -53,14 +53,14 @@ public class EnvironmentTest {
     @Test
     public void successfulAdd() {
         var sut = new Environment(ENV);
-        var actual = sut.add("r", Fn.val(10));
+        var actual = sut.add("r", Fn.val("r", 10));
         assertEquals(10, actual.lookup("r").value());
     }
 
     @Test
     public void successfulMerge() {
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("e", Fn.val(Math.E)));
+        var otherEnv = new Environment(HashMap.of("e", Fn.val("e", Math.E)));
         var merged = sut.merge(otherEnv);
         assertNotNull(merged.lookup("pi"));
         assertNotNull(merged.lookup("e"));
@@ -69,7 +69,7 @@ public class EnvironmentTest {
     @Test
     public void successfulMergeWhereThisOverridesThat() {
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("pi", Fn.val(Math.E)));
+        var otherEnv = new Environment(HashMap.of("pi", Fn.val("e", Math.E)));
         var merged = sut.merge(otherEnv);
         var pi = merged.lookup("pi");
         assertEquals(Math.PI, pi.value());

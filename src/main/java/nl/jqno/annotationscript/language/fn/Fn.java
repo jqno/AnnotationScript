@@ -21,16 +21,16 @@ public interface Fn {
         throw new EvaluationException("This Fn is not a builtin or lambda");
     }
 
-    public static Fn val(Object value) {
-        return new Value(value);
+    public static Fn val(String name, Object value) {
+        return new Value(name, value);
     }
 
-    public static Fn builtin(Function1<List<Object>, Object> fn) {
-        return new Builtin(fn);
+    public static Fn builtin(String name, Function1<List<Object>, Object> fn) {
+        return new Builtin(name, fn);
     }
 
-    public static Fn builtin(Function3<List<Object>, Environment, Evaluator, Object> fn) {
-        return new Builtin(fn);
+    public static Fn builtin(String name, Function3<List<Object>, Environment, Evaluator, Object> fn) {
+        return new Builtin(name, fn);
     }
 
     public static Fn lambda(List<AstSymbol> params, AstExp body, Environment capturedEnv) {

@@ -65,15 +65,15 @@ public final class GlobalEnvironment {
     private GlobalEnvironment() {}
 
     private static Tuple2<String, Fn> builtin(String name, Function1<List<Object>, Object> fn) {
-        return Tuple.of(name, Fn.builtin(fn));
+        return Tuple.of(name, Fn.builtin(name, fn));
     }
 
     private static Tuple2<String, Fn> builtin(String name, Function3<List<Object>, Environment, Evaluator, Object> fn) {
-        return Tuple.of(name, Fn.builtin(fn));
+        return Tuple.of(name, Fn.builtin(name, fn));
     }
 
     private static Tuple2<String, Fn> builtin(String name, Object value) {
-        return Tuple.of(name, Fn.val(value));
+        return Tuple.of(name, Fn.val(name, value));
     }
 
     private static int bool(boolean b) {

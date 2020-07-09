@@ -10,7 +10,7 @@ import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.Environment;
 
 public class BuiltinTest {
-    private final Builtin sut = new Builtin(params -> params.foldLeft(0.0, (acc, curr) -> acc + (double)curr));
+    private final Builtin sut = new Builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + (double)curr));
 
     @Test
     public void isProcedure() {
@@ -21,5 +21,11 @@ public class BuiltinTest {
     public void evaluate() {
         var actual = sut.evaluate(List.of(1.0, 2.0, 3.0, 4.0), new Environment(HashMap.empty()), null);
         assertEquals(10.0, actual);
+    }
+
+    @Test
+    public void tostring() {
+        var actual = sut.toString();
+        assertEquals("Builtin[+]", actual);
     }
 }

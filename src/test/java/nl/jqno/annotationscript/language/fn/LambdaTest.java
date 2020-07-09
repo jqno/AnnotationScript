@@ -38,4 +38,10 @@ public class LambdaTest {
 
         assertEquals(6.0, actual);
     }
+
+    @Test
+    public void tostring() {
+        var actual = sut.toString();
+        assertEquals("λ[(x,y) → (- x y)]", actual);
+    }
 }
