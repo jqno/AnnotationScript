@@ -75,6 +75,26 @@ public final class GlobalEnvironment {
         return b ? 1 : 0;
     }
 
+    private static boolean isNumber(Object object) {
+        return object instanceof Integer || object instanceof Double;
+    }
+
+    private static boolean isString(Object object) {
+        if (object instanceof String) {
+            var s = (String)object;
+            return s.startsWith("'") && s.endsWith("'");
+        }
+        return false;
+    }
+
+    private static boolean isSymbol(Object object) {
+        if (object instanceof String) {
+            var s = (String)object;
+            return !(s.startsWith("'") && s.endsWith("'"));
+        }
+        return false;
+    }
+
     private static boolean isTruthy(Object x) {
         return !(x.equals(0.0) || x.equals(0));
     }
@@ -95,25 +115,5 @@ public final class GlobalEnvironment {
         catch (RuntimeException ignored) {
             return Option.none();
         }
-    }
-
-    private static boolean isNumber(Object object) {
-        return object instanceof Integer || object instanceof Double;
-    }
-
-    private static boolean isString(Object object) {
-        if (object instanceof String) {
-            var s = (String)object;
-            return s.startsWith("'") && s.endsWith("'");
-        }
-        return false;
-    }
-
-    private static boolean isSymbol(Object object) {
-        if (object instanceof String) {
-            var s = (String)object;
-            return !(s.startsWith("'") && s.endsWith("'"));
-        }
-        return false;
     }
 }
