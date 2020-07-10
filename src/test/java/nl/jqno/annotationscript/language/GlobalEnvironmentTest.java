@@ -324,6 +324,11 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void reverse() {
+        assertEquals(List.of(4, 3, 2, 1), evaluate("reverse", List.of(1, 2, 3, 4)));
+    }
+
+    @Test
     public void round() {
         assertEquals(42.0, evaluate("round", 42.42));
         assertEquals(42.0, evaluate("round", 41.52));

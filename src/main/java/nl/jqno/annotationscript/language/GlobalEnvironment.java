@@ -65,6 +65,7 @@ public final class GlobalEnvironment {
         builtin("procedure?", (params, env, eval) ->
             bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
         builtin("range", params -> List.range(toInt(params.get(0)), toInt(params.get(1)))),
+        builtin("reverse", params -> toList(() -> params.get(0)).get().reverse()),
         builtin("round", params -> toDouble(Math.round(toDouble(params.get(0))))),
         builtin("str/char-at", params -> wrapString("" + unwrapString(params.get(1)).charAt(toInt(params.get(0))))),
         builtin("str/concat", params -> wrapString(params.foldLeft("", (acc, curr) -> acc + unwrapString(curr)))),
