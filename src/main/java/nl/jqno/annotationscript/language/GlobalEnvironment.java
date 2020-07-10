@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import io.vavr.Function1;
+import io.vavr.Function2;
 import io.vavr.Function3;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -15,17 +16,18 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
     private static final List<Tuple2<String, Fn>> GLOBAL = List.of(
-        builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + toDouble(curr))),
-        builtin("-", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc - toDouble(curr))),
-        builtin("*", params -> params.foldLeft(1.0, (acc, curr) -> acc * toDouble(curr))),
-        builtin("/", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc / toDouble(curr))),
-        builtin("%", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> acc % toDouble(curr))),
+        builtin("+", params -> params.foldLeft((Object)0, (acc, curr) -> wideningOp((x, y) -> x + y, acc, curr))),
+        builtin("-", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x - y, acc, curr))),
+        builtin("*", params -> params.foldLeft((Object)1, (acc, curr) -> wideningOp((x, y) -> x * y, acc, curr))),
+        builtin("/", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x / y, acc, curr))),
+        builtin("%", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x % y, acc, curr))),
         builtin(">", params -> bool(toDouble(params.get(0)) > toDouble(params.get(1)))),
         builtin("<", params -> bool(toDouble(params.get(0)) < toDouble(params.get(1)))),
         builtin(">=", params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1)))),
         builtin("<=", params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1)))),
         builtin("=", params -> bool(isEquals(params))),
-        builtin("abs", params -> Math.abs(toDouble(params.get(0)))),
+        builtin("abs", params ->
+            params.get(0) instanceof Integer ? (Object)Math.abs(toInt(params.get(0))) : (Object)Math.abs(toDouble(params.get(0)))),
         builtin("and", params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr)))),
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
         builtin("apply", (params, env, eval) -> toFn(params.get(0)).evaluate(toList(() -> params.get(1)).get(), env, eval)),
@@ -50,8 +52,8 @@ public final class GlobalEnvironment {
         builtin("map/remove", params -> toMap(params.get(0)).remove(params.get(1))),
         builtin("map/size", params -> toMap(params.get(0)).size()),
         builtin("map/values", params -> toMap(params.get(0)).values().toList()),
-        builtin("max", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr)))),
-        builtin("min", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr)))),
+        builtin("max", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::max, acc, curr))),
+        builtin("min", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::min, acc, curr))),
         builtin("not", params -> bool(!isTruthy(params.get(0)))),
         builtin("null", (Object)null),
         builtin("null?", params -> bool(params.get(0) == null)),
@@ -66,7 +68,7 @@ public final class GlobalEnvironment {
             bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
         builtin("range", params -> List.range(toInt(params.get(0)), toInt(params.get(1)))),
         builtin("reverse", params -> toList(() -> params.get(0)).get().reverse()),
-        builtin("round", params -> toDouble(Math.round(toDouble(params.get(0))))),
+        builtin("round", params -> toInt(Math.round(toDouble(params.get(0))))),
         builtin("str/char-at", params -> wrapString("" + unwrapString(params.get(1)).charAt(toInt(params.get(0))))),
         builtin("str/concat", params -> wrapString(params.foldLeft("", (acc, curr) -> acc + unwrapString(curr)))),
         builtin("str/ends-with?", params -> bool(unwrapString(params.get(1)).endsWith(unwrapString(params.get(0))))),
@@ -137,7 +139,13 @@ public final class GlobalEnvironment {
         return !(x.equals(0.0) || x.equals(0));
     }
 
-    private static double toDouble(Object x) {
+    private static Double toDouble(Object x) {
+        if (x instanceof Double) {
+            return (Double)x;
+        }
+        if (x instanceof Integer) {
+            return Double.valueOf((Integer)x);
+        }
         return Double.valueOf(x.toString());
     }
 
@@ -181,5 +189,13 @@ public final class GlobalEnvironment {
 
     private static String wrapString(String x) {
         return "'" + x + "'";
+    }
+
+    private static Object wideningOp(Function2<Double, Double, Object> op, Object x, Object y) {
+        var result = op.apply(toDouble(x), toDouble(y));
+        if (x instanceof Integer && y instanceof Integer) {
+            return toInt(result);
+        }
+        return result;
     }
 }

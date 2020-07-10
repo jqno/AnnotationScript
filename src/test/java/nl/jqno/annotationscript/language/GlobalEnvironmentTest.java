@@ -16,31 +16,41 @@ public class GlobalEnvironmentTest {
     @Test
     public void addition() {
         assertEquals(1.0, evaluate("+", 1.0));
-        assertEquals(42.0, evaluate("+", 3, 33, 6));
+        assertEquals(42, evaluate("+", 3, 33, 6));
+        assertEquals(42.0, evaluate("+", 3, 33.0, 6));
+        assertEquals(42.0, evaluate("+", "3", 33.0, 6));
     }
 
     @Test
     public void subtraction() {
-        assertEquals(1.0, evaluate("-", 1));
-        assertEquals(10.0, evaluate("-", 42, 30, 2));
+        assertEquals(1.0, evaluate("-", 1.0));
+        assertEquals(10, evaluate("-", 42, 30, 2));
+        assertEquals(10.0, evaluate("-", 42, 30.0, 2));
+        assertEquals(10.0, evaluate("-", 42, 30, "2"));
     }
 
     @Test
     public void multiplication() {
-        assertEquals(1.0, evaluate("*", 1));
-        assertEquals(24.0, evaluate("*", 2, 3, 4));
+        assertEquals(1.0, evaluate("*", 1.0));
+        assertEquals(24, evaluate("*", 2, 3, 4));
+        assertEquals(24.0, evaluate("*", 2, 3.0, 4));
+        assertEquals(24.0, evaluate("*", 2, "3.0", 4));
     }
 
     @Test
     public void division() {
-        assertEquals(1.0, evaluate("/", 1));
-        assertEquals(2.5, evaluate("/", 10, 2, 2));
+        assertEquals(1, evaluate("/", 1));
+        assertEquals(2, evaluate("/", 10, 2, 2));
+        assertEquals(2.5, evaluate("/", 10, 2.0, 2));
+        assertEquals(2.5, evaluate("/", "10", 2.0, 2));
     }
 
     @Test
     public void modulo() {
-        assertEquals(1.0, evaluate("%", 1));
-        assertEquals(2.0, evaluate("%", 17, 6, 3));
+        assertEquals(1.0, evaluate("%", 1.0));
+        assertEquals(2, evaluate("%", 17, 6, 3));
+        assertEquals(2.0, evaluate("%", 17, 6.0, 3));
+        assertEquals(2.0, evaluate("%", 17, "6.0", 3));
     }
 
     @Test
@@ -88,6 +98,8 @@ public class GlobalEnvironmentTest {
     public void abs() {
         assertEquals(1.0, evaluate("abs", -1.0));
         assertEquals(1.0, evaluate("abs", 1.0));
+        assertEquals(1, evaluate("abs", 1));
+        assertEquals(1, evaluate("abs", 1));
     }
 
     @Test
@@ -110,7 +122,7 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void apply() {
-        assertEquals(42.0, evaluate("apply", ENV.lookup("+"), List.of(10, 32)));
+        assertEquals(42, evaluate("apply", ENV.lookup("+"), List.of(10, 32)));
         assertEquals(1, evaluate("apply", ENV.lookup("number?"), List.of(42)));
     }
 
@@ -137,7 +149,7 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void foldLeft() {
-        assertEquals(42.0, evaluate("fold-left", ENV.lookup("+"), 10, List.of(8, 4, 12, 8)));
+        assertEquals(42, evaluate("fold-left", ENV.lookup("+"), 10, List.of(8, 4, 12, 8)));
     }
 
     @Test
@@ -238,14 +250,18 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void max() {
-        assertEquals(42.0, evaluate("max", 6, 42, 3));
-        assertEquals(42.0, evaluate("max", 42));
+        assertEquals(42.0, evaluate("max", 42.0));
+        assertEquals(42, evaluate("max", 6, 42, 3));
+        assertEquals(42.0, evaluate("max", 6, 42.0, 3));
+        assertEquals(42.0, evaluate("max", 6, "42.0", 3));
     }
 
     @Test
     public void min() {
-        assertEquals(3.0, evaluate("min", 6, 42, 3));
-        assertEquals(42.0, evaluate("max", 42));
+        assertEquals(42.0, evaluate("min", 42.0));
+        assertEquals(3, evaluate("min", 6, 42, 3));
+        assertEquals(3.0, evaluate("min", 6, 42.0, 3));
+        assertEquals(3.0, evaluate("min", "6", 42, 3));
     }
 
     @Test
@@ -330,8 +346,8 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void round() {
-        assertEquals(42.0, evaluate("round", 42.42));
-        assertEquals(42.0, evaluate("round", 41.52));
+        assertEquals(42, evaluate("round", 42.42));
+        assertEquals(42, evaluate("round", 41.52));
     }
 
     @Test
