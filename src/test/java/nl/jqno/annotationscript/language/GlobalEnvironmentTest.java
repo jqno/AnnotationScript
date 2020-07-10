@@ -279,9 +279,9 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
-    public void strEndsWith() {
-        assertEquals(1, evaluate("str/ends-with", "'de'", "'abcde'"));
-        assertEquals(0, evaluate("str/ends-with", "'def'", "'abcde'"));
+    public void strEndsWithp() {
+        assertEquals(1, evaluate("str/ends-with?", "'de'", "'abcde'"));
+        assertEquals(0, evaluate("str/ends-with?", "'def'", "'abcde'"));
     }
 
     @Test
@@ -310,9 +310,9 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
-    public void strStartsWith() {
-        assertEquals(1, evaluate("str/starts-with", "'ab'", "'abcde'"));
-        assertEquals(0, evaluate("str/starts-with", "'abx'", "'abcde'"));
+    public void strStartsWithp() {
+        assertEquals(1, evaluate("str/starts-with?", "'ab'", "'abcde'"));
+        assertEquals(0, evaluate("str/starts-with?", "'abx'", "'abcde'"));
     }
 
     @Test
