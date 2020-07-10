@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
+import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import nl.jqno.annotationscript.language.fn.Value;
@@ -175,6 +176,67 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void mapContainsp() {
+        assertEquals(1, evaluate("map/contains?", HashMap.of("a", 42, "b", 10), "a"));
+        assertEquals(0, evaluate("map/contains?", HashMap.of("a", 42, "b", 10), "c"));
+    }
+
+    @Test
+    public void mapEmpty() {
+        assertEquals(HashMap.empty(), evaluate("map/empty"));
+    }
+
+    @Test
+    public void mapEntries() {
+        assertEquals(List.of(List.of("a", 42), List.of("b", 10)), evaluate("map/entries", HashMap.of("a", 42, "b", 10)));
+    }
+
+    @Test
+    public void mapGet() {
+        assertEquals(42, evaluate("map/get", HashMap.of("a", 42, "b", 10), "a"));
+        assertNull(evaluate("map/get", HashMap.empty(), "a"));
+    }
+
+    @Test
+    public void mapKeys() {
+        assertEquals(List.of("a", "b"), evaluate("map/keys", HashMap.of("a", 42, "b", 10)));
+    }
+
+    @Test
+    public void mapMerge() {
+        assertEquals(HashMap.of("a", 42, "b", 10, "c", 1337), evaluate("map/merge", HashMap.of("a", 42, "b", 10), HashMap.of("a", 0, "c", 1337)));
+        assertEquals(HashMap.of("a", 0, "b", 10, "c", 1337), evaluate("map/merge", HashMap.of("a", 0, "c", 1337), HashMap.of("a", 42, "b", 10)));
+    }
+
+    @Test
+    public void mapOf() {
+        assertEquals(HashMap.of("'a'", 42, "'b'", 10), evaluate("map/of", "'a'", 42, "'b'", 10));
+        assertEquals(HashMap.of("a", 42, "b", 10), evaluate("map/of", "a", 42, "b", 10));
+    }
+
+    @Test
+    public void mapPut() {
+        assertEquals(HashMap.of("a", 42, "b", 10), evaluate("map/put", HashMap.of("a", 42), "b", 10));
+    }
+
+    @Test
+    public void mapRemove() {
+        assertEquals(HashMap.of("a", 42), evaluate("map/remove", HashMap.of("a", 42, "b", 10), "b"));
+        assertEquals(HashMap.of("a", 42), evaluate("map/remove", HashMap.of("a", 42), "b"));
+    }
+
+    @Test
+    public void mapSize() {
+        assertEquals(0, evaluate("map/size", HashMap.empty()));
+        assertEquals(2, evaluate("map/size", HashMap.of("a", 42, "b", 10)));
+    }
+
+    @Test
+    public void mapValues() {
+        assertEquals(List.of(42, 10), evaluate("map/values", HashMap.of("a", 42, "b", 10)));
+    }
+
+    @Test
     public void max() {
         assertEquals(42.0, evaluate("max", 6, 42, 3));
         assertEquals(42.0, evaluate("max", 42));
@@ -203,7 +265,8 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void nullp() {
-        assertEquals(1, evaluate("null?", Option.none().getOrNull())); // avoid warnings caused by typing `null` directly
+        assertEquals(1, evaluate("null?", Option.none().getOrNull())); // avoid warnings caused by typing `null`
+                                                                       // directly
         assertEquals(0, evaluate("null?", "null"));
         assertEquals(0, evaluate("null?", 1));
     }
@@ -241,7 +304,8 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void printlnErr() {
-        assertNull(evaluate("println-err", "'We're just going to assume'", "'that this actually printed something'", "'to System.err'"));
+        assertNull(evaluate("println-err", "'We're just going to assume'", "'that this actually printed something'",
+                "'to System.err'"));
     }
 
     @Test

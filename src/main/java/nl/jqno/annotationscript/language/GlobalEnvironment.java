@@ -7,7 +7,9 @@ import io.vavr.Function1;
 import io.vavr.Function3;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
+import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import nl.jqno.annotationscript.language.fn.Fn;
 
@@ -37,6 +39,17 @@ public final class GlobalEnvironment {
         builtin("list", params -> params),
         builtin("list?", params -> bool(params.get(0) instanceof List)),
         builtin("map", (params, env, eval) -> toList(() -> params.get(1)).get().map(p -> (toFn(params.get(0))).evaluate(List.of(p), env, eval))),
+        builtin("map/contains?", params -> bool(toMap(params.get(0)).containsKey(params.get(1)))),
+        builtin("map/empty", params -> HashMap.empty()),
+        builtin("map/entries", params -> toMap(params.get(0)).toList().map(tup -> List.of(tup._1, tup._2))),
+        builtin("map/get", params -> toMap(params.get(0)).getOrElse(params.get(1), null)),
+        builtin("map/keys", params -> toMap(params.get(0)).keySet().toList()),
+        builtin("map/merge", params -> toMap(params.get(0)).merge(toMap(params.get(1)))),
+        builtin("map/of", params -> HashMap.ofEntries(params.sliding(2, 2).map(e -> Tuple.of(e.get(0), e.get(1))))),
+        builtin("map/put", params -> toMap(params.get(0)).put(params.get(1), params.get(2))),
+        builtin("map/remove", params -> toMap(params.get(0)).remove(params.get(1))),
+        builtin("map/size", params -> toMap(params.get(0)).size()),
+        builtin("map/values", params -> toMap(params.get(0)).values().toList()),
         builtin("max", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.max(acc, toDouble(curr)))),
         builtin("min", params -> params.tail().foldLeft(toDouble(params.head()), (acc, curr) -> Math.min(acc, toDouble(curr)))),
         builtin("not", params -> bool(!isTruthy(params.get(0)))),
@@ -150,6 +163,11 @@ public final class GlobalEnvironment {
         catch (RuntimeException ignored) {
             return Option.none();
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<Object, Object> toMap(Object object) {
+        return (Map<Object, Object>)object;
     }
 
     private static String unwrapString(Object x) {
