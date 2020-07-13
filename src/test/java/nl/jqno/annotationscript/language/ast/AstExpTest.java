@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import nl.jqno.annotationscript.language.ast.AstExpTest.AstBogus;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
