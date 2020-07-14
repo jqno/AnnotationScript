@@ -45,9 +45,7 @@ public class NinetyNineBottlesOfBeer {
         @Two(list={@Three("println"), @Three(list={@Four("str/concat"),
             @Four("'Go to the store and buy some more, '"),
             @Four(list={@Five("bottles-str"), @Five("n")}),
-            @Four("' on the wall.'")
-        })})
-    })})
+            @Four("' on the wall.'")})})})})
     public static class Sing {}
 
     @Zero("begin")
