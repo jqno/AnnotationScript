@@ -14,7 +14,7 @@ public class NinetyNineBottlesOfBeer {
         @Two(list={@Three("cond"),
             @Three(list={@Four("="), @Four("0"), @Four("n")}), @Three("'no more bottles'"),
             @Three(list={@Four("="), @Four("1"), @Four("n")}), @Three("'1 bottle'"),
-            @Three("1"), @Three(list={@Four("str/concat"), @Four("n"), @Four("' bottles'")})}),
+            @Three("else"), @Three(list={@Four("str/concat"), @Four("n"), @Four("' bottles'")})}),
         @Two("' of beer'")})})
     public static class Bottles {}
 
@@ -29,7 +29,7 @@ public class NinetyNineBottlesOfBeer {
             @Four("'.'")})}),
         @Two(list={@Three("println"), @Three(list={@Four("str/concat"),
             @Four("'Take one down and pass it around, '"),
-            @Four(list={@Five("bottles-str"), @Five(list={@Six("-"), @Six("n"), @Six("1")})}),
+            @Four(list={@Five("bottles-str"), @Five(list={@Six("dec"), @Six("n")})}),
             @Four("' on the wall.'")})}),
         @Two(list={@Three("println")})})})
     public static class PrintBottle {}
@@ -40,7 +40,7 @@ public class NinetyNineBottlesOfBeer {
         @Two("begin"),
         @Two(list={@Three("map"),
             @Three("print-bottle"),
-            @Three(list={@Four("reverse"), @Four(list={@Five("range"), @Five("1"), @Five(list={@Six("+"), @Six("n"), @Six("1")})})})}),
+            @Three(list={@Four("reverse"), @Four(list={@Five("range"), @Five("1"), @Five(list={@Six("inc"), @Six("n")})})})}),
         @Two(list={@Three("println"), @Three("'No more bottles of beer on the wall, no more bottles of beer.'")}),
         @Two(list={@Three("println"), @Three(list={@Four("str/concat"),
             @Four("'Go to the store and buy some more, '"),

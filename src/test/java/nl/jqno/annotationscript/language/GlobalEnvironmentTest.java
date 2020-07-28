@@ -148,6 +148,24 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void containsp() {
+        assertEquals(1, evaluate("contains?", List.of(1, 2, 3), 2));
+        assertEquals(0, evaluate("contains?", List.of(1, 2, 3), 4));
+        assertEquals(1, evaluate("contains?", List.of(1, "two", "'three'"), "two"));
+    }
+
+    @Test
+    public void dec() {
+        assertEquals(42, evaluate("dec", 43));
+        assertEquals(42.0, evaluate("dec", 43.0));
+    }
+
+    @Test
+    public void else_() {
+        assertEquals(1, evaluate("else"));
+    }
+
+    @Test
     public void foldLeft() {
         assertEquals(42, evaluate("fold-left", ENV.lookup("+"), 10, List.of(8, 4, 12, 8)));
     }
@@ -158,6 +176,12 @@ public class GlobalEnvironmentTest {
         assertEquals(null, evaluate("head", List.empty()));
         assertEquals(null, evaluate("head"));
         assertEquals(null, evaluate("head", "not-a-list"));
+    }
+
+    @Test
+    public void inc() {
+        assertEquals(42, evaluate("inc", 41));
+        assertEquals(42.0, evaluate("inc", 41.0));
     }
 
     @Test
