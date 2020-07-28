@@ -3,9 +3,7 @@ package nl.jqno.annotationscript.demo;
 import nl.jqno.annotationscript.AnnotationScript;
 import nl.jqno.annotationscript.Annotations.*;
 
-/*
- * Based on http://www.99-bottles-of-beer.net/language-clojure-2328.html
- */
+@Zero(comment="Based on http://www.99-bottles-of-beer.net/language-clojure-2328.html")
 public class NinetyNineBottlesOfBeer {
 
     @Zero("define")

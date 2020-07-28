@@ -10,6 +10,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Zero {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         One[] list() default {};
@@ -18,6 +19,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface One {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Two[] list() default {};
@@ -26,6 +28,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Two {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Three[] list() default {};
@@ -34,6 +37,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Three {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Four[] list() default {};
@@ -42,6 +46,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Four {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Five[] list() default {};
@@ -50,6 +55,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Five {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Six[] list() default {};
@@ -58,6 +64,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Six {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Seven[] list() default {};
@@ -66,6 +73,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Seven {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Eight[] list() default {};
@@ -74,6 +82,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Eight {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Nine[] list() default {};
@@ -82,6 +91,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Nine {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Ten[] list() default {};
@@ -90,6 +100,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Ten {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
         Eleven[] list() default {};
@@ -98,6 +109,7 @@ public final class Annotations {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Eleven {
+        String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
     }
