@@ -12,13 +12,13 @@ import io.vavr.collection.List;
 import nl.jqno.annotationscript.Annotations.*;
 import nl.jqno.annotationscript.language.exceptions.TokenizeException;
 
-public class TokenizerTest {
+public class AnnotationTokenizerTest {
     @Test
     public void tokenizeValidInput() {
         @Zero("if")@Zero("1")@Zero("'one'")
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var actual = sut.tokenize();
         assertEquals(List.of("(", "if", "1", "'one'", ")"), actual);
     }
@@ -33,7 +33,7 @@ public class TokenizerTest {
             @One(list={@Two("*"), @Two("r"), @Two("r")})})
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var actual = sut.tokenize();
         var expected = List.of("(", "begin", 
                 "(", "define", "r", "10", ")",
@@ -48,7 +48,7 @@ public class TokenizerTest {
         )))))))
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var actual = sut.tokenize();
         var expected = List.of("(", "(", "(", "(", "(", "(", "(",
                 "(",  "(", "(", "(", "😜", ")", ")", ")", ")",
@@ -69,7 +69,7 @@ public class TokenizerTest {
         @Zero(list={@One("*"), @One("pi"), @One(include=InputMultiply.class)})
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var actual = sut.tokenize();
         var expected = List.of("(", "begin", 
                 "(", "define", "r", "10", ")",
@@ -82,7 +82,7 @@ public class TokenizerTest {
         @Zero("non-empty")@Zero
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var e = assertThrows(TokenizeException.class, () -> sut.tokenize());
         assertEquals("annotation has no value", e.getMessage());
     }
@@ -92,7 +92,7 @@ public class TokenizerTest {
         @Zero("if")@IgnoreThis@Zero("1")
         class Input {}
 
-        var sut = new Tokenizer(Input.class);
+        var sut = new AnnotationTokenizer(Input.class);
         var actual = sut.tokenize();
         assertEquals(List.of("(", "if", "1", ")"), actual);
     }
