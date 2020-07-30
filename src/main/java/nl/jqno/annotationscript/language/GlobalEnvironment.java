@@ -79,6 +79,7 @@ public final class GlobalEnvironment {
         builtin("str/index-of", params -> unwrapString(params.get(1)).indexOf(unwrapString(params.get(0)))),
         builtin("str/join", params -> wrapString(toList(() -> params.get(1)).get().map(s -> unwrapString(s)).mkString(unwrapString(params.get(0))))),
         builtin("str/length", params -> unwrapString(params.get(0)).length()),
+        builtin("str/replace", params -> wrapString(unwrapString(params.get(0)).replace(unwrapString(params.get(1)), unwrapString(params.get(2))))),
         builtin("str/split", params -> List.of(unwrapString(params.get(1)).split(unwrapString(params.get(0)))).map(s -> wrapString(s))),
         builtin("str/starts-with?", params -> bool(unwrapString(params.get(1)).startsWith(unwrapString(params.get(0))))),
         builtin("str/to-lower", params -> wrapString(unwrapString(params.get(0)).toLowerCase())),

@@ -413,6 +413,12 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void strReplace() {
+        assertEquals("'hello world'", evaluate("str/replace", "'hello lisp'", "'lisp'", "'world'"));
+        assertEquals("'x ( y'", evaluate("str/replace", "'x(y'", "'('", "' ( '"));
+    }
+
+    @Test
     public void strSplit() {
         assertEquals(List.of("'a'", "'b'", "'c'"), evaluate("str/split", "','", "'a,b,c'"));
         assertEquals(List.of("'abc'"), evaluate("str/split", "','", "'abc'"));
