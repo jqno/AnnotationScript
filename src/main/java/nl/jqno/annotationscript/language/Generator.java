@@ -6,7 +6,7 @@ import nl.jqno.annotationscript.language.ast.AstList;
 
 public class Generator {
     private static final List<String> LEVELS =
-        List.of("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven");
+        List.of("", "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven");
 
     public String generate(AstExp exp) {
         return generate(exp, 0);
@@ -24,6 +24,11 @@ public class Generator {
     }
 
     private String generateList(AstList exp, int level) {
+        if (level == 0) {
+            return exp.value()
+                .map(e -> generate(e, level + 1))
+                .mkString();
+        }
         var inner = exp.value()
             .map(e -> generate(e, level + 1))
             .mkString(", ");

@@ -27,12 +27,12 @@ public class AnnotationScriptTest {
     public void generateCalculation() {
         var input = "(begin (define r 10) (* pi (* r r)))";
         var actual = AnnotationScript.generate(input);
-        var expected = "@Zero(list={@One(\"begin\"), " +
-            "@One(list={@Two(\"define\"), @Two(\"r\"), @Two(\"10\")}), " +
-            "@One(list={" +
-                "@Two(\"*\"), " +
-                "@Two(\"pi\"), " +
-                "@Two(list={@Three(\"*\"), @Three(\"r\"), @Three(\"r\")})})})";
+        var expected = "@Zero(\"begin\")" +
+            "@Zero(list={@One(\"define\"), @One(\"r\"), @One(\"10\")})" +
+            "@Zero(list={" +
+                "@One(\"*\"), " +
+                "@One(\"pi\"), " +
+                "@One(list={@Two(\"*\"), @Two(\"r\"), @Two(\"r\")})})";
         assertEquals(expected, actual);
     }
 
