@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import io.vavr.collection.HashMap;
 import nl.jqno.annotationscript.Annotations.*;
 
 public class AnnotationScriptTest {
@@ -19,6 +20,19 @@ public class AnnotationScriptTest {
         class Input {}
 
         var actual = (double)AnnotationScript.run(Input.class);
+        var expected = 314.159265;
+        assertEquals(expected, actual, 0.000001);
+    }
+
+    @Test
+    public void runCalculationWithInitialValue() {
+        @Zero("*")
+        @Zero("pi")
+        @Zero(list={@One("*"), @One("r"), @One("r")})
+        class Input {}
+
+        var initialValues = HashMap.<String, Object>of("r", 10);
+        var actual = (double)AnnotationScript.run(Input.class, initialValues);
         var expected = 314.159265;
         assertEquals(expected, actual, 0.000001);
     }
