@@ -12,7 +12,7 @@ public class Evaluator {
         return evaluate(exp, env)._1;
     }
 
-    public Tuple2<Object, Environment> evaluate(AstExp exp, Environment env) {
+    private Tuple2<Object, Environment> evaluate(AstExp exp, Environment env) {
         if (exp instanceof AstSymbol) {
             return evaluateSymbol(exp, env);
         }
