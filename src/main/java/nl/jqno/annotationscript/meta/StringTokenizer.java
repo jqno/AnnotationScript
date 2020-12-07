@@ -2,6 +2,8 @@ package nl.jqno.annotationscript.meta;
 
 import nl.jqno.annotationscript.Annotations.*;
 
+// CHECKSTYLE OFF: AvoidEscapedUnicodeCharacters
+
 @Zero("begin")
 @Zero(list={@One("define"), @One("PUNCTUATION_SPACE"), @One("'\u2008'")})
 @Zero(list={

@@ -50,6 +50,7 @@
                 <configuration>
                     <excludes>
                         <exclude>nl/jqno/annotationscript/demo/**/*</exclude>
+                        <exclude>nl/jqno/annotationscript/meta/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
