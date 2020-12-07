@@ -12,6 +12,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
+import nl.jqno.annotationscript.language.ast.AstSymbol;
 import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
@@ -127,19 +128,11 @@ public final class GlobalEnvironment {
     }
 
     private static boolean isString(Object object) {
-        if (object instanceof String) {
-            var s = (String)object;
-            return s.startsWith("'") && s.endsWith("'");
-        }
-        return false;
+        return object instanceof String;
     }
 
     private static boolean isSymbol(Object object) {
-        if (object instanceof String) {
-            var s = (String)object;
-            return !(s.startsWith("'") && s.endsWith("'"));
-        }
-        return false;
+        return object instanceof AstSymbol;
     }
 
     private static boolean isTruthy(Object x) {

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
+import nl.jqno.annotationscript.language.ast.AstSymbol;
 import nl.jqno.annotationscript.language.fn.Value;
 
 public class GlobalEnvironmentTest {
@@ -130,8 +131,8 @@ public class GlobalEnvironmentTest {
     public void atomp() {
         assertEquals(1, evaluate("atom?", 42));
         assertEquals(1, evaluate("atom?", 42.0));
-        assertEquals(1, evaluate("atom?", "'string'"));
-        assertEquals(0, evaluate("atom?", "symbol"));
+        assertEquals(1, evaluate("atom?", "string"));
+        assertEquals(0, evaluate("atom?", new AstSymbol("symbol")));
         assertEquals(0, evaluate("atom?", List.empty()));
     }
 
@@ -447,18 +448,20 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void stringp() {
+        assertEquals(1, evaluate("string?", "string"));
+        assertEquals(1, evaluate("string?", "string'"));
+        assertEquals(1, evaluate("string?", "'string"));
         assertEquals(1, evaluate("string?", "'string'"));
-        assertEquals(0, evaluate("string?", "'symbol"));
-        assertEquals(0, evaluate("string?", "symbol'"));
-        assertEquals(0, evaluate("string?", "symbol"));
+        assertEquals(0, evaluate("string?", new AstSymbol("symbol")));
         assertEquals(0, evaluate("string?", 42));
     }
 
     @Test
     public void symbolp() {
-        assertEquals(1, evaluate("symbol?", "symbol"));
-        assertEquals(1, evaluate("symbol?", "'symbol"));
-        assertEquals(1, evaluate("symbol?", "symbol'"));
+        assertEquals(1, evaluate("symbol?", new AstSymbol("symbol")));
+        assertEquals(0, evaluate("symbol?", "string"));
+        assertEquals(0, evaluate("symbol?", "string'"));
+        assertEquals(0, evaluate("symbol?", "'string"));
         assertEquals(0, evaluate("symbol?", "'string'"));
         assertEquals(0, evaluate("symbol?", 42));
     }
