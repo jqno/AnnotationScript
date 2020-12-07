@@ -4,25 +4,28 @@ import nl.jqno.annotationscript.Annotations.*;
 
 // CHECKSTYLE OFF: AvoidEscapedUnicodeCharacters
 
-@Zero("begin")
-@Zero(list={@One("define"), @One("PUNCTUATION_SPACE"), @One("'\u2008'")})
-@Zero(list={
-    @One("filter"),
-    @One(list={
-        @Two("lambda"),
-        @Two(list={@Three("s")}),
-        @Two(list={@Three("not"), @Three(list={@Four("="), @Four("s"), @Four("''")})})}),
-    @One(list={
-        @Two("map"),
-        @Two(list={
-            @Three("lambda"),
-            @Three(list={@Four("s")}),
-            @Three(list={@Four("str/replace"), @Four("s"), @Four("PUNCTUATION_SPACE"), @Four("' '")})}),
-        @Two(list={
-            @Three("str/split"), @Three("' '"), @Three(list={
-                @Four("str/replace"), @Four(list={
-                    @Five("str/replace"), @Five(list={
-                        @Six("str/replace"), @Six("input"), @Six("'\\ '"), @Six("PUNCTUATION_SPACE")}),
-                    @Five("'('"), @Five("' ( '")}),
-                @Four("')'"), @Four("' ) '")})})})})
+@Zero("define")
+@Zero("tokenize")
+@Zero(list={@One("lambda"), @One(list=@Two("input")), @One(list={
+    @Two("begin"),
+    @Two(list={@Three("define"), @Three("PUNCTUATION_SPACE"), @Three("'\u2008'")}),
+    @Two(list={
+        @Three("filter"),
+        @Three(list={
+            @Four("lambda"),
+            @Four(list={@Five("s")}),
+            @Four(list={@Five("not"), @Five(list={@Six("="), @Six("s"), @Six("''")})})}),
+        @Three(list={
+            @Four("map"),
+            @Four(list={
+                @Five("lambda"),
+                @Five(list={@Six("s")}),
+                @Five(list={@Six("str/replace"), @Six("s"), @Six("PUNCTUATION_SPACE"), @Six("' '")})}),
+            @Four(list={
+                @Five("str/split"), @Five("' '"), @Five(list={
+                    @Six("str/replace"), @Six(list={
+                        @Seven("str/replace"), @Seven(list={
+                            @Eight("str/replace"), @Eight("input"), @Eight("'\\ '"), @Eight("PUNCTUATION_SPACE")}),
+                        @Seven("'('"), @Seven("' ( '")}),
+                    @Six("')'"), @Six("' ) '")})})})})})})
 public class StringTokenizer {}
