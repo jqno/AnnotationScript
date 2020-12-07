@@ -166,6 +166,11 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void filter() {
+        assertEquals(List.of(1, 3.0), evaluate("filter", ENV.lookup("number?"), List.of(1, "two", 3.0)));
+    }
+
+    @Test
     public void foldLeft() {
         assertEquals(42, evaluate("fold-left", ENV.lookup("+"), 10, List.of(8, 4, 12, 8)));
     }

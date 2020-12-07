@@ -37,6 +37,8 @@ public final class GlobalEnvironment {
         builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
         builtin("else", 1),
+        builtin("filter", (params, env, eval) -> 
+            toList(() -> params.get(1)).get().filter(p -> isTruthy((toFn(params.get(0))).evaluate(List.of(p), env, eval)))),
         builtin("fold-left", (params, env, eval) ->
             toList(() -> params.get(2)).get().foldLeft(params.get(1), (acc, curr) -> toFn(params.get(0)).evaluate(List.of(acc, curr), env, eval))),
         builtin("head", params -> toList(() -> params.get(0)).flatMap(l -> l.headOption()).getOrNull()),
