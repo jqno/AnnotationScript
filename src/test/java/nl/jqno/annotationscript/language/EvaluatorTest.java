@@ -35,7 +35,7 @@ public class EvaluatorTest {
     @Test
     public void successfullyEvaluateAString() {
         var actual = sut.eval(new AstString("yeah"), env);
-        assertEquals("'yeah'", actual);
+        assertEquals("yeah", actual);
     }
 
     @Test

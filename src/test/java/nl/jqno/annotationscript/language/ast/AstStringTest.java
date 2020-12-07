@@ -8,13 +8,13 @@ public class AstStringTest {
     @Test
     public void value() {
         var sut = new AstString("some-value");
-        assertEquals("'some-value'", sut.value());
-        assertEquals("'some-value'", sut.asString());
+        assertEquals("some-value", sut.value());
+        assertEquals("some-value", sut.asString());
     }
 
     @Test
     public void tostring() {
         var sut = new AstString("some-value");
-        assertEquals("'some-value'", sut.toString());
+        assertEquals("some-value", sut.toString());
     }
 }

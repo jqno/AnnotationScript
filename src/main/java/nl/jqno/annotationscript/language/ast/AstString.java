@@ -11,12 +11,12 @@ public final class AstString implements AstExp {
 
     @Override
     public String value() {
-        return asString();
+        return value;
     }
 
     @Override
     public String asString() {
-        return "'" + value + "'";
+        return value;
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class AstString implements AstExp {
 
     @Override
     public String toString() {
-        return asString();
+        return value;
     }
 }
 

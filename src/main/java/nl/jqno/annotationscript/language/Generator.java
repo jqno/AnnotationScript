@@ -3,6 +3,7 @@ package nl.jqno.annotationscript.language;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.ast.AstExp;
 import nl.jqno.annotationscript.language.ast.AstList;
+import nl.jqno.annotationscript.language.ast.AstString;
 
 public class Generator {
     private static final List<String> LEVELS =
@@ -16,11 +17,18 @@ public class Generator {
         if (exp instanceof AstList) {
             return generateList((AstList)exp, level);
         }
+        if (exp instanceof AstString) {
+            return generateString(exp, level);
+        }
         return generateAtom(exp, level);
     }
 
     private String generateAtom(AstExp exp, int level) {
-        return prefix(level) + "\"" + exp.toString() + "\")";
+        return prefix(level) + "\"" + exp.value() + "\")";
+    }
+
+    private String generateString(AstExp exp, int level) {
+        return prefix(level) + "\"'" + exp.value() + "'\")";
     }
 
     private String generateList(AstList exp, int level) {
