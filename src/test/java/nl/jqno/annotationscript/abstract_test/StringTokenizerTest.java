@@ -43,4 +43,12 @@ public abstract class StringTokenizerTest {
                 ")", ")", ")", ")", ")", ")", ")");
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void tokenizeInputWithStringsContainingSpaces() {
+        var input = "(str/split '\\ ' input)";
+        var actual = tokenize(input);
+        var expected = List.of("(", "str/split", "' '", "input", ")");
+        assertEquals(expected, actual);
+    }
 }
