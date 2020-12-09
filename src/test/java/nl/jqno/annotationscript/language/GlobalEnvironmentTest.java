@@ -2,6 +2,7 @@ package nl.jqno.annotationscript.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -472,6 +473,12 @@ public class GlobalEnvironmentTest {
         assertEquals(List.empty(), evaluate("tail", List.empty()));
         assertEquals(null, evaluate("tail"));
         assertEquals(null, evaluate("tail", "not-a-list"));
+    }
+
+    @Test
+    public void throwException() {
+        var rte = assertThrows(RuntimeException.class, () -> evaluate("throw", "some-exception"));
+        assertEquals("some-exception", rte.getMessage());
     }
 
     private Object evaluate(String symbol, Object... params) {

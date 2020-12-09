@@ -88,7 +88,8 @@ public final class GlobalEnvironment {
         builtin("str/to-upper", params -> toString(params.get(0)).toUpperCase()),
         builtin("string?", params -> bool(isString(params.get(0)))),
         builtin("symbol?", params -> bool(isSymbol(params.get(0)))),
-        builtin("tail", params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull())
+        builtin("tail", params -> toList(() -> params.get(0)).map(l -> l.size() > 0 ? l.tail() : List.empty()).getOrNull()),
+        builtin("throw", params -> { throw new RuntimeException(toString(params.get(0))); })
     );
 
     public static Environment build() {
