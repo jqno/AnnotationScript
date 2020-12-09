@@ -1,4 +1,4 @@
-package nl.jqno.annotationscript.language;
+package nl.jqno.annotationscript.abstract_test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -6,9 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.List;
-import nl.jqno.annotationscript.language.exceptions.ParseException;
+import nl.jqno.annotationscript.language.Symbol;
 
-public class ParserTest {
+public abstract class ParserTest {
+
+    public abstract Object parse(String... input);
+    public abstract Class<? extends Throwable> exception();
+
     @Test
     public void parseValidTokens() {
         var actual = parse("(", "begin", "(", "define", "r", "10", ")", "(", "*", "pi", "(", "*", "r", "r", ")", ")", ")");
@@ -54,7 +58,7 @@ public class ParserTest {
 
     @Test
     public void throwsOnNoInput() {
-        var e = assertThrows(ParseException.class, () ->
+        var e = assertThrows(exception(), () ->
             parse()
         );
         assertEquals("no input", e.getMessage());
@@ -62,7 +66,7 @@ public class ParserTest {
 
     @Test
     public void throwsOnUnexpectedEndOfInput() {
-        var e = assertThrows(ParseException.class, () ->
+        var e = assertThrows(exception(), () ->
             parse("(", "begin")
         );
         assertEquals("unexpected EOF", e.getMessage());
@@ -70,7 +74,7 @@ public class ParserTest {
 
     @Test
     public void throwsOnUnexpectedCloseParen() {
-        var e = assertThrows(ParseException.class, () ->
+        var e = assertThrows(exception(), () ->
             parse(")")
         );
         assertEquals("unexpected )", e.getMessage());
@@ -78,14 +82,9 @@ public class ParserTest {
 
     @Test
     public void throwsOnNotAllInputConsumed() {
-        var e = assertThrows(ParseException.class, () ->
+        var e = assertThrows(exception(), () ->
             parse("(", "begin", ")", "stuff")
         );
         assertEquals("unexpected end of program", e.getMessage());
-    }
-
-    private Object parse(String... input) {
-        var sut = new Parser(List.of(input));
-        return sut.parse();
     }
 }
