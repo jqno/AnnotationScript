@@ -5,8 +5,7 @@ import io.vavr.Function3;
 import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.Environment;
 import nl.jqno.annotationscript.language.Evaluator;
-import nl.jqno.annotationscript.language.ast.AstExp;
-import nl.jqno.annotationscript.language.ast.AstSymbol;
+import nl.jqno.annotationscript.language.Symbol;
 import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 
 public interface Fn {
@@ -33,7 +32,7 @@ public interface Fn {
         return new Builtin(name, fn);
     }
 
-    public static Fn lambda(List<AstSymbol> params, AstExp body, Environment capturedEnv) {
+    public static Fn lambda(List<Symbol> params, Object body, Environment capturedEnv) {
         return new Lambda(params, body, capturedEnv);
     }
 }

@@ -11,16 +11,15 @@ import io.vavr.collection.List;
 import nl.jqno.annotationscript.language.Environment;
 import nl.jqno.annotationscript.language.Evaluator;
 import nl.jqno.annotationscript.language.GlobalEnvironment;
-import nl.jqno.annotationscript.language.ast.AstList;
-import nl.jqno.annotationscript.language.ast.AstSymbol;
+import nl.jqno.annotationscript.language.Symbol;
 
 public class LambdaTest {
     private Lambda sut = null;
 
     @BeforeEach
     public void setUp() {
-        var params = List.of(new AstSymbol("x"), new AstSymbol("y"));
-        var body = new AstList(List.of(new AstSymbol("-"), new AstSymbol("x"), new AstSymbol("y")));
+        var params = List.of(new Symbol("x"), new Symbol("y"));
+        var body = List.of(new Symbol("-"), new Symbol("x"), new Symbol("y"));
         var env = new Environment(HashMap.empty());
 
         sut = new Lambda(params, body, env);
@@ -42,6 +41,6 @@ public class LambdaTest {
     @Test
     public void tostring() {
         var actual = sut.toString();
-        assertEquals("λ[(x,y) → (- x y)]", actual);
+        assertEquals("λ[('x,'y) → List('-, 'x, 'y)]", actual);
     }
 }

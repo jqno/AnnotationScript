@@ -12,7 +12,6 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
-import nl.jqno.annotationscript.language.ast.AstSymbol;
 import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
@@ -132,7 +131,7 @@ public final class GlobalEnvironment {
     }
 
     private static boolean isSymbol(Object object) {
-        return object instanceof AstSymbol;
+        return object instanceof Symbol;
     }
 
     private static boolean isTruthy(Object x) {

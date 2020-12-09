@@ -3,7 +3,6 @@ package nl.jqno.annotationscript.language;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
-import nl.jqno.annotationscript.language.ast.*;
 import nl.jqno.annotationscript.language.exceptions.ParseException;
 
 public class Parser {
@@ -13,7 +12,7 @@ public class Parser {
         this.allTokens = allTokens;
     }
 
-    public AstExp parse() {
+    public Object parse() {
         if (allTokens.size() == 0) {
             throw new ParseException("no input");
         }
@@ -24,7 +23,7 @@ public class Parser {
         return parsed._1;
     }
 
-    private Tuple2<AstExp, List<String>> readFromTokens(List<String> tokens) {
+    private Tuple2<Object, List<String>> readFromTokens(List<String> tokens) {
         var token = tokens.head();
         if ("(".equals(token)) {
             return list(List.empty(), tokens.tail());
@@ -35,31 +34,31 @@ public class Parser {
         return Tuple.of(atom(token), tokens.tail());
     }
 
-    private Tuple2<AstExp, List<String>> list(List<AstExp> accumulated, List<String> tokens) {
+    private Tuple2<Object, List<String>> list(List<Object> accumulated, List<String> tokens) {
         if (tokens.size() == 0) {
             throw new ParseException("unexpected EOF");
         }
         var head = tokens.head();
         if (")".equals(head)) {
-            return Tuple.of(new AstList(accumulated), tokens.tail());
+            return Tuple.of(accumulated, tokens.tail());
         }
         var parsed = readFromTokens(tokens);
         return list(accumulated.append(parsed._1), parsed._2);
     }
 
-    private AstExp atom(String token) {
+    private Object atom(String token) {
         if (token.startsWith("'") && token.endsWith("'")) {
-            return new AstString(token.substring(1, token.length() - 1));
+            return token.substring(1, token.length() - 1);
         }
         try {
-            return new AstInt(Integer.parseInt(token));
+            return Integer.parseInt(token);
         }
         catch (NumberFormatException ignored1) {
             try {
-                return new AstFloat(Double.parseDouble(token));
+                return Double.parseDouble(token);
             }
             catch (NumberFormatException ignored2) {
-                return new AstSymbol(token);
+                return new Symbol(token);
             }
         }
     }
