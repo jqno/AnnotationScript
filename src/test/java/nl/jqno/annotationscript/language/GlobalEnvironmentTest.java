@@ -167,6 +167,18 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void emptyp() {
+        assertEquals(0, evaluate("empty?", "non-empty"));
+        assertEquals(1, evaluate("empty?", ""));
+        assertEquals(0, evaluate("empty?", List.of(1)));
+        assertEquals(1, evaluate("empty?", List.empty()));
+        assertEquals(0, evaluate("empty?", HashMap.of(1, 1)));
+        assertEquals(1, evaluate("empty?", HashMap.empty()));
+        assertNull(evaluate("empty?", new Symbol("some-symbol")));
+        assertNull(evaluate("empty?", 42));
+    }
+
+    @Test
     public void filter() {
         assertEquals(List.of(1, 3.0), evaluate("filter", ENV.lookup("number?"), List.of(1, "two", 3.0)));
     }

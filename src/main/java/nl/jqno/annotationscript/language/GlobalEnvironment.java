@@ -37,6 +37,13 @@ public final class GlobalEnvironment {
         builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
         builtin("else", 1),
+        builtin("empty?", params -> {
+            var p = params.get(0);
+            if (p instanceof String) { return bool(toString(p).isEmpty()); }
+            if (p instanceof List) { return bool(toList(() -> p).get().isEmpty()); }
+            if (p instanceof Map) { return bool(toMap(p).isEmpty()); }
+            return null;
+        }),
         builtin("filter", (params, env, eval) -> 
             toList(() -> params.get(1)).get().filter(p -> isTruthy((toFn(params.get(0))).evaluate(List.of(p), env, eval)))),
         builtin("fold-left", (params, env, eval) ->
