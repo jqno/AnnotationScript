@@ -14,30 +14,31 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public class EnvironmentTest {
 
-    private static final Map<String, Fn> ENV = HashMap.of(
-        "pi", Fn.val("pi", Math.PI)
+    private static final Symbol PI = new Symbol("pi");
+    private static final Map<Symbol, Fn> ENV = HashMap.of(
+        PI, Fn.val("pi", Math.PI)
     );
 
     @Test
     public void successfulLookupOption() {
         var sut = new Environment(ENV);
-        var actual = sut.lookupOption("pi").get();
-        var expected = ENV.get("pi").get();
+        var actual = sut.lookupOption(PI).get();
+        var expected = ENV.get(PI).get();
         assertEquals(expected, actual);
     }
 
     @Test
     public void lookupOptionReturnsNoneIfSymbolIsAbsent() {
         var sut = new Environment(ENV);
-        var actual = sut.lookupOption("something-else");
+        var actual = sut.lookupOption(new Symbol("something-else"));
         assertEquals(Option.none(), actual);
     }
 
     @Test
     public void successfulLookup() {
         var sut = new Environment(ENV);
-        var actual = sut.lookup("pi");
-        var expected = ENV.get("pi").get();
+        var actual = sut.lookup(PI);
+        var expected = ENV.get(PI).get();
         assertEquals(expected, actual);
     }
 
@@ -45,33 +46,35 @@ public class EnvironmentTest {
     public void lookupThrowsIfSymbolIsAbsent() {
         var sut = new Environment(ENV);
         var e = assertThrows(EvaluationException.class, () ->
-            sut.lookup("something-else")
+            sut.lookup(new Symbol("something-else"))
         );
-        assertEquals("unknown symbol: something-else", e.getMessage());
+        assertEquals("unknown symbol: 'something-else", e.getMessage());
     }
 
     @Test
     public void successfulAdd() {
+        var r = new Symbol("r");
         var sut = new Environment(ENV);
-        var actual = sut.add("r", Fn.val("r", 10));
-        assertEquals(10, actual.lookup("r").value());
+        var actual = sut.add(r, Fn.val("r", 10));
+        assertEquals(10, actual.lookup(r).value());
     }
 
     @Test
     public void successfulMerge() {
+        var e = new Symbol("e");
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("e", Fn.val("e", Math.E)));
+        var otherEnv = new Environment(HashMap.of(e, Fn.val("e", Math.E)));
         var merged = sut.merge(otherEnv);
-        assertNotNull(merged.lookup("pi"));
-        assertNotNull(merged.lookup("e"));
+        assertNotNull(merged.lookup(PI));
+        assertNotNull(merged.lookup(e));
     }
 
     @Test
     public void successfulMergeWhereThisOverridesThat() {
         var sut = new Environment(ENV);
-        var otherEnv = new Environment(HashMap.of("pi", Fn.val("e", Math.E)));
+        var otherEnv = new Environment(HashMap.of(PI, Fn.val("e", Math.E)));
         var merged = sut.merge(otherEnv);
-        var pi = merged.lookup("pi");
+        var pi = merged.lookup(PI);
         assertEquals(Math.PI, pi.value());
     }
 }

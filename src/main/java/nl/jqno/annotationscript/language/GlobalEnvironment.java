@@ -15,7 +15,7 @@ import io.vavr.control.Option;
 import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
-    private static final List<Tuple2<String, Fn>> GLOBAL = List.of(
+    private static final List<Tuple2<Symbol, Fn>> GLOBAL = List.of(
         builtin("+", params -> params.foldLeft((Object)0, (acc, curr) -> wideningOp((x, y) -> x + y, acc, curr))),
         builtin("-", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x - y, acc, curr))),
         builtin("*", params -> params.foldLeft((Object)1, (acc, curr) -> wideningOp((x, y) -> x * y, acc, curr))),
@@ -82,7 +82,7 @@ public final class GlobalEnvironment {
         builtin("println-err", params -> { System.err.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
         builtin("procedure?", (params, env, eval) ->
-            bool(env.lookupOption(params.get(0).toString()).map(Fn::isProcedure).getOrElse(false))),
+            bool(env.lookupOption(toSymbol(params.get(0))).map(Fn::isProcedure).getOrElse(false))),
         builtin("range", params -> List.range(toInt(params.get(0)), toInt(params.get(1)))),
         builtin("reverse", params -> toList(() -> params.get(0)).get().reverse()),
         builtin("round", params -> toInt(Math.round(toDouble(params.get(0))))),
@@ -110,16 +110,16 @@ public final class GlobalEnvironment {
 
     private GlobalEnvironment() {}
 
-    private static Tuple2<String, Fn> builtin(String name, Function1<List<Object>, Object> fn) {
-        return Tuple.of(name, Fn.builtin(name, fn));
+    private static Tuple2<Symbol, Fn> builtin(String name, Function1<List<Object>, Object> fn) {
+        return Tuple.of(new Symbol(name), Fn.builtin(name, fn));
     }
 
-    private static Tuple2<String, Fn> builtin(String name, Function3<List<Object>, Environment, Evaluator, Object> fn) {
-        return Tuple.of(name, Fn.builtin(name, fn));
+    private static Tuple2<Symbol, Fn> builtin(String name, Function3<List<Object>, Environment, Evaluator, Object> fn) {
+        return Tuple.of(new Symbol(name), Fn.builtin(name, fn));
     }
 
-    private static Tuple2<String, Fn> builtin(String name, Object value) {
-        return Tuple.of(name, Fn.val(name, value));
+    private static Tuple2<Symbol, Fn> builtin(String name, Object value) {
+        return Tuple.of(new Symbol(name), Fn.val(name, value));
     }
 
     private static int bool(boolean b) {
@@ -158,6 +158,9 @@ public final class GlobalEnvironment {
         if (x instanceof Integer) {
             return Double.valueOf((Integer)x);
         }
+        if (x instanceof Symbol) {
+            return Double.valueOf(((Symbol)x).name);
+        }
         return Double.valueOf(x.toString());
     }
 
@@ -193,6 +196,10 @@ public final class GlobalEnvironment {
 
     private static String toString(Object x) {
         return x.toString();
+    }
+
+    private static Symbol toSymbol(Object x) {
+        return x instanceof Symbol ? (Symbol)x : null;
     }
 
     private static Object wideningOp(Function2<Double, Double, Object> op, Object x, Object y) {

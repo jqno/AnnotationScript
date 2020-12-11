@@ -6,21 +6,21 @@ import nl.jqno.annotationscript.language.exceptions.EvaluationException;
 import nl.jqno.annotationscript.language.fn.Fn;
 
 public class Environment {
-    private final Map<String, Fn> env;
+    private final Map<Symbol, Fn> env;
 
-    public Environment(Map<String, Fn> env) {
+    public Environment(Map<Symbol, Fn> env) {
         this.env = env;
     }
 
-    public Option<Fn> lookupOption(String symbol) {
+    public Option<Fn> lookupOption(Symbol symbol) {
         return env.get(symbol);
     }
 
-    public Fn lookup(String symbol) {
+    public Fn lookup(Symbol symbol) {
         return lookupOption(symbol).getOrElseThrow(() -> new EvaluationException("unknown symbol: " + symbol));
     }
 
-    public Environment add(String symbol, Fn fn) {
+    public Environment add(Symbol symbol, Fn fn) {
         return new Environment(env.put(symbol, fn));
     }
 
