@@ -12,12 +12,12 @@ public class MetaStringTokenizerTest extends StringTokenizerTest {
     @Zero("begin")
     @Zero(include=StringTokenizer.class)
     @Zero(list={@One("tokenize"), @One("input")})
-    class Tokenizer {}
+    class Sut {}
 
     @Override
     @SuppressWarnings("unchecked")
     public List<String> tokenize(String input) {
         var initialValues = HashMap.<String, Object>of("input", input);
-        return (List<String>)AnnotationScript.run(Tokenizer.class, initialValues);
+        return (List<String>)AnnotationScript.run(Sut.class, initialValues);
     }
 }

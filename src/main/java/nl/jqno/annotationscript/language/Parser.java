@@ -13,11 +13,11 @@ public class Parser {
     }
 
     public Object parse() {
-        if (allTokens.size() == 0) {
+        if (allTokens.isEmpty()) {
             throw new ParseException("no input");
         }
         var parsed = readFromTokens(allTokens);
-        if (parsed._2.size() > 0) {
+        if (!parsed._2.isEmpty()) {
             throw new ParseException("unexpected end of program");
         }
         return parsed._1;
@@ -35,7 +35,7 @@ public class Parser {
     }
 
     private Tuple2<Object, List<String>> list(List<Object> accumulated, List<String> tokens) {
-        if (tokens.size() == 0) {
+        if (tokens.isEmpty()) {
             throw new ParseException("unexpected EOF");
         }
         var head = tokens.head();

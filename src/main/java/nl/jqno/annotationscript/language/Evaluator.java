@@ -34,7 +34,7 @@ public class Evaluator {
     }
 
     private Tuple2<Object, Environment> evaluateList(List<?> exp, Environment env) {
-        if (exp.size() == 0) {
+        if (exp.isEmpty()) {
             return Tuple.of(exp, env);
         }
         var head = exp.head() instanceof Symbol ? symbolName(exp.head()) : "";
