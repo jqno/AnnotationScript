@@ -65,6 +65,10 @@ public final class GlobalEnvironment {
         builtin("null?", params -> bool(params.get(0) == null)),
         builtin("number?", params -> bool(isNumber(params.get(0)))),
         builtin("or", params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr)))),
+        builtin("parse-float", params ->
+            { try { return Double.parseDouble(toString(params.get(0))); } catch (NumberFormatException e) { return null; } }),
+        builtin("parse-int", params -> 
+            { try { return Integer.parseInt(toString(params.get(0))); } catch (NumberFormatException e) { return null; } }),
         builtin("pi", Math.PI),
         // CHECKSTYLE OFF: Regexp
         builtin("println", params -> { System.out.println(params.map(p -> toString(p)).mkString(" ")); return null; }),

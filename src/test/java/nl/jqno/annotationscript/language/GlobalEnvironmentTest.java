@@ -339,6 +339,20 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void parseFloat() {
+        assertEquals(3.14, evaluate("parse-float", "3.14"));
+        assertEquals(3.0, evaluate("parse-float", "3"));
+        assertNull(evaluate("parse-float", "'not-a-float'"));
+    }
+
+    @Test
+    public void parseInt() {
+        assertEquals(3, evaluate("parse-int", "3"));
+        assertNull(evaluate("parse-int", "3.14"));
+        assertNull(evaluate("parse-int", "'not-an-int'"));
+    }
+
+    @Test
     public void pi() {
         assertEquals(Math.PI, evaluate("pi"));
     }
