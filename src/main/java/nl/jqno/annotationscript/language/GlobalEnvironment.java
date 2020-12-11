@@ -88,6 +88,7 @@ public final class GlobalEnvironment {
         builtin("str/replace", params -> toString(params.get(0)).replace(toString(params.get(1)), toString(params.get(2)))),
         builtin("str/split", params -> List.of(toString(params.get(1)).split(toString(params.get(0))))),
         builtin("str/starts-with?", params -> bool(toString(params.get(1)).startsWith(toString(params.get(0))))),
+        builtin("str/substring", params -> toString(params.get(0)).substring(toInt(params.get(1)), toInt(params.get(2)))),
         builtin("str/to-lower", params -> toString(params.get(0)).toLowerCase()),
         builtin("str/to-upper", params -> toString(params.get(0)).toUpperCase()),
         builtin("string?", params -> bool(isString(params.get(0)))),

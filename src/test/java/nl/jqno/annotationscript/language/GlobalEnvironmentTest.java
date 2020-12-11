@@ -451,6 +451,12 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void strSubstring() {
+        assertEquals("string", evaluate("str/substring", "'string'", 1, 7));
+        assertEquals("", evaluate("str/substring", "something", 0, 0));
+    }
+
+    @Test
     public void strToLower() {
         assertEquals("abcde", evaluate("str/to-lower", "aBcDe"));
     }
