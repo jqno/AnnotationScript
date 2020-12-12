@@ -66,19 +66,19 @@ public class Parser {
     public static class ReadList {}
 
     /*
-     *  Generated from:
+     * Generated from:
      *
-     *  (define read-atom
-     *    (lambda (token)
-     *      (cond
-     *        (and (str/starts-with? ''' token) (str/ends-with? ''' token))
-     *        (str/substring token 1 (- (str/length token) 1))
-     *        (not (null? (parse-int token)))
-     *        (parse-int token)
-     *        (not (null? (parse-float token)))
-     *        (parse-float token)
-     *        else
-     *        (symbol token))))
+     * (define read-atom
+     *   (lambda (token)
+     *     (cond
+     *       (and (str/starts-with? ''' token) (str/ends-with? ''' token))
+     *       (str/substring token 1 (- (str/length token) 1))
+     *       (not (null? (parse-int token)))
+     *       (parse-int token)
+     *       (not (null? (parse-float token)))
+     *       (parse-float token)
+     *       else
+     *       (symbol token))))
      */
     @Zero("define")
     @Zero("read-atom")
