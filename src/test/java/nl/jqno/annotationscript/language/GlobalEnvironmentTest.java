@@ -509,6 +509,13 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void symbol() {
+        assertEquals(new Symbol("some-symbol"), evaluate("symbol", "some-symbol"));
+        assertEquals(new Symbol("+"), evaluate("symbol", "+"));
+        assertEquals(new Symbol("42"), evaluate("symbol", 42));
+    }
+
+    @Test
     public void symbolp() {
         assertEquals(1, evaluate("symbol?", new Symbol("symbol")));
         assertEquals(0, evaluate("symbol?", "string"));
