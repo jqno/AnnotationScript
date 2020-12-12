@@ -23,6 +23,51 @@ public class Parser {
     /*
      * Generated from:
      *
+     * (define read-list
+     *   (lambda (accumulated tokens)
+     *     (cond
+     *       (empty? tokens)
+     *       (throw 'unexpected EOF')
+     *       (= ')' (head tokens))
+     *       (list accumulated (tail tokens))
+     *       else
+     *       (begin
+     *         (define parsed (read-from-tokens tokens))
+     *         (read-list (append (head parsed) accumulated) (second parsed))))))
+     */
+    @Zero("define")
+    @Zero("read-list")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("accumulated"), @Two("tokens")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("empty?"), @Three("tokens")}),
+            @Two(list={@Three("throw"), @Three("'unexpected EOF'")}),
+            @Two(list={@Three("="), @Three("')'"), @Three(list={@Four("head"), @Four("tokens")})}),
+            @Two(list={
+                @Three("list"),
+                @Three("accumulated"),
+                @Three(list={@Four("tail"), @Four("tokens")})}),
+            @Two("else"),
+            @Two(list={
+                @Three("begin"),
+                @Three(list={
+                    @Four("define"),
+                    @Four("parsed"),
+                    @Four(list={@Five("read-from-tokens"), @Five("tokens")})}),
+                @Three(list={
+                    @Four("read-list"),
+                    @Four(list={
+                        @Five("append"),
+                        @Five(list={@Six("head"), @Six("parsed")}),
+                        @Five("accumulated")}),
+                    @Four(list={@Five("second"), @Five("parsed")})})})})})
+    public static class ReadList {}
+
+    /*
+     *  Generated from:
+     *
      *  (define read-atom
      *    (lambda (token)
      *      (cond
