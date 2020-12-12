@@ -23,6 +23,48 @@ public class Parser {
     /*
      * Generated from:
      *
+     * (define read-from-tokens
+     *   (lambda (tokens)
+     *     (begin
+     *       (define token (head tokens))
+     *       (cond
+     *         (= '(' token)
+     *         (read-list (list) (tail tokens))
+     *         (= ')' token)
+     *         (throw 'unexpected )')
+     *         else
+     *         (list (read-atom token) (tail tokens))))))
+     */
+    @Zero("define")
+    @Zero("read-from-tokens")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("tokens")}),
+        @One(list={
+            @Two("begin"),
+            @Two(list={
+                @Three("define"),
+                @Three("token"),
+                @Three(list={@Four("head"), @Four("tokens")})}),
+            @Two(list={
+                @Three("cond"),
+                @Three(list={@Four("="), @Four("'('"), @Four("token")}),
+                @Three(list={
+                    @Four("read-list"),
+                    @Four(list={@Five("list")}),
+                    @Four(list={@Five("tail"), @Five("tokens")})}),
+                @Three(list={@Four("="), @Four("')'"), @Four("token")}),
+                @Three(list={@Four("throw"), @Four("'unexpected )'")}),
+                @Three("else"),
+                @Three(list={
+                    @Four("list"),
+                    @Four(list={@Five("read-atom"), @Five("token")}),
+                    @Four(list={@Five("tail"), @Five("tokens")})})})})})
+    public static class ReadFromTokens {}
+
+    /*
+     * Generated from:
+     *
      * (define read-list
      *   (lambda (accumulated tokens)
      *     (cond

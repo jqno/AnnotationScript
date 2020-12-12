@@ -29,6 +29,58 @@ public class MetaParserTest  {
     }
 
     @Nested
+    class ReadFromTokens {
+        @Zero("begin")
+        @Zero(include=Parser.ReadFromTokens.class)
+        @Zero(list={
+            @One("define"),
+            @One("read-list"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("accumulated"), @Three("tokens")}),
+                @Two(list={
+                    @Three("list"),
+                    @Three("'called read-list'"),
+                    @Three("accumulated"),
+                    @Three("tokens")})})})
+        @Zero(list={
+            @One("define"),
+            @One("read-atom"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("token")}),
+                @Two(list={
+                    @Three("list"),
+                    @Three("'called read-atom'"),
+                    @Three("token")})})})
+        @Zero(list={@One("read-from-tokens"), @One("input")})
+        class Sut {}
+
+        @Test
+        public void openParen() {
+            var initialValues = input(List.of("(", "tail"));
+            var actual = run(Sut.class, initialValues);
+            var expected = List.of("called read-list", List.empty(), List.of("tail"));
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void closeParen() {
+            var initialValues = input(List.of(")", "tail"));
+            var e = assertThrows(RuntimeException.class, () -> run(Sut.class, initialValues));
+            assertEquals("unexpected )", e.getMessage());
+        }
+
+        @Test
+        public void middleOfList() {
+            var initialValues = input(List.of(1, "tail"));
+            var actual = run(Sut.class, initialValues);
+            var expected = List.of(List.of("called read-atom", 1), List.of("tail"));
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Nested
     class ReadList {
         @Zero("begin")
         @Zero(include=Parser.Second.class)
