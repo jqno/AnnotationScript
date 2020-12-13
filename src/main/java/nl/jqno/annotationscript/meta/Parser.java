@@ -2,10 +2,19 @@ package nl.jqno.annotationscript.meta;
 
 import nl.jqno.annotationscript.Annotations.*;
 
-/*
- * Generated from:
- *
- */
+@Zero("define")
+@Zero("parse")
+@Zero(list={
+    @One("lambda"),
+    @One(list={@Two("all-tokens")}),
+    @One(list={
+        @Two("begin"),
+        @Two(include=Parser.Second.class),
+        @Two(include=Parser.ReadFromTokens.class),
+        @Two(include=Parser.ReadList.class),
+        @Two(include=Parser.ReadAtom.class),
+        @Two(include=Parser.InnerParse.class),
+        @Two(list={@Three("inner-parse"), @Three("all-tokens")})})})
 public class Parser {
     /*
      * Generated from:

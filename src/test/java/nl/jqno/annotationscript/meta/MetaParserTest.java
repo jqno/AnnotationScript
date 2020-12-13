@@ -11,9 +11,25 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import nl.jqno.annotationscript.Annotations.*;
+import nl.jqno.annotationscript.abstract_test.ParserTest;
 import nl.jqno.annotationscript.language.Symbol;
 
-public class MetaParserTest  {
+public class MetaParserTest extends ParserTest {
+
+    @Override
+    public Object parse(String... input) {
+        @Zero("begin")
+        @Zero(include=Parser.class)
+        @Zero(list={@One("parse"), @One("input")})
+        class Sut {}
+
+        return run(Sut.class, input(List.of(input)));
+    }
+
+    @Override
+    public Class<? extends Throwable> exception() {
+        return RuntimeException.class;
+    }
 
     @Nested
     class Second {
