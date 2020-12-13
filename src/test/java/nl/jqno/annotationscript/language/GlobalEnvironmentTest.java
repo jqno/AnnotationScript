@@ -147,7 +147,7 @@ public class GlobalEnvironmentTest {
         assertEquals(1, evaluate("atom?", 42));
         assertEquals(1, evaluate("atom?", 42.0));
         assertEquals(1, evaluate("atom?", "string"));
-        assertEquals(0, evaluate("atom?", new Symbol("symbol")));
+        assertEquals(1, evaluate("atom?", new Symbol("symbol")));
         assertEquals(0, evaluate("atom?", List.empty()));
     }
 
