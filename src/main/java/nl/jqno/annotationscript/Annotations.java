@@ -13,6 +13,7 @@ public final class Annotations {
         String comment() default EMPTY;
         String value() default EMPTY;
         Class<?> include() default Nothing.class;
+        Class<?>[] export() default {};
         One[] list() default {};
     }
 

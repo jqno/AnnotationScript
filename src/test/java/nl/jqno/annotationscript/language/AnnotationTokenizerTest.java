@@ -78,6 +78,29 @@ public class AnnotationTokenizerTest {
     }
 
     @Test
+    public void tokenizeExports() {
+        @Zero("define")@Zero("fun1")@Zero("1")
+        class Fun1 {}
+
+        @Zero("define")@Zero("fun2")@Zero("2")
+        class Fun2 {}
+
+        @Zero("define")@Zero("fun3")@Zero("3")
+        class Fun3 {}
+
+        @Zero(export={Fun1.class, Fun2.class, Fun3.class})
+        class Module {}
+
+        var sut = new AnnotationTokenizer(Module.class);
+        var actual = sut.tokenize();
+        var expected = List.of(
+                "(", "define", "fun1", "1", ")",
+                "(", "define", "fun2", "2", ")",
+                "(", "define", "fun3", "3", ")");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void throwOnUninitializedAnnotation() {
         @Zero("non-empty")@Zero
         class Input {}
