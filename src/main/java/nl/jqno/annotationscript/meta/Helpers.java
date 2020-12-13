@@ -2,6 +2,10 @@ package nl.jqno.annotationscript.meta;
 
 import nl.jqno.annotationscript.Annotations.*;
 
+@Zero(export={
+    Helpers.First.class,
+    Helpers.Second.class,
+    Helpers.Third.class})
 public class Helpers {
     /*
      * Generated from:

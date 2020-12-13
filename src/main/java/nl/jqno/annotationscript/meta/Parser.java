@@ -9,8 +9,7 @@ import nl.jqno.annotationscript.Annotations.*;
     @One(list={@Two("all-tokens")}),
     @One(list={
         @Two("begin"),
-        @Two(include=Helpers.First.class),
-        @Two(include=Helpers.Second.class),
+        @Two(include=Helpers.class),
         @Two(include=Parser.ReadFromTokens.class),
         @Two(include=Parser.ReadList.class),
         @Two(include=Parser.ReadAtom.class),

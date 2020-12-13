@@ -19,7 +19,7 @@ public class HelpersTest {
     @Nested
     class First {
         @Zero("begin")
-        @Zero(include=Helpers.First.class)
+        @Zero(include=Helpers.class)
         @Zero(list={@One("first"), @One("input")})
         class Sut {}
 
@@ -32,7 +32,7 @@ public class HelpersTest {
     @Nested
     class Second {
         @Zero("begin")
-        @Zero(include=Helpers.Second.class)
+        @Zero(include=Helpers.class)
         @Zero(list={@One("second"), @One("input")})
         class Sut {}
 
@@ -45,7 +45,7 @@ public class HelpersTest {
     @Nested
     class Third {
         @Zero("begin")
-        @Zero(include=Helpers.Third.class)
+        @Zero(include=Helpers.class)
         @Zero(list={@One("third"), @One("input")})
         class Sut {}
 

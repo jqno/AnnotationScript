@@ -34,7 +34,7 @@ public class MetaParserTest extends ParserTest {
     @Nested
     class ReadFromTokens {
         @Zero("begin")
-        @Zero(include=Helpers.First.class)
+        @Zero(include=Helpers.class)
         @Zero(include=Parser.ReadFromTokens.class)
         @Zero(list={
             @One("define"),
@@ -87,8 +87,7 @@ public class MetaParserTest extends ParserTest {
     @Nested
     class ReadList {
         @Zero("begin")
-        @Zero(include=Helpers.First.class)
-        @Zero(include=Helpers.Second.class)
+        @Zero(include=Helpers.class)
         @Zero(include=Parser.ReadList.class)
         @Zero(list={
             @One("define"),
@@ -161,8 +160,7 @@ public class MetaParserTest extends ParserTest {
     @Nested
     class InnerParse {
         @Zero("begin")
-        @Zero(include=Helpers.First.class)
-        @Zero(include=Helpers.Second.class)
+        @Zero(include=Helpers.class)
         @Zero(include=Parser.InnerParse.class)
         @Zero(list={
             @One("define"),
