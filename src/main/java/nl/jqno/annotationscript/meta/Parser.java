@@ -9,7 +9,8 @@ import nl.jqno.annotationscript.Annotations.*;
     @One(list={@Two("all-tokens")}),
     @One(list={
         @Two("begin"),
-        @Two(include=Parser.Second.class),
+        @Two(include=Helpers.First.class),
+        @Two(include=Helpers.Second.class),
         @Two(include=Parser.ReadFromTokens.class),
         @Two(include=Parser.ReadList.class),
         @Two(include=Parser.ReadAtom.class),
@@ -19,23 +20,10 @@ public class Parser {
     /*
      * Generated from:
      *
-     * (define second (lambda (l) (head (tail l)))) 
-     */
-    @Zero("define")
-    @Zero("second")
-    @Zero(list={
-        @One("lambda"),
-        @One(list={@Two("l")}),
-        @One(list={@Two("head"), @Two(list={@Three("tail"), @Three("l")})})})
-    public static class Second {}
-
-    /*
-     * Generated from:
-     *
      * (define read-from-tokens
      *   (lambda (tokens)
      *     (begin
-     *       (define token (head tokens))
+     *       (define token (first tokens))
      *       (cond
      *         (= '(' token)
      *         (read-list (list) (tail tokens))
@@ -54,7 +42,7 @@ public class Parser {
             @Two(list={
                 @Three("define"),
                 @Three("token"),
-                @Three(list={@Four("head"), @Four("tokens")})}),
+                @Three(list={@Four("first"), @Four("tokens")})}),
             @Two(list={
                 @Three("cond"),
                 @Three(list={@Four("="), @Four("'('"), @Four("token")}),
@@ -79,12 +67,12 @@ public class Parser {
      *     (cond
      *       (empty? tokens)
      *       (throw 'unexpected EOF')
-     *       (= ')' (head tokens))
+     *       (= ')' (first tokens))
      *       (list accumulated (tail tokens))
      *       else
      *       (begin
      *         (define parsed (read-from-tokens tokens))
-     *         (read-list (append (head parsed) accumulated) (second parsed))))))
+     *         (read-list (append (first parsed) accumulated) (second parsed))))))
      */
     @Zero("define")
     @Zero("read-list")
@@ -95,7 +83,7 @@ public class Parser {
             @Two("cond"),
             @Two(list={@Three("empty?"), @Three("tokens")}),
             @Two(list={@Three("throw"), @Three("'unexpected EOF'")}),
-            @Two(list={@Three("="), @Three("')'"), @Three(list={@Four("head"), @Four("tokens")})}),
+            @Two(list={@Three("="), @Three("')'"), @Three(list={@Four("first"), @Four("tokens")})}),
             @Two(list={
                 @Three("list"),
                 @Three("accumulated"),
@@ -111,7 +99,7 @@ public class Parser {
                     @Four("read-list"),
                     @Four(list={
                         @Five("append"),
-                        @Five(list={@Six("head"), @Six("parsed")}),
+                        @Five(list={@Six("first"), @Six("parsed")}),
                         @Five("accumulated")}),
                     @Four(list={@Five("second"), @Five("parsed")})})})})})
     public static class ReadList {}
@@ -174,7 +162,7 @@ public class Parser {
      *           (not (empty? (second parsed)))
      *           (throw 'unexpected end of program')
      *           else
-     *           (head parsed))))))
+     *           (first parsed))))))
      */
     @Zero("define")
     @Zero("inner-parse")
@@ -201,6 +189,6 @@ public class Parser {
                             @Six(list={@Seven("second"), @Seven("parsed")})})}),
                     @Four(list={@Five("throw"), @Five("'unexpected end of program'")}),
                     @Four("else"),
-                    @Four(list={@Five("head"), @Five("parsed")})})})})})
+                    @Four(list={@Five("first"), @Five("parsed")})})})})})
     public static class InnerParse {}
 }

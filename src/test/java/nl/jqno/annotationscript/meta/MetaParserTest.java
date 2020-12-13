@@ -32,21 +32,9 @@ public class MetaParserTest extends ParserTest {
     }
 
     @Nested
-    class Second {
-        @Zero("begin")
-        @Zero(include=Parser.Second.class)
-        @Zero(list={@One("second"), @One("input")})
-        class Sut {}
-
-        @Test
-        public void happy() {
-            assertEquals(2, run(Sut.class, input(List.of(1, 2, 3))));
-        }
-    }
-
-    @Nested
     class ReadFromTokens {
         @Zero("begin")
+        @Zero(include=Helpers.First.class)
         @Zero(include=Parser.ReadFromTokens.class)
         @Zero(list={
             @One("define"),
@@ -99,7 +87,8 @@ public class MetaParserTest extends ParserTest {
     @Nested
     class ReadList {
         @Zero("begin")
-        @Zero(include=Parser.Second.class)
+        @Zero(include=Helpers.First.class)
+        @Zero(include=Helpers.Second.class)
         @Zero(include=Parser.ReadList.class)
         @Zero(list={
             @One("define"),
@@ -172,7 +161,8 @@ public class MetaParserTest extends ParserTest {
     @Nested
     class InnerParse {
         @Zero("begin")
-        @Zero(include=Parser.Second.class)
+        @Zero(include=Helpers.First.class)
+        @Zero(include=Helpers.Second.class)
         @Zero(include=Parser.InnerParse.class)
         @Zero(list={
             @One("define"),
