@@ -149,4 +149,49 @@ public class Parser {
             @Two("else"),
             @Two(list={@Three("symbol"), @Three("token")})})})
     public static class ReadAtom {}
+
+    /*
+     * Generated from:
+     *
+     * (define inner-parse
+     *   (lambda (all-tokens)
+     *     (cond
+     *       (empty? all-tokens)
+     *       (throw 'no input')
+     *       else
+     *       (begin
+     *         (define parsed (read-from-tokens all-tokens))
+     *         (cond
+     *           (not (empty? (second parsed)))
+     *           (throw 'unexpected end of program')
+     *           else
+     *           (head parsed))))))
+     */
+    @Zero("define")
+    @Zero("inner-parse")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("all-tokens")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("empty?"), @Three("all-tokens")}),
+            @Two(list={@Three("throw"), @Three("'no input'")}),
+            @Two("else"),
+            @Two(list={
+                @Three("begin"),
+                @Three(list={
+                    @Four("define"),
+                    @Four("parsed"),
+                    @Four(list={@Five("read-from-tokens"), @Five("all-tokens")})}),
+                @Three(list={
+                    @Four("cond"),
+                    @Four(list={
+                        @Five("not"),
+                        @Five(list={
+                            @Six("empty?"),
+                            @Six(list={@Seven("second"), @Seven("parsed")})})}),
+                    @Four(list={@Five("throw"), @Five("'unexpected end of program'")}),
+                    @Four("else"),
+                    @Four(list={@Five("head"), @Five("parsed")})})})})})
+    public static class InnerParse {}
 }

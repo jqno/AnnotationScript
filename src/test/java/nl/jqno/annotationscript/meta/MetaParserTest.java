@@ -100,7 +100,7 @@ public class MetaParserTest  {
 
         @Test
         public void empty() {
-            var initialValues = input(List.empty(), List.empty());
+            var initialValues = input("acc", List.empty(), "initial-tokens", List.empty());
             var e = assertThrows(RuntimeException.class, () -> run(Sut.class, initialValues));
             assertEquals("unexpected EOF", e.getMessage());
         }
@@ -108,7 +108,7 @@ public class MetaParserTest  {
         @Test
         public void endOfList() {
             var acc = List.of(1, 2, 3);
-            var initialValues = input(acc, List.of(")", "tail"));
+            var initialValues = input("acc", acc, "initial-tokens", List.of(")", "tail"));
             var actual = run(Sut.class, initialValues);
             var expected = List.of(acc, List.of("tail"));
             assertEquals(expected, actual);
@@ -118,7 +118,7 @@ public class MetaParserTest  {
         public void middleOfList() {
             var acc = List.of(1, 2, 3);
             var initialTokens = List.of(4, 5, ")", "tail");
-            var actual = run(Sut.class, input(acc, initialTokens));
+            var actual = run(Sut.class, input("acc", acc, "initial-tokens", initialTokens));
             var expected = List.of(List.of(1, 2, 3, 4, 5), List.of("tail"));
             assertEquals(expected, actual);
         }
@@ -153,11 +153,53 @@ public class MetaParserTest  {
         }
     }
 
+    @Nested
+    class InnerParse {
+        @Zero("begin")
+        @Zero(include=Parser.Second.class)
+        @Zero(include=Parser.InnerParse.class)
+        @Zero(list={
+            @One("define"),
+            @One("read-from-tokens"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("tokens")}),
+                @Two("read-from-tokens-result")})})
+        @Zero(list={@One("inner-parse"), @One("input")})
+        class Sut {}
+
+        @Test
+        public void empty() {
+            var initialValues = input("input", List.empty(), "read-from-tokens-result", null);
+            var e = assertThrows(RuntimeException.class, () -> run(Sut.class, initialValues));
+            assertEquals("no input", e.getMessage());
+        }
+
+        @Test
+        public void unexpectedEndOfProgram() {
+            var initialValues = input(
+                "input", List.of(1),
+                "read-from-tokens-result", List.of(1, List.of(1)));
+            var e = assertThrows(RuntimeException.class, () -> run(Sut.class, initialValues));
+            assertEquals("unexpected end of program", e.getMessage());
+        }
+
+        @Test
+        public void parse() {
+            var expected = 42;
+            var initialValues = input(
+                "input", List.of(1),
+                "read-from-tokens-result", List.of(expected, List.empty()));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(expected, actual);
+        }
+    }
+
     private Map<String, Object> input(Object input) {
         return HashMap.of("input", input);
     }
 
-    private Map<String, Object> input(Object acc, Object initialTokens) {
-        return HashMap.of("acc", acc, "initial-tokens", initialTokens);
+    private Map<String, Object> input(String key1, Object val1, String key2, Object val2) {
+        return HashMap.of(key1, val1, key2, val2);
     }
 }
