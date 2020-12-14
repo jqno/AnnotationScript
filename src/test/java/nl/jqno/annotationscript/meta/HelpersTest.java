@@ -54,4 +54,19 @@ public class HelpersTest {
             assertEquals(3, AnnotationScript.run(Sut.class, INPUT));
         }
     }
+
+    @Nested
+    class Build {
+        @Zero("begin")
+        @Zero(include=Helpers.Build.class)
+        @Zero(list={@One("build"), @One("s1"), @One("s2")})
+        class Sut {}
+
+        @Test
+        public void happy() {
+            var initialValues = HashMap.<String, Object>of("s1", 1, "s2", 2);
+            var actual = AnnotationScript.run(Sut.class, initialValues);
+            assertEquals(List.of(1, 2), actual);
+        }
+    }
 }

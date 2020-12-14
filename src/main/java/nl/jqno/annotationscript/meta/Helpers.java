@@ -5,7 +5,8 @@ import nl.jqno.annotationscript.Annotations.*;
 @Zero(export={
     Helpers.First.class,
     Helpers.Second.class,
-    Helpers.Third.class})
+    Helpers.Third.class,
+    Helpers.Build.class})
 public class Helpers {
     /*
      * Generated from:
@@ -45,4 +46,25 @@ public class Helpers {
         @One(list={@Two("l")}),
         @One(list={@Two("head"), @Two(list={@Three("tail"), @Three(list={@Four("tail"), @Four("l")})})})})
     public static class Third {}
+
+    /*
+     * Generated from:
+     *
+     * (define build
+     *   (lambda (s1 s2)
+     *     (cons s1 (cons s2 (list)))))
+    */
+    @Zero("define")
+    @Zero("build")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("s1"), @Two("s2")}),
+        @One(list={
+            @Two("cons"),
+            @Two("s1"),
+            @Two(list={
+                @Three("cons"),
+                @Three("s2"),
+                @Three(list={@Four("list")})})})})
+    public static class Build {}
 }
