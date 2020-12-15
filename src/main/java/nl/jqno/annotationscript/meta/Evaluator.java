@@ -130,4 +130,19 @@ public class Evaluator {
             @Two("else"),
             @Two("*application")})})
     public static class ListToAction {}
+
+    /*
+     * Generated from:
+     *
+     * (define value
+     *   (lambda (e)
+     *     (meaning e (list))))
+     */
+    @Zero("define")
+    @Zero("value")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e")}),
+        @One(list={@Two("meaning"), @Two("e"), @Two(list={@Three("list")})})})
+    public static class Value {}
 }

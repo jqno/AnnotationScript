@@ -141,6 +141,33 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Value {
+        @Zero("begin")
+        @Zero(include=Evaluator.Value.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two(list={
+                    @Three("str/concat"),
+                    @Three("'meaning '"),
+                    @Three("e"),
+                    @Three("', '"),
+                    @Three("table")})})})
+        @Zero(list={@One("value"), @One("e")})
+        class Sut {}
+
+        @Test
+        public void value() {
+            var initialValues = input("e", 42);
+            var actual = run(Sut.class, initialValues);
+            assertEquals("meaning 42, List()", actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
