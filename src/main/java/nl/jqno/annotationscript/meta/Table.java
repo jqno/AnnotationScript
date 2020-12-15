@@ -2,6 +2,12 @@ package nl.jqno.annotationscript.meta;
 
 import nl.jqno.annotationscript.Annotations.*;
 
+@Zero(export={
+    Table.NewEntry.class,
+    Table.LookupInEntry.class,
+    Table.LookupInEntryHelp.class,
+    Table.ExtendTable.class,
+    Table.LookupInTable.class})
 public class Table {
 
     /*
@@ -74,4 +80,56 @@ public class Table {
                 @Three(list={@Four("tail"), @Four("values")}),
                 @Three("entry-f")})})})
     public static class LookupInEntryHelp {}
+
+    /*
+     * Generated from:
+     *
+     * (define extend-table cons)
+     */
+    @Zero("define")
+    @Zero("extend-table")
+    @Zero("cons")
+    public static class ExtendTable {}
+
+    /*
+     * Generated from:
+     *
+     * (define lookup-in-table
+     *   (lambda (name table table-f)
+     *     (cond
+     *     (empty? table) 
+     *     (table-f name)
+     *     else
+     *     (lookup-in-entry
+     *       name
+     *       (head table)
+     *       (lambda (name)
+     *         (lookup-in-table
+     *           name
+     *           (tail table)
+     *           table-f))))))
+     */
+    @Zero("define")
+    @Zero("lookup-in-table")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("name"), @Two("table"), @Two("table-f")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("empty?"), @Three("table")}),
+            @Two(list={@Three("table-f"), @Three("name")}),
+            @Two("else"),
+            @Two(list={
+                @Three("lookup-in-entry"),
+                @Three("name"),
+                @Three(list={@Four("head"),@Four("table")}),
+                @Three(list={
+                    @Four("lambda"),
+                    @Four(list={@Five("name")}),
+                    @Four(list={
+                        @Five("lookup-in-table"),
+                        @Five("name"),
+                        @Five(list={@Six("tail"), @Six("table")}),
+                        @Five("table-f")})})})})})
+    public static class LookupInTable {}
 }
