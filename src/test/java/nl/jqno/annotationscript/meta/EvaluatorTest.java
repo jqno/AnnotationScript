@@ -10,6 +10,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import nl.jqno.annotationscript.Annotations.*;
+import nl.jqno.annotationscript.language.Symbol;
 
 public class EvaluatorTest {
 
@@ -52,6 +53,91 @@ public class EvaluatorTest {
             var initialValues = input("e", List.of(1));
             var actual = run(Sut.class, initialValues);
             assertEquals("list-to-action List(1)", actual);
+        }
+    }
+
+    @Nested
+    class AtomToAction {
+        @Zero("begin")
+        @Zero(include=Evaluator.AtomToAction.class)
+        @Zero(list={@One("define"), @One("*const"), @One("'*const'")})
+        @Zero(list={@One("define"), @One("*identifier"), @One("'*identifier'")})
+        @Zero(list={@One("atom-to-action"), @One("e")})
+        class Sut {}
+
+        @Test
+        public void number() {
+            var initialValues = input("e", 42);
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*const", actual);
+        }
+
+        @Test
+        public void bool() {
+            var initialValues = input("e", new Symbol("#t"));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*const", actual);
+        }
+
+        @Test
+        public void function() {
+            var initialValues = input("e", new Symbol("eq?"));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*const", actual);
+        }
+
+        @Test
+        public void identifier() {
+            var initialValues = input("e", new Symbol("something-else"));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*identifier", actual);
+        }
+    }
+
+    @Nested
+    class ListToAction {
+        @Zero("begin")
+        @Zero(include=Evaluator.ListToAction.class)
+        @Zero(list={@One("define"), @One("*quote"), @One("'*quote'")})
+        @Zero(list={@One("define"), @One("*lambda"), @One("'*lambda'")})
+        @Zero(list={@One("define"), @One("*cond"), @One("'*cond'")})
+        @Zero(list={@One("define"), @One("*application"), @One("'*application'")})
+        @Zero(list={@One("list-to-action"), @One("e")})
+        class Sut {}
+
+        @Test
+        public void quote() {
+            var initialValues = input("e", List.of(new Symbol("quote"), 1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*quote", actual);
+        }
+
+        @Test
+        public void lambda() {
+            var initialValues = input("e", List.of(new Symbol("lambda"), 1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*lambda", actual);
+        }
+
+        @Test
+        public void cond() {
+            var initialValues = input("e", List.of(new Symbol("cond"), 1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*cond", actual);
+        }
+
+        @Test
+        public void otherAtom() {
+            var initialValues = input("e", List.of(new Symbol("other-atom"), 1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*application", actual);
+        }
+
+        @Test
+        public void list() {
+            var initialValues = input("e", List.of(List.of(1), 1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("*application", actual);
         }
     }
 
