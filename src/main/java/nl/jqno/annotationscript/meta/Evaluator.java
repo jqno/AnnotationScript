@@ -164,4 +164,61 @@ public class Evaluator {
             @Two("e"),
             @Two("table")})})
     public static class Meaning {}
+
+    /*
+     * Generated from:
+     *
+     * (define *const
+     *   (lambda (e table)
+     *     (cond
+     *       (number? e) e
+     *       (= e #t) #t
+     *       (= e #f) #f
+     *       else
+     *         (build (quote primitive) e))))
+     */
+    @Zero("define")
+    @Zero("*const")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("number?"), @Three("e")}),
+            @Two("e"),
+            @Two(list={@Three("="), @Three("e"), @Three("#t")}),
+            @Two("#t"),
+            @Two(list={@Three("="), @Three("e"), @Three("#f")}),
+            @Two("#f"),
+            @Two("else"),
+            @Two(list={
+                @Three("build"),
+                @Three(list={@Four("quote"), @Four("primitive")}),
+                @Three("e")})})})
+    public static class TypeConst {}
+
+    /*
+     * Generated from:
+     *
+     * (define *quote
+     *   (lambda (e table)
+     *     (text-of e)))
+     */
+    @Zero("define")
+    @Zero("*quote")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={@Two("text-of"), @Two("e")})})
+    public static class TypeQuote {}
+
+    /*
+     * Generated from:
+     *
+     * (define text-of second)
+     */
+    @Zero("define")
+    @Zero("text-of")
+    @Zero("second")
+    public static class TextOf {}
 }

@@ -198,6 +198,62 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class TypeConst {
+        @Zero("begin")
+        @Zero(include=Helpers.Build.class)
+        @Zero(include=Evaluator.TypeConst.class)
+        @Zero(list={@One("*const"), @One("e"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void number() {
+            var initialValues = input("e", 42, "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(42, actual);
+        }
+
+        @Test
+        public void t() {
+            var initialValues = input("e", true, "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void f() {
+            var initialValues = input("e", false, "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+
+        @Test
+        public void primitive() {
+            var initialValues = input("e", new Symbol("something"), "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(new Symbol("primitive"), new Symbol("something")), actual);
+        }
+    }
+
+    @Nested
+    class TypeQuote {
+        @Zero("begin")
+        @Zero(include=Helpers.Second.class)
+        @Zero(include=Evaluator.TypeQuote.class)
+        @Zero(include=Evaluator.TextOf.class)
+        @Zero(list={@One("*quote"), @One("e"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void quote() {
+            var initialValues = input(
+                "e", List.of(new Symbol("quote"), new Symbol("something-quoted")),
+                "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(new Symbol("something-quoted"), actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
