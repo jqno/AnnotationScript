@@ -16,32 +16,34 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
     private static final List<Tuple2<Symbol, Fn>> GLOBAL = List.of(
+        builtin("#t", true),
+        builtin("#f", false),
         builtin("+", params -> params.foldLeft((Object)0, (acc, curr) -> wideningOp((x, y) -> x + y, acc, curr))),
         builtin("-", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x - y, acc, curr))),
         builtin("*", params -> params.foldLeft((Object)1, (acc, curr) -> wideningOp((x, y) -> x * y, acc, curr))),
         builtin("/", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x / y, acc, curr))),
         builtin("%", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x % y, acc, curr))),
-        builtin(">", params -> bool(toDouble(params.get(0)) > toDouble(params.get(1)))),
-        builtin("<", params -> bool(toDouble(params.get(0)) < toDouble(params.get(1)))),
-        builtin(">=", params -> bool(toDouble(params.get(0)) >= toDouble(params.get(1)))),
-        builtin("<=", params -> bool(toDouble(params.get(0)) <= toDouble(params.get(1)))),
-        builtin("=", params -> bool(isEquals(params))),
+        builtin(">", params -> toDouble(params.get(0)) > toDouble(params.get(1))),
+        builtin("<", params -> toDouble(params.get(0)) < toDouble(params.get(1))),
+        builtin(">=", params -> toDouble(params.get(0)) >= toDouble(params.get(1))),
+        builtin("<=", params -> toDouble(params.get(0)) <= toDouble(params.get(1))),
+        builtin("=", params -> isEquals(params)),
         builtin("abs", params ->
             params.get(0) instanceof Integer ? (Object)Math.abs(toInt(params.get(0))) : (Object)Math.abs(toDouble(params.get(0)))),
-        builtin("and", params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr)))),
+        builtin("and", params -> params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr))),
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
         builtin("apply", (params, env, eval) -> toFn(params.get(0)).evaluate(toList(() -> params.get(1)).get(), env, eval)),
-        builtin("atom?", params -> bool(isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0)))),
+        builtin("atom?", params -> isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0))),
         builtin("begin", params -> params.last()),
         builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
-        builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
+        builtin("contains?", params -> toList(() -> params.get(0)).get().contains(params.get(1))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
-        builtin("else", 1),
+        builtin("else", true),
         builtin("empty?", params -> {
             var p = params.get(0);
-            if (p instanceof String) { return bool(toString(p).isEmpty()); }
-            if (p instanceof List) { return bool(toList(() -> p).get().isEmpty()); }
-            if (p instanceof Map) { return bool(toMap(p).isEmpty()); }
+            if (p instanceof String) { return toString(p).isEmpty(); }
+            if (p instanceof List) { return toList(() -> p).get().isEmpty(); }
+            if (p instanceof Map) { return toMap(p).isEmpty(); }
             return null;
         }),
         builtin("filter", (params, env, eval) -> 
@@ -52,9 +54,9 @@ public final class GlobalEnvironment {
         builtin("inc", params -> wideningOp((x, y) -> x + y, params.get(0), 1)),
         builtin("length", params -> toList(() -> params.get(0)).map(l -> l.length()).getOrNull()),
         builtin("list", params -> params),
-        builtin("list?", params -> bool(params.get(0) instanceof List)),
+        builtin("list?", params -> params.get(0) instanceof List),
         builtin("map", (params, env, eval) -> toList(() -> params.get(1)).get().map(p -> (toFn(params.get(0))).evaluate(List.of(p), env, eval))),
-        builtin("map/contains?", params -> bool(toMap(params.get(0)).containsKey(params.get(1)))),
+        builtin("map/contains?", params -> toMap(params.get(0)).containsKey(params.get(1))),
         builtin("map/empty", params -> HashMap.empty()),
         builtin("map/entries", params -> toMap(params.get(0)).toList().map(tup -> List.of(tup._1, tup._2))),
         builtin("map/get", params -> toMap(params.get(0)).getOrElse(params.get(1), null)),
@@ -67,11 +69,11 @@ public final class GlobalEnvironment {
         builtin("map/values", params -> toMap(params.get(0)).values().toList()),
         builtin("max", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::max, acc, curr))),
         builtin("min", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::min, acc, curr))),
-        builtin("not", params -> bool(!isTruthy(params.get(0)))),
+        builtin("not", params -> !isTruthy(params.get(0))),
         builtin("null", (Object)null),
-        builtin("null?", params -> bool(params.get(0) == null)),
-        builtin("number?", params -> bool(isNumber(params.get(0)))),
-        builtin("or", params -> bool(params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr)))),
+        builtin("null?", params -> params.get(0) == null),
+        builtin("number?", params -> isNumber(params.get(0))),
+        builtin("or", params -> params.foldLeft(false, (acc, curr) -> acc || isTruthy(curr))),
         builtin("parse-float", params ->
             { try { return Double.parseDouble(toString(params.get(0))); } catch (NumberFormatException e) { return null; } }),
         builtin("parse-int", params -> 
@@ -82,25 +84,25 @@ public final class GlobalEnvironment {
         builtin("println-err", params -> { System.err.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
         builtin("procedure?", (params, env, eval) ->
-            bool(env.lookupOption(toSymbol(params.get(0))).map(Fn::isProcedure).getOrElse(false))),
+            env.lookupOption(toSymbol(params.get(0))).map(Fn::isProcedure).getOrElse(false)),
         builtin("range", params -> List.range(toInt(params.get(0)), toInt(params.get(1)))),
         builtin("reverse", params -> toList(() -> params.get(0)).get().reverse()),
         builtin("round", params -> toInt(Math.round(toDouble(params.get(0))))),
         builtin("str/char-at", params -> "" + toString(params.get(1)).charAt(toInt(params.get(0)))),
         builtin("str/concat", params -> params.foldLeft("", (acc, curr) -> acc + toString(curr))),
-        builtin("str/ends-with?", params -> bool(toString(params.get(1)).endsWith(toString(params.get(0))))),
+        builtin("str/ends-with?", params -> toString(params.get(1)).endsWith(toString(params.get(0)))),
         builtin("str/index-of", params -> toString(params.get(1)).indexOf(toString(params.get(0)))),
         builtin("str/join", params -> toList(() -> params.get(1)).get().map(s -> toString(s)).mkString(toString(params.get(0)))),
         builtin("str/length", params -> toString(params.get(0)).length()),
         builtin("str/replace", params -> toString(params.get(0)).replace(toString(params.get(1)), toString(params.get(2)))),
         builtin("str/split", params -> List.of(toString(params.get(1)).split(toString(params.get(0))))),
-        builtin("str/starts-with?", params -> bool(toString(params.get(1)).startsWith(toString(params.get(0))))),
+        builtin("str/starts-with?", params -> toString(params.get(1)).startsWith(toString(params.get(0)))),
         builtin("str/substring", params -> toString(params.get(0)).substring(toInt(params.get(1)), toInt(params.get(2)))),
         builtin("str/to-lower", params -> toString(params.get(0)).toLowerCase()),
         builtin("str/to-upper", params -> toString(params.get(0)).toUpperCase()),
-        builtin("string?", params -> bool(isString(params.get(0)))),
+        builtin("string?", params -> isString(params.get(0))),
         builtin("symbol", params -> new Symbol(toString(params.get(0)))),
-        builtin("symbol?", params -> bool(isSymbol(params.get(0)))),
+        builtin("symbol?", params -> isSymbol(params.get(0))),
         builtin("tail", params -> toList(() -> params.get(0)).map(l -> !l.isEmpty() ? l.tail() : List.empty()).getOrNull()),
         builtin("throw", params -> { throw new RuntimeException(toString(params.get(0))); })
     );
@@ -121,10 +123,6 @@ public final class GlobalEnvironment {
 
     private static Tuple2<Symbol, Fn> builtin(String name, Object value) {
         return Tuple.of(new Symbol(name), Fn.val(name, value));
-    }
-
-    private static int bool(boolean b) {
-        return b ? 1 : 0;
     }
 
     private static boolean isEquals(List<Object> params) {
@@ -149,7 +147,7 @@ public final class GlobalEnvironment {
     }
 
     private static boolean isTruthy(Object x) {
-        return !(x.equals(0.0) || x.equals(0));
+        return !(x.equals(false) || x.equals(0.0) || x.equals(0));
     }
 
     private static Double toDouble(Object x) {

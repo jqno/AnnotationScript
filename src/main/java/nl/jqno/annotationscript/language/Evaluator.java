@@ -15,7 +15,7 @@ public class Evaluator {
         if (exp instanceof Symbol) {
             return evaluateSymbol((Symbol)exp, env);
         }
-        if (exp instanceof Integer || exp instanceof Double || exp instanceof String) {
+        if (exp instanceof Boolean || exp instanceof Integer || exp instanceof Double || exp instanceof String) {
             return evaluateAtom(exp, env);
         }
         return evaluateList((List<?>)exp, env);
@@ -101,7 +101,7 @@ public class Evaluator {
     }
 
     private boolean isTruthy(Object x) {
-        return !(x.equals(0) || x.equals(0.0));
+        return !(x.equals(false) || x.equals(0) || x.equals(0.0));
     }
 
     private String symbolName(Object symbol) {

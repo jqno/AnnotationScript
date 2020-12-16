@@ -61,51 +61,51 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void greaterThan() {
-        assertEquals(1, evaluate(">", 10, 4));
-        assertEquals(0, evaluate(">", 10, 10));
-        assertEquals(0, evaluate(">", 4, 10));
-        assertEquals(1, evaluate(">", 10, "4"));
-        assertEquals(1, evaluate(">", 10, new Symbol("4")));
+        assertEquals(true, evaluate(">", 10, 4));
+        assertEquals(false, evaluate(">", 10, 10));
+        assertEquals(false, evaluate(">", 4, 10));
+        assertEquals(true, evaluate(">", 10, "4"));
+        assertEquals(true, evaluate(">", 10, new Symbol("4")));
     }
 
     @Test
     public void lessThan() {
-        assertEquals(1, evaluate("<", 4, 10));
-        assertEquals(0, evaluate("<", 10, 10));
-        assertEquals(0, evaluate("<", 10, 4));
-        assertEquals(1, evaluate("<", "4", 10));
-        assertEquals(1, evaluate("<", new Symbol("4"), 10));
+        assertEquals(true, evaluate("<", 4, 10));
+        assertEquals(false, evaluate("<", 10, 10));
+        assertEquals(false, evaluate("<", 10, 4));
+        assertEquals(true, evaluate("<", "4", 10));
+        assertEquals(true, evaluate("<", new Symbol("4"), 10));
     }
 
     @Test
     public void greaterThanOrEqualTo() {
-        assertEquals(1, evaluate(">=", 10, 4));
-        assertEquals(1, evaluate(">=", 10, 10));
-        assertEquals(0, evaluate(">=", 4, 10));
-        assertEquals(1, evaluate(">=", "10", 4));
-        assertEquals(1, evaluate(">=", new Symbol("10"), 4));
+        assertEquals(true, evaluate(">=", 10, 4));
+        assertEquals(true, evaluate(">=", 10, 10));
+        assertEquals(false, evaluate(">=", 4, 10));
+        assertEquals(true, evaluate(">=", "10", 4));
+        assertEquals(true, evaluate(">=", new Symbol("10"), 4));
     }
 
     @Test
     public void lessThanOrEqualTo() {
-        assertEquals(1, evaluate("<=", 4, 10));
-        assertEquals(1, evaluate("<=", 10, 10));
-        assertEquals(0, evaluate("<=", 10, 4));
-        assertEquals(1, evaluate("<=", 4, "10"));
-        assertEquals(1, evaluate("<=", 4, new Symbol("10")));
+        assertEquals(true, evaluate("<=", 4, 10));
+        assertEquals(true, evaluate("<=", 10, 10));
+        assertEquals(false, evaluate("<=", 10, 4));
+        assertEquals(true, evaluate("<=", 4, "10"));
+        assertEquals(true, evaluate("<=", 4, new Symbol("10")));
     }
 
     @Test
     public void equalTo() {
-        assertEquals(1, evaluate("=", 10, 10));
-        assertEquals(0, evaluate("=", 10, 4));
-        assertEquals(1, evaluate("=", 0, 0.0));
-        assertEquals(0, evaluate("=", new Symbol("a"), 0.0));
-        assertEquals(0, evaluate("=", 0, new Symbol("b")));
-        assertEquals(1, evaluate("=", new Symbol("a"), new Symbol("a")));
-        assertEquals(0, evaluate("=", new Symbol("a"), new Symbol("b")));
-        assertEquals(1, evaluate("=", "a", "a"));
-        assertEquals(0, evaluate("=", "a", "b"));
+        assertEquals(true, evaluate("=", 10, 10));
+        assertEquals(false, evaluate("=", 10, 4));
+        assertEquals(true, evaluate("=", 0, 0.0));
+        assertEquals(false, evaluate("=", new Symbol("a"), 0.0));
+        assertEquals(false, evaluate("=", 0, new Symbol("b")));
+        assertEquals(true, evaluate("=", new Symbol("a"), new Symbol("a")));
+        assertEquals(false, evaluate("=", new Symbol("a"), new Symbol("b")));
+        assertEquals(true, evaluate("=", "a", "a"));
+        assertEquals(false, evaluate("=", "a", "b"));
     }
 
     @Test
@@ -120,14 +120,14 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void and() {
-        assertEquals(1, evaluate("and", 1, 42));
-        assertEquals(0, evaluate("and", 0, 42));
-        assertEquals(0, evaluate("and", 1, 0));
-        assertEquals(0, evaluate("and", 0, 0));
+        assertEquals(true, evaluate("and", 1, 42));
+        assertEquals(false, evaluate("and", 0, 42));
+        assertEquals(false, evaluate("and", 1, 0));
+        assertEquals(false, evaluate("and", 0, 0));
 
-        assertEquals(1, evaluate("and", 1, 42, 1, 1));
-        assertEquals(0, evaluate("and", 1, 42, 0, 1));
-        assertEquals(0, evaluate("and", 0, 0, 0, 0));
+        assertEquals(true, evaluate("and", 1, 42, 1, 1));
+        assertEquals(false, evaluate("and", 1, 42, 0, 1));
+        assertEquals(false, evaluate("and", 0, 0, 0, 0));
     }
 
     @Test
@@ -139,16 +139,16 @@ public class GlobalEnvironmentTest {
     @Test
     public void apply() {
         assertEquals(42, evaluate("apply", ENV.lookup(new Symbol("+")), List.of(10, 32)));
-        assertEquals(1, evaluate("apply", ENV.lookup(new Symbol("number?")), List.of(42)));
+        assertEquals(true, evaluate("apply", ENV.lookup(new Symbol("number?")), List.of(42)));
     }
 
     @Test
     public void atomp() {
-        assertEquals(1, evaluate("atom?", 42));
-        assertEquals(1, evaluate("atom?", 42.0));
-        assertEquals(1, evaluate("atom?", "string"));
-        assertEquals(1, evaluate("atom?", new Symbol("symbol")));
-        assertEquals(0, evaluate("atom?", List.empty()));
+        assertEquals(true, evaluate("atom?", 42));
+        assertEquals(true, evaluate("atom?", 42.0));
+        assertEquals(true, evaluate("atom?", "string"));
+        assertEquals(true, evaluate("atom?", new Symbol("symbol")));
+        assertEquals(false, evaluate("atom?", List.empty()));
     }
 
     @Test
@@ -166,9 +166,9 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void containsp() {
-        assertEquals(1, evaluate("contains?", List.of(1, 2, 3), 2));
-        assertEquals(0, evaluate("contains?", List.of(1, 2, 3), 4));
-        assertEquals(1, evaluate("contains?", List.of(1, new Symbol("two"), "three"), new Symbol("two")));
+        assertEquals(true, evaluate("contains?", List.of(1, 2, 3), 2));
+        assertEquals(false, evaluate("contains?", List.of(1, 2, 3), 4));
+        assertEquals(true, evaluate("contains?", List.of(1, new Symbol("two"), "three"), new Symbol("two")));
     }
 
     @Test
@@ -179,17 +179,17 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void else_() {
-        assertEquals(1, evaluate("else"));
+        assertEquals(true, evaluate("else"));
     }
 
     @Test
     public void emptyp() {
-        assertEquals(0, evaluate("empty?", "non-empty"));
-        assertEquals(1, evaluate("empty?", ""));
-        assertEquals(0, evaluate("empty?", List.of(1)));
-        assertEquals(1, evaluate("empty?", List.empty()));
-        assertEquals(0, evaluate("empty?", HashMap.of(1, 1)));
-        assertEquals(1, evaluate("empty?", HashMap.empty()));
+        assertEquals(false, evaluate("empty?", "non-empty"));
+        assertEquals(true, evaluate("empty?", ""));
+        assertEquals(false, evaluate("empty?", List.of(1)));
+        assertEquals(true, evaluate("empty?", List.empty()));
+        assertEquals(false, evaluate("empty?", HashMap.of(1, 1)));
+        assertEquals(true, evaluate("empty?", HashMap.empty()));
         assertNull(evaluate("empty?", new Symbol("some-symbol")));
         assertNull(evaluate("empty?", 42));
     }
@@ -234,21 +234,21 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void listp() {
-        assertEquals(1, evaluate("list?", List.of(1, 2, 3)));
-        assertEquals(1, evaluate("list?", List.empty()));
-        assertEquals(0, evaluate("list?", new Symbol("not-a-list")));
-        assertEquals(0, evaluate("list?", 1));
+        assertEquals(true, evaluate("list?", List.of(1, 2, 3)));
+        assertEquals(true, evaluate("list?", List.empty()));
+        assertEquals(false, evaluate("list?", new Symbol("not-a-list")));
+        assertEquals(false, evaluate("list?", 1));
     }
 
     @Test
     public void map() {
-        assertEquals(List.of(1, 0, 1), evaluate("map", ENV.lookup(new Symbol("number?")), List.of(1, new Symbol("two"), 3.0)));
+        assertEquals(List.of(true, false, true), evaluate("map", ENV.lookup(new Symbol("number?")), List.of(1, new Symbol("two"), 3.0)));
     }
 
     @Test
     public void mapContainsp() {
-        assertEquals(1, evaluate("map/contains?", HashMap.of(new Symbol("a"), 42, new Symbol("b"), 10), new Symbol("a")));
-        assertEquals(0, evaluate("map/contains?", HashMap.of(new Symbol("a"), 42, new Symbol("b"), 10), new Symbol("c")));
+        assertEquals(true, evaluate("map/contains?", HashMap.of(new Symbol("a"), 42, new Symbol("b"), 10), new Symbol("a")));
+        assertEquals(false, evaluate("map/contains?", HashMap.of(new Symbol("a"), 42, new Symbol("b"), 10), new Symbol("c")));
     }
 
     @Test
@@ -326,13 +326,13 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void not() {
-        assertEquals(1, evaluate("not", 0));
-        assertEquals(1, evaluate("not", 0.0));
-        assertEquals(0, evaluate("not", 1));
-        assertEquals(0, evaluate("not", 2));
-        assertEquals(0, evaluate("not", "something"));
-        assertEquals(0, evaluate("not", new Symbol("something")));
-        assertEquals(0, evaluate("not", List.empty()));
+        assertEquals(true, evaluate("not", 0));
+        assertEquals(true, evaluate("not", 0.0));
+        assertEquals(false, evaluate("not", 1));
+        assertEquals(false, evaluate("not", 2));
+        assertEquals(false, evaluate("not", "something"));
+        assertEquals(false, evaluate("not", new Symbol("something")));
+        assertEquals(false, evaluate("not", List.empty()));
     }
 
     @Test
@@ -342,31 +342,31 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void nullp() {
-        assertEquals(1, evaluate("null?", Option.none().getOrNull())); // avoid warnings caused by typing `null` directly
-        assertEquals(1, evaluate("null?", evaluate("null")));
-        assertEquals(0, evaluate("null?", "null"));
-        assertEquals(0, evaluate("null?", 1));
+        assertEquals(true, evaluate("null?", Option.none().getOrNull())); // avoid warnings caused by typing `null` directly
+        assertEquals(true, evaluate("null?", evaluate("null")));
+        assertEquals(false, evaluate("null?", "null"));
+        assertEquals(false, evaluate("null?", 1));
     }
 
     @Test
     public void numberp() {
-        assertEquals(1, evaluate("number?", 1));
-        assertEquals(1, evaluate("number?", 1.0));
-        assertEquals(0, evaluate("number?", "not-a-number"));
-        assertEquals(0, evaluate("number?", new Symbol("not-a-number")));
-        assertEquals(0, evaluate("number?", List.empty()));
+        assertEquals(true, evaluate("number?", 1));
+        assertEquals(true, evaluate("number?", 1.0));
+        assertEquals(false, evaluate("number?", "not-a-number"));
+        assertEquals(false, evaluate("number?", new Symbol("not-a-number")));
+        assertEquals(false, evaluate("number?", List.empty()));
     }
 
     @Test
     public void or() {
-        assertEquals(1, evaluate("or", 1, 42));
-        assertEquals(1, evaluate("or", 0, 42));
-        assertEquals(1, evaluate("or", 1, 0));
-        assertEquals(0, evaluate("or", 0, 0));
+        assertEquals(true, evaluate("or", 1, 42));
+        assertEquals(true, evaluate("or", 0, 42));
+        assertEquals(true, evaluate("or", 1, 0));
+        assertEquals(false, evaluate("or", 0, 0));
 
-        assertEquals(1, evaluate("or", 1, 42, 1, 1));
-        assertEquals(1, evaluate("or", 0, 42, 0, 0));
-        assertEquals(0, evaluate("or", 0, 0, 0, 0));
+        assertEquals(true, evaluate("or", 1, 42, 1, 1));
+        assertEquals(true, evaluate("or", 0, 42, 0, 0));
+        assertEquals(false, evaluate("or", 0, 0, 0, 0));
     }
 
     @Test
@@ -400,12 +400,12 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void procedurep() {
-        assertEquals(1, evaluate("procedure?", new Symbol("begin")));
-        assertEquals(1, evaluate("procedure?", new Symbol("+")));
-        assertEquals(0, evaluate("procedure?", new Symbol("pi")));
-        assertEquals(0, evaluate("procedure?", new Symbol("undefined-symbol")));
-        assertEquals(0, evaluate("procedure?", 0));
-        assertEquals(0, evaluate("procedure?", "begin"));
+        assertEquals(true, evaluate("procedure?", new Symbol("begin")));
+        assertEquals(true, evaluate("procedure?", new Symbol("+")));
+        assertEquals(false, evaluate("procedure?", new Symbol("pi")));
+        assertEquals(false, evaluate("procedure?", new Symbol("undefined-symbol")));
+        assertEquals(false, evaluate("procedure?", 0));
+        assertEquals(false, evaluate("procedure?", "begin"));
     }
 
     @Test
@@ -441,8 +441,8 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void strEndsWithp() {
-        assertEquals(1, evaluate("str/ends-with?", "de", "abcde"));
-        assertEquals(0, evaluate("str/ends-with?", "def", "abcde"));
+        assertEquals(true, evaluate("str/ends-with?", "de", "abcde"));
+        assertEquals(false, evaluate("str/ends-with?", "def", "abcde"));
     }
 
     @Test
@@ -478,8 +478,8 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void strStartsWithp() {
-        assertEquals(1, evaluate("str/starts-with?", "ab", "abcde"));
-        assertEquals(0, evaluate("str/starts-with?", "abx", "abcde"));
+        assertEquals(true, evaluate("str/starts-with?", "ab", "abcde"));
+        assertEquals(false, evaluate("str/starts-with?", "abx", "abcde"));
     }
 
     @Test
@@ -500,12 +500,12 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void stringp() {
-        assertEquals(1, evaluate("string?", "string"));
-        assertEquals(1, evaluate("string?", "string'"));
-        assertEquals(1, evaluate("string?", "'string"));
-        assertEquals(1, evaluate("string?", "'string'"));
-        assertEquals(0, evaluate("string?", new Symbol("symbol")));
-        assertEquals(0, evaluate("string?", 42));
+        assertEquals(true, evaluate("string?", "string"));
+        assertEquals(true, evaluate("string?", "string'"));
+        assertEquals(true, evaluate("string?", "'string"));
+        assertEquals(true, evaluate("string?", "'string'"));
+        assertEquals(false, evaluate("string?", new Symbol("symbol")));
+        assertEquals(false, evaluate("string?", 42));
     }
 
     @Test
@@ -517,12 +517,12 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void symbolp() {
-        assertEquals(1, evaluate("symbol?", new Symbol("symbol")));
-        assertEquals(0, evaluate("symbol?", "string"));
-        assertEquals(0, evaluate("symbol?", "string'"));
-        assertEquals(0, evaluate("symbol?", "'string"));
-        assertEquals(0, evaluate("symbol?", "'string'"));
-        assertEquals(0, evaluate("symbol?", 42));
+        assertEquals(true, evaluate("symbol?", new Symbol("symbol")));
+        assertEquals(false, evaluate("symbol?", "string"));
+        assertEquals(false, evaluate("symbol?", "string'"));
+        assertEquals(false, evaluate("symbol?", "'string"));
+        assertEquals(false, evaluate("symbol?", "'string'"));
+        assertEquals(false, evaluate("symbol?", 42));
     }
 
     @Test
