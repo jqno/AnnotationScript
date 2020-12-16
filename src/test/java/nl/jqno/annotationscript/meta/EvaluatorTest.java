@@ -168,7 +168,41 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Meaning {
+        @Zero("begin")
+        @Zero(include=Evaluator.Meaning.class)
+        @Zero(list={
+            @One("define"),
+            @One("expression-to-action"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two(list={
+                    @Three("lambda"),
+                    @Three(list={@Four("e"), @Four("table")}),
+                    @Three(list={
+                        @Four("str/concat"),
+                        @Four("'e-to-a '"),
+                        @Four("e"),
+                        @Four("', '"),
+                        @Four("table")})})})})
+        @Zero(list={@One("meaning"), @One("e"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void meaning() {
+            var initialValues = input("e", 42, "table", List.of(1337));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("e-to-a 42, List(1337)", actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
+    }
+
+    private Map<String, Object> input(String key1, Object val1, String key2, Object val2) {
+        return HashMap.of(key1, val1, key2, val2);
     }
 }

@@ -145,4 +145,23 @@ public class Evaluator {
         @One(list={@Two("e")}),
         @One(list={@Two("meaning"), @Two("e"), @Two(list={@Three("list")})})})
     public static class Value {}
+
+    /*
+     * Generated from:
+     *
+     * (define meaning
+     *   (lambda (e table)
+     *     ((expression-to-action e) e table)))
+     */
+    @Zero("define")
+    @Zero("meaning")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two(list={
+                @Three("expression-to-action"), @Three("e")}),
+            @Two("e"),
+            @Two("table")})})
+    public static class Meaning {}
 }
