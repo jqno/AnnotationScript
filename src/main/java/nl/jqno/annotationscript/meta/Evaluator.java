@@ -2,6 +2,37 @@ package nl.jqno.annotationscript.meta;
 
 import nl.jqno.annotationscript.Annotations.*;
 
+@Zero(export={
+    Evaluator.ExpressionToAction.class,
+    Evaluator.AtomToAction.class,
+    Evaluator.ListToAction.class,
+    Evaluator.Value.class,
+    Evaluator.Meaning.class,
+    Evaluator.TypeConst.class,
+    Evaluator.TypeQuote.class,
+    Evaluator.TextOf.class,
+    Evaluator.TypeIdentifier.class,
+    Evaluator.InitialTable.class,
+    Evaluator.TypeLambda.class,
+    Evaluator.TableOf.class,
+    Evaluator.FormalsOf.class,
+    Evaluator.BodyOf.class,
+    Evaluator.Evcon.class,
+    Evaluator.Else.class,
+    Evaluator.QuestionOf.class,
+    Evaluator.AnswerOf.class,
+    Evaluator.TypeCond.class,
+    Evaluator.CondLinesOf.class,
+    Evaluator.Evlis.class,
+    Evaluator.TypeApplication.class,
+    Evaluator.FunctionOf.class,
+    Evaluator.ArgumentsOf.class,
+    Evaluator.Primitive.class,
+    Evaluator.NonPrimitive.class,
+    Evaluator.Apply.class,
+    Evaluator.ApplyPrimitive.class,
+    Evaluator.Atom.class,
+    Evaluator.ApplyClosure.class})
 public class Evaluator {
 
     /*

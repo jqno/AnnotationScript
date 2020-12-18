@@ -714,6 +714,61 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Integration {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Table.class)
+        @Zero(include=Evaluator.class)
+        @Zero(list={@One("value"), @One("e")})
+        class Sut {}
+
+        @Test
+        public void addition() {
+            var initialValues = input("e", List.of(new Symbol("add1"), 42));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(43, actual);
+        }
+
+        @Test
+        public void quote() {
+            var initialValues = input("e", List.of(new Symbol("quote"), List.of(new Symbol("a"), new Symbol("b"))));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(new Symbol("a"), new Symbol("b")), actual);
+        }
+
+        @Test
+        public void car() {
+            var initialValues = input("e", List.of(new Symbol("car"), List.of(new Symbol("quote"), List.of(1, 2, 3))));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(1, actual);
+        }
+
+        @Test
+        public void lists() {
+            var initialValues = input("e", List.of(
+                new Symbol("cons"),
+                List.of(new Symbol("car"), List.of("quote", List.of(1, 2, 3))),
+                List.of(new Symbol("cdr"), List.of("quote", List.of("a", "b", "c")))));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(1, new Symbol("b"), new Symbol("c")), actual);
+        }
+
+        @Test
+        public void lambdaWithBooleans() {
+            var initialValues = input("e", List.of(
+                List.of(
+                    new Symbol("lambda"),
+                    List.of(new Symbol("x")),
+                    List.of(new Symbol("cond"),
+                        List.of(List.of(new Symbol("x")), List.of(new Symbol("quote"), new Symbol("true"))),
+                        List.of(List.of(new Symbol("else"), List.of(new Symbol("quote"), new Symbol("false")))))),
+                new Symbol("#t")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
