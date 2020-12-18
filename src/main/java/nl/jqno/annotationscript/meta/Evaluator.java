@@ -664,4 +664,32 @@ public class Evaluator {
             @Two("else"),
             @Two("#f")})})
     public static class Atom {}
+
+    /*
+     * Generated from:
+     *
+     * (define apply-closure
+     *   (lambda (closure vals)
+     *     (meaning
+     *       (body-of closure)
+     *       (extend-table
+     *         (new-entry (formals-of closure) vals)
+     *         (table-of closure)))))
+     */
+    @Zero("define")
+    @Zero("apply-closure")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("closure"), @Two("vals")}),
+        @One(list={
+            @Two("meaning"),
+            @Two(list={@Three("body-of"), @Three("closure")}),
+            @Two(list={
+                @Three("extend-table"),
+                @Three(list={
+                    @Four("new-entry"),
+                    @Four(list={@Five("formals-of"), @Five("closure")}),
+                    @Four("vals")}),
+                @Three(list={@Four("table-of"), @Four("closure")})})})})
+    public static class ApplyClosure {}
 }

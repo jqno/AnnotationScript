@@ -680,6 +680,40 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class ApplyClosure {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Table.class)
+        @Zero(include=Evaluator.BodyOf.class)
+        @Zero(include=Evaluator.FormalsOf.class)
+        @Zero(include=Evaluator.TableOf.class)
+        @Zero(include=Evaluator.ApplyClosure.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two(list={
+                    @Three("str/concat"),
+                    @Three("'meaning '"),
+                    @Three("e"),
+                    @Three("', '"),
+                    @Three("table")})})})
+        @Zero(list={@One("apply-closure"), @One("closure"), @One("vals")})
+        class Sut {}
+
+        @Test
+        public void closure() {
+            var initialValues = input(
+                "closure", List.of(List.of("table"), List.of("a", "b"), "body"),
+                "vals", List.of(1, 2));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("meaning body, List(List(List(a, b), List(1, 2)), table)", actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
