@@ -537,6 +537,106 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class ApplyPrimitive {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.ApplyPrimitive.class)
+        @Zero(list={@One("define"), @One(":atom?"), @One("atom?")})
+        @Zero(list={@One("apply-primitive"), @One("name"), @One("vals")})
+        class Sut {}
+
+        @Test
+        public void cons() {
+            var initialValues = input(
+                "name", new Symbol("cons"),
+                "vals", List.of(1, List.of(2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(1, 2, 3), actual);
+        }
+
+        @Test
+        public void car() {
+            var initialValues = input(
+                "name", new Symbol("car"),
+                "vals", List.of(List.of(1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(1, actual);
+        }
+
+        @Test
+        public void cdr() {
+            var initialValues = input(
+                "name", new Symbol("cdr"),
+                "vals", List.of(List.of(1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(2, 3), actual);
+        }
+
+        @Test
+        public void nullp() {
+            var initialValues = input(
+                "name", new Symbol("null?"),
+                "vals", List.of(List.empty()));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void eqp() {
+            var initialValues = input(
+                "name", new Symbol("eq?"),
+                "vals", List.of(1, 2));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+
+        @Test
+        public void atomp() {
+            var initialValues = input(
+                "name", new Symbol("atom?"),
+                "vals", List.of(1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void zerop() {
+            var initialValues = input(
+                "name", new Symbol("zero?"),
+                "vals", List.of(1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+
+        @Test
+        public void add1() {
+            var initialValues = input(
+                "name", new Symbol("add1"),
+                "vals", List.of(2));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(3, actual);
+        }
+
+        @Test
+        public void sub1() {
+            var initialValues = input(
+                "name", new Symbol("sub1"),
+                "vals", List.of(2));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(1, actual);
+        }
+
+        @Test
+        public void numberp() {
+            var initialValues = input(
+                "name", new Symbol("number?"),
+                "vals", List.of(1));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }

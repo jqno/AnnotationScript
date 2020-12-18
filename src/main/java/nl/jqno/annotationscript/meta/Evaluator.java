@@ -571,4 +571,60 @@ public class Evaluator {
                     @Three(list={@Four("second"), @Four("fun")}),
                     @Three("vals")})})})
     public static class Apply {}
+
+    /*
+     * Generated from:
+     *
+     * (define apply-primitive
+     *   (lambda (name vals)
+     *     (cond
+     *       (= name (quote cons))
+     *       (cons (first vals) (second vals))
+     *       (= name (quote car))
+     *       (head (first vals))
+     *       (= name (quote cdr))
+     *       (tail (first vals))
+     *       (= name (quote null?))
+     *       (empty? (first vals))
+     *       (= name (quote eq?))
+     *       (= (first vals) (second vals))
+     *       (= name (quote atom?))
+     *       (:atom? (first vals))
+     *       (= name (quote zero?))
+     *       (= 0 (first vals))
+     *       (= name (quote add1))
+     *       (+ (first vals) 1)
+     *       (= name (quote sub1))
+     *       (- (first vals) 1)
+     *       (= name (quote number?))
+     *       (number? (first vals)))))
+     */
+    @Zero("define")
+    @Zero("apply-primitive")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("name"), @Two("vals")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("cons")})}), 
+            @Two(list={@Three("cons"), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("car")})}),
+            @Two(list={@Three("head"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("cdr")})}),
+            @Two(list={@Three("tail"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("null?")})}),
+            @Two(list={@Three("empty?"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("eq?")})}),
+            @Two(list={@Three("="), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("atom?")})}),
+            @Two(list={@Three(":atom?"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("zero?")})}),
+            @Two(list={@Three("="), @Three("0"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("add1")})}),
+            @Two(list={@Three("+"), @Three(list={@Four("first"), @Four("vals")}), @Three("1")}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("sub1")})}),
+            @Two(list={@Three("-"), @Three(list={@Four("first"), @Four("vals")}), @Three("1")}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("number?")})}),
+            @Two(list={@Three("number?"), @Three(list={@Four("first"), @Four("vals")})})})})
+    public static class ApplyPrimitive {}
 }
