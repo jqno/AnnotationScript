@@ -426,4 +426,37 @@ public class Evaluator {
     @Zero("cond-lines-of")
     @Zero("tail")
     public static class CondLinesOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define evlis
+     *   (lambda (args table)
+     *     (cond
+     *       (empty? args) (list)
+     *       else
+     *         (cons (meaning (head args) table)
+     *               (evlis (tail args) table)))))
+     */
+    @Zero("define")
+    @Zero("evlis")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("args"), @Two("table")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("empty?"), @Three("args")}),
+            @Two(list={@Three("list")}),
+            @Two("else"),
+            @Two(list={
+                @Three("cons"),
+                @Three(list={
+                    @Four("meaning"),
+                    @Four(list={@Five("head"), @Five("args")}),
+                    @Four("table")}),
+                @Three(list={
+                    @Four("evlis"),
+                    @Four(list={@Five("tail"), @Five("args")}),
+                    @Four("table")})})})})
+    public static class Evlis {}
 }

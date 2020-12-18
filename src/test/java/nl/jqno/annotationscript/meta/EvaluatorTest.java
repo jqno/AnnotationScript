@@ -374,6 +374,35 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Evlis {
+        @Zero("begin")
+        @Zero(include=Evaluator.Evlis.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two("e")})})
+        @Zero(list={@One("evlis"), @One("args"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void empty() {
+            var initialValues = input("args", List.empty(), "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.empty(), actual);
+        }
+
+        @Test
+        public void list() {
+            var initialValues = input("args", List.of(1, 2, 3, 4), "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(1, 2, 3, 4), actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
