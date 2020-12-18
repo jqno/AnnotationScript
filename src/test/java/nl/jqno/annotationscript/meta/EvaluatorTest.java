@@ -748,8 +748,8 @@ public class EvaluatorTest {
         public void lists() {
             var initialValues = input("e", List.of(
                 new Symbol("cons"),
-                List.of(new Symbol("car"), List.of("quote", List.of(1, 2, 3))),
-                List.of(new Symbol("cdr"), List.of("quote", List.of("a", "b", "c")))));
+                List.of(new Symbol("car"), List.of(new Symbol("quote"), List.of(1, 2, 3))),
+                List.of(new Symbol("cdr"), List.of(new Symbol("quote"), List.of(new Symbol("a"), new Symbol("b"), new Symbol("c"))))));
             var actual = run(Sut.class, initialValues);
             assertEquals(List.of(1, new Symbol("b"), new Symbol("c")), actual);
         }
