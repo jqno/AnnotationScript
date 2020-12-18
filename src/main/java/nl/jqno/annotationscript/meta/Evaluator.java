@@ -505,4 +505,40 @@ public class Evaluator {
     @Zero("arguments-of")
     @Zero("tail")
     public static class ArgumentsOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define primitive?
+     *   (lambda (l)
+     *     (= (first l) (quote primitive))))
+     */
+    @Zero("define")
+    @Zero("primitive?")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("l")}),
+        @One(list={
+            @Two("="),
+            @Two(list={@Three("first"), @Three("l")}),
+            @Two(list={@Three("quote"), @Three("primitive")})})})
+    public static class Primitive {}
+
+    /*
+     * Generated from:
+     *
+     * (define non-primitive?
+     *   (lambda (l)
+     *     (= (first l) (quote non-primitive))))
+     */
+    @Zero("define")
+    @Zero("non-primitive?")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("l")}),
+        @One(list={
+            @Two("="),
+            @Two(list={@Three("first"), @Three("l")}),
+            @Two(list={@Three("quote"), @Three("non-primitive")})})})
+    public static class NonPrimitive {}
 }

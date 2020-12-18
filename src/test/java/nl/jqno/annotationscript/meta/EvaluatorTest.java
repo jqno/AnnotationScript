@@ -438,6 +438,52 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Primitive {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.Primitive.class)
+        @Zero(list={@One("primitive?"), @One("l")})
+        class Sut {}
+
+        @Test
+        public void primitive() {
+            var initialValues = input("l", List.of(new Symbol("primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void nonPrimitive() {
+            var initialValues = input("l", List.of(new Symbol("non-primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+    }
+
+    @Nested
+    class NonPrimitive {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.NonPrimitive.class)
+        @Zero(list={@One("non-primitive?"), @One("l")})
+        class Sut {}
+
+        @Test
+        public void nonPrimitive() {
+            var initialValues = input("l", List.of(new Symbol("non-primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void primitive() {
+            var initialValues = input("l", List.of(new Symbol("primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
