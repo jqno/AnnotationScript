@@ -307,4 +307,123 @@ public class Evaluator {
     @Zero("body-of")
     @Zero("third")
     public static class BodyOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define evcon
+     *   (lambda (lines table)
+     *     (cond
+     *       (else? (question-of (head lines)))
+     *       (meaning (answer-of (head lines)) table)
+     *       (meaning (question-of (head lines)) table)
+     *       (meaning (answer-of (head lines)) table)
+     *       else (evcon (tail lines) table))))
+     */
+    @Zero("define")
+    @Zero("evcon")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("lines"), @Two("table")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={
+                @Three("else?"),
+                @Three(list={
+                    @Four("question-of"),
+                    @Four(list={@Five("head"), @Five("lines")})})}),
+            @Two(list={
+                @Three("meaning"),
+                @Three(list={
+                    @Four("answer-of"),
+                    @Four(list={@Five("head"), @Five("lines")})}),
+                @Three("table")}),
+            @Two(list={
+                @Three("meaning"),
+                @Three(list={
+                    @Four("question-of"),
+                    @Four(list={@Five("head"), @Five("lines")})}),
+                @Three("table")}),
+            @Two(list={
+                @Three("meaning"),
+                @Three(list={
+                    @Four("answer-of"),
+                    @Four(list={@Five("head"), @Five("lines")})}),
+                @Three("table")}),
+            @Two("else"),
+            @Two(list={
+                @Three("evcon"),
+                @Three(list={@Four("tail"), @Four("lines")}),
+                @Three("table")})})})
+    public static class Evcon {}
+
+    /*
+     * Generated from:
+     *
+     * (define else?
+     *   (lambda (x)
+     *     (cond
+     *       (atom? x) (= x (quote else))
+     *       else #f)))
+     */
+    @Zero("define")
+    @Zero("else?")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("x")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("atom?"), @Three("x")}),
+            @Two(list={@Three("="), @Three("x"), @Three(list={@Four("quote"), @Four("else")})}),
+            @Two("else"),
+            @Two("#f")})})
+    public static class Else {}
+
+    /*
+     * Generated from:
+     *
+     * (define question-of first)
+     */
+    @Zero("define")
+    @Zero("question-of")
+    @Zero("first")
+    public static class QuestionOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define question-of first)
+     */
+    @Zero("define")
+    @Zero("answer-of")
+    @Zero("second")
+    public static class AnswerOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define *cond
+     *   (lambda (e table)
+     *     (evcon (cond-lines-of e) table)))
+     */
+    @Zero("define")
+    @Zero("*cond")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two("evcon"),
+            @Two(list={@Three("cond-lines-of"), @Three("e")}),
+            @Two("table")})})
+    public static class TypeCond {}
+
+    /*
+     * Generated from:
+     *
+     * (define cond-lines-of tail)
+     */
+    @Zero("define")
+    @Zero("cond-lines-of")
+    @Zero("tail")
+    public static class CondLinesOf {}
 }

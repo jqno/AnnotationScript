@@ -296,6 +296,84 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Evcon {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.Evcon.class)
+        @Zero(include=Evaluator.Else.class)
+        @Zero(include=Evaluator.QuestionOf.class)
+        @Zero(include=Evaluator.AnswerOf.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two("e")})})
+        @Zero(list={@One("evcon"), @One("lines"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void firstCase() {
+            var lines = List.of(
+                List.of(new Symbol("#t"), 1),
+                List.of(new Symbol("#f"), 2),
+                List.of(new Symbol("else"), 3));
+            var initialValues = input("lines", lines, "table", null);
+            var actual = run(Sut.class, initialValues);
+            assertEquals(actual, 1);
+        }
+
+        @Test
+        public void middleCase() {
+            var lines = List.of(
+                List.of(new Symbol("#f"), 1),
+                List.of(new Symbol("#t"), 2),
+                List.of(new Symbol("else"), 3));
+            var initialValues = input("lines", lines, "table", null);
+            var actual = run(Sut.class, initialValues);
+            assertEquals(actual, 1);
+        }
+        
+        @Test
+        public void elseCase() {
+            var lines = List.of(
+                List.of(new Symbol("#f"), 1),
+                List.of(new Symbol("#f"), 2),
+                List.of(new Symbol("else"), 3));
+            var initialValues = input("lines", lines, "table", null);
+            var actual = run(Sut.class, initialValues);
+            assertEquals(actual, 1);
+        }
+    }
+
+    @Nested
+    class TypeCond {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.TypeCond.class)
+        @Zero(include=Evaluator.CondLinesOf.class)
+        @Zero(list={
+            @One("define"),
+            @One("evcon"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("lines"), @Three("table")}),
+                @Two(list={@Three("str/concat"), @Three("lines"), @Three("table")})})})
+        @Zero(list={@One("*cond"), @One("e"), @One("table")})
+        class Sut {}
+
+        private final Object table = List.of(1, 2, 3);
+
+        @Test
+        public void cond() {
+            var initialValues = input("e", List.of(new Symbol("cond"), 1, 2, 3, 4), "table", table);
+            var actual = run(Sut.class, initialValues);
+            assertEquals(actual, "List(1, 2, 3, 4)List(1, 2, 3)");
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
