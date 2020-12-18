@@ -44,18 +44,6 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void successfullyEvaluateIfTrue() {
-        var actual = sut.eval(List.of(new Symbol("if"), true, 1, 2), env);
-        assertEquals(1, actual);
-    }
-
-    @Test
-    public void successfullyEvaluateIfFalse() {
-        var actual = sut.eval(List.of(new Symbol("if"), false, 1, 2), env);
-        assertEquals(2, actual);
-    }
-
-    @Test
     public void successfullyEvaluateIf1() {
         var actual = sut.eval(List.of(new Symbol("if"), 1, 1, 2), env);
         assertEquals(1, actual);
@@ -95,7 +83,7 @@ public class EvaluatorTest {
     public void successfullyEvaluateBigCond() {
         var expression = List.of(
             new Symbol("cond"),
-            false, 1,
+            0, 1,
             0.0, 2,
             List.of(new Symbol("+"), 0, 0), 3,
             "yeah", 4,
@@ -109,8 +97,7 @@ public class EvaluatorTest {
         var expression = List.of(
             new Symbol("cond"),
             0, 1,
-            0.0, 2,
-            false, 3);
+            0.0, 2);
         var e = assertThrows(EvaluationException.class, () -> sut.eval(expression, env));
         assertEquals("cond has no true branch", e.getMessage());
     }
