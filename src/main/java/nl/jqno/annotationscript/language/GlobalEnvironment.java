@@ -33,7 +33,7 @@ public final class GlobalEnvironment {
         builtin("and", params -> params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr))),
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
         builtin("apply", (params, env, eval) -> toFn(params.get(0)).evaluate(toList(() -> params.get(1)).get(), env, eval)),
-        builtin("atom?", params -> isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0))),
+        builtin("atom?", params -> isBoolean(params.get(0)) || isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0))),
         builtin("begin", params -> params.last()),
         builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
         builtin("contains?", params -> toList(() -> params.get(0)).get().contains(params.get(1))),
@@ -132,6 +132,10 @@ public final class GlobalEnvironment {
             return Double.compare(toDouble(one), toDouble(two)) == 0;
         }
         return Objects.equals(one, two);
+    }
+
+    private static boolean isBoolean(Object object) {
+        return object instanceof Boolean;
     }
 
     private static boolean isNumber(Object object) {

@@ -144,6 +144,7 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void atomp() {
+        assertEquals(true, evaluate("atom?", true));
         assertEquals(true, evaluate("atom?", 42));
         assertEquals(true, evaluate("atom?", 42.0));
         assertEquals(true, evaluate("atom?", "string"));
