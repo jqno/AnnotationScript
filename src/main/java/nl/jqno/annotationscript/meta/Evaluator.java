@@ -541,4 +541,34 @@ public class Evaluator {
             @Two(list={@Three("first"), @Three("l")}),
             @Two(list={@Three("quote"), @Three("non-primitive")})})})
     public static class NonPrimitive {}
+
+    /*
+     * Generated from:
+     *
+     * (define :apply
+     *   (lambda (fun vals)
+     *     (cond
+     *       (primitive? fun)
+     *       (apply-primitive (second fun) vals)
+     *       (non-primitive? fun)
+     *       (apply-closure (second fun) vals))))
+     */
+    @Zero("define")
+    @Zero(":apply")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("fun"), @Two("vals")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("primitive?"), @Three("fun")}),
+            @Two(list={
+                @Three("apply-primitive"),
+                @Three(list={@Four("second"), @Four("fun")}),
+                @Three("vals")}),
+            @Two(list={@Three("non-primitive?"), @Three("fun")}),
+                @Two(list={
+                    @Three("apply-closure"),
+                    @Three(list={@Four("second"), @Four("fun")}),
+                    @Three("vals")})})})
+    public static class Apply {}
 }

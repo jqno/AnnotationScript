@@ -484,6 +484,59 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Apply {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.Primitive.class)
+        @Zero(include=Evaluator.NonPrimitive.class)
+        @Zero(include=Evaluator.Apply.class)
+        @Zero(list={
+            @One("define"),
+            @One("apply-primitive"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("name"), @Three("vals")}),
+                @Two(list={
+                    @Three("str/concat"),
+                    @Three("'primitive: '"),
+                    @Three("name"),
+                    @Three("', '"),
+                    @Three("vals")})})})
+        @Zero(list={
+            @One("define"),
+            @One("apply-closure"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("name"), @Three("vals")}),
+                @Two(list={
+                    @Three("str/concat"),
+                    @Three("'closure: '"),
+                    @Three("name"),
+                    @Three("', '"),
+                    @Three("vals")})})})
+        @Zero(list={@One(":apply"), @One("name"), @One("vals")})
+        class Sut {}
+
+        @Test
+        public void primitive() {
+            var initialValues = input(
+                "name", List.of(new Symbol("primitive"), new Symbol("some-name")),
+                "vals", List.of(1, 2, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("primitive: 'some-name, List(1, 2, 3)", actual);
+        }
+
+        @Test
+        public void closure() {
+            var initialValues = input(
+                "name", List.of(new Symbol("non-primitive"), new Symbol("some-name")),
+                "vals", List.of(1, 2, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals("closure: 'some-name, List(1, 2, 3)", actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
