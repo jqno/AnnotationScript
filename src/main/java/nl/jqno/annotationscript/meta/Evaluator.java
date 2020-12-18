@@ -221,4 +221,90 @@ public class Evaluator {
     @Zero("text-of")
     @Zero("second")
     public static class TextOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define *identifier
+     *   (lambda (e table)
+     *     (lookup-in-table e table initial-table)))
+     */
+    @Zero("define")
+    @Zero("*identifier")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two("lookup-in-table"),
+            @Two("e"),
+            @Two("table"),
+            @Two("initial-table")})})
+    public static class TypeIdentifier {}
+
+    /* 
+     * Generated from:
+     *
+     * (define initial-table
+     *   (lambda (name)
+     *     (head (list))))
+     */
+    @Zero("define")
+    @Zero("initial-table")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("name")}),
+        @One(list={@Two("head"), @Two(list={@Three("list")})})})
+    public static class InitialTable {}
+
+    /*
+     * Generated from:
+     *
+     * (define *lambda
+     *   (lambda (e table)
+     *     (build (quote non-primitive)
+     *       (cons table (tail e))))) 
+     */
+    @Zero("define")
+    @Zero("*lambda")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two("build"),
+            @Two(list={@Three("quote"), @Three("non-primitive")}),
+            @Two(list={
+                @Three("cons"),
+                @Three("table"),
+                @Three(list={@Four("tail"), @Four("e")})})})})
+    public static class TypeLambda {}
+
+    /*
+     * Generated from:
+     *
+     * (define table-of first)
+     */
+    @Zero("define")
+    @Zero("table-of")
+    @Zero("first")
+    public static class TableOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define formals-of second)
+     */
+    @Zero("define")
+    @Zero("formals-of")
+    @Zero("second")
+    public static class FormalsOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define body-of third)
+     */
+    @Zero("define")
+    @Zero("body-of")
+    @Zero("third")
+    public static class BodyOf {}
 }

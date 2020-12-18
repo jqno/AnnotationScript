@@ -254,6 +254,48 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class TypeIdentifier {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Table.class)
+        @Zero(include=Evaluator.TypeIdentifier.class)
+        @Zero(include=Evaluator.InitialTable.class)
+        @Zero(list={@One("*identifier"), @One("e"), @One("table")})
+        class Sut {}
+
+        private final Object table = List.of(
+            List.of(List.of("entree", "dessert"), List.of("spaghetti", "spumoni")),
+            List.of(List.of("appetizer", "entree", "beverage"), List.of("food", "tastes", "good")));
+
+        @Test
+        public void identifier() {
+            var initialValues = input("e", "entree", "table", table);
+            var actual = run(Sut.class, initialValues);
+            assertEquals("spaghetti", actual);
+        }
+    }
+
+    @Nested
+    class TypeLambda {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Evaluator.TypeLambda.class)
+        @Zero(list={@One("*lambda"), @One("e"), @One("table")})
+        class Sut {}
+
+        private final List<?> lambda = List.of(new Symbol("lambda"), List.of(new Symbol("e")), List.of("e"));
+        private final Object table = List.of(1, 2, 3);
+
+        @Test
+        public void lambda() {
+            var initialValues = input("e", lambda, "table", table);
+            var actual = run(Sut.class, initialValues);
+            var expected = List.of(new Symbol("non-primitive"), List.of(table, lambda.get(1), lambda.get(2)));
+            assertEquals(expected, actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
