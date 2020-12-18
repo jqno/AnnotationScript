@@ -637,6 +637,49 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class Atom {
+        @Zero("begin")
+        @Zero(include=Evaluator.Atom.class)
+        @Zero(list={@One(":atom?"), @One("x")})
+        class Sut {}
+
+        @Test
+        public void atom() {
+            var initialValues = input("x", 1);
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void empty() {
+            var initialValues = input("x", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+
+        @Test
+        public void primitive() {
+            var initialValues = input("x", List.of(new Symbol("primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void nonPrimitive() {
+            var initialValues = input("x", List.of(new Symbol("non-primitive"), new Symbol("something")));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(true, actual);
+        }
+
+        @Test
+        public void list() {
+            var initialValues = input("x", List.of(1, 2, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(false, actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }

@@ -627,4 +627,41 @@ public class Evaluator {
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two(list={@Three("number?"), @Three(list={@Four("first"), @Four("vals")})})})})
     public static class ApplyPrimitive {}
+
+    /*
+     * Generated from:
+     *
+     * (define :atom?
+     *   (lambda (x)
+     *     (cond
+     *       (atom? x) #t
+     *       (empty? x) #f
+     *       (= (head x) (quote primitive)) #t
+     *       (= (head x) (quote non-primitive)) #t
+     *       else #f)))
+     */
+    @Zero("define")
+    @Zero(":atom?")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("x")}),
+        @One(list={
+            @Two("cond"),
+            @Two(list={@Three("atom?"), @Three("x")}),
+            @Two("#t"),
+            @Two(list={@Three("empty?"), @Three("x")}),
+            @Two("#f"),
+            @Two(list={
+                @Three("="),
+                @Three(list={@Four("head"), @Four("x")}),
+                @Three(list={@Four("quote"), @Four("primitive")})}),
+            @Two("#t"),
+            @Two(list={
+                @Three("="),
+                @Three(list={@Four("head"), @Four("x")}),
+                @Three(list={@Four("quote"), @Four("non-primitive")})}),
+            @Two("#t"),
+            @Two("else"),
+            @Two("#f")})})
+    public static class Atom {}
 }
