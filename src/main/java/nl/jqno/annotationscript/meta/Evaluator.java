@@ -459,4 +459,50 @@ public class Evaluator {
                     @Four(list={@Five("tail"), @Five("args")}),
                     @Four("table")})})})})
     public static class Evlis {}
+
+    /*
+     * Generated from:
+     *
+     * (define *application
+     *   (lambda (e table)
+     *     (:apply
+     *       (meaning (function-of e) table)
+     *       (evlis (arguments-of e) table))))
+     */
+    @Zero("define")
+    @Zero("*application")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two(":apply"),
+            @Two(list={
+                @Three("meaning"),
+                @Three(list={@Four("function-of"), @Four("e")}),
+                @Three("table")}),
+            @Two(list={
+                @Three("evlis"),
+                @Three(list={@Four("arguments-of"), @Four("e")}),
+                @Three("table")})})})
+    public static class TypeApplication {}
+
+    /*
+     * Generated from:
+     *
+     * (define function-of head)
+     */
+    @Zero("define")
+    @Zero("function-of")
+    @Zero("head")
+    public static class FunctionOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define arguments-of tail)
+     */
+    @Zero("define")
+    @Zero("arguments-of")
+    @Zero("tail")
+    public static class ArgumentsOf {}
 }

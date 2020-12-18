@@ -403,6 +403,41 @@ public class EvaluatorTest {
         }
     }
 
+    @Nested
+    class TypeApplication {
+        @Zero("begin")
+        @Zero(include=Evaluator.TypeApplication.class)
+        @Zero(include=Evaluator.FunctionOf.class)
+        @Zero(include=Evaluator.ArgumentsOf.class)
+        @Zero(include=Evaluator.Evlis.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two("e")})})
+        @Zero(list={
+            @One("define"),
+            @One(":apply"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("x"), @Three("xs")}),
+                @Two(list={
+                    @Three("str/concat"),
+                    @Three("x"),
+                    @Three("xs")})})})
+        @Zero(list={@One("*application"), @One("e"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void application() {
+            var initialValues = input("e", List.of(1, 2, 3, 4), "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals("1List(2, 3, 4)", actual);
+        }
+    }
+
     private Map<String, Object> input(String key1, Object val1) {
         return HashMap.of(key1, val1);
     }
