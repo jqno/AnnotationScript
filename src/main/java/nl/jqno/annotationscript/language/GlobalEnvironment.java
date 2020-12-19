@@ -47,7 +47,7 @@ public final class GlobalEnvironment {
             if (p instanceof String) { return bool(toString(p).isEmpty()); }
             if (p instanceof List) { return bool(toList(() -> p).get().isEmpty()); }
             if (p instanceof Map) { return bool(toMap(p).isEmpty()); }
-            return null;
+            return FALSE;
         }),
         builtin("filter", (params, env, eval) -> 
             toList(() -> params.get(1)).get().filter(p -> isTruthy((toFn(params.get(0))).evaluate(List.of(p), env, eval)))),

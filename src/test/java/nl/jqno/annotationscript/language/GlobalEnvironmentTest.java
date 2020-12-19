@@ -192,8 +192,8 @@ public class GlobalEnvironmentTest {
         assertEquals(TRUE, evaluate("empty?", List.empty()));
         assertEquals(FALSE, evaluate("empty?", HashMap.of(TRUE, 1)));
         assertEquals(TRUE, evaluate("empty?", HashMap.empty()));
-        assertNull(evaluate("empty?", new Symbol("some-symbol")));
-        assertNull(evaluate("empty?", 42));
+        assertEquals(FALSE, evaluate("empty?", new Symbol("some-symbol")));
+        assertEquals(FALSE, evaluate("empty?", 42));
     }
 
     @Test
