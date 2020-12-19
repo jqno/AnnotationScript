@@ -3,6 +3,9 @@ package nl.jqno.annotationscript.language;
 import java.util.Objects;
 
 public final class Symbol {
+    public static final Symbol TRUE = new Symbol("#t");
+    public static final Symbol FALSE = new Symbol("#f");
+
     public final String name;
 
     public Symbol(String name) {

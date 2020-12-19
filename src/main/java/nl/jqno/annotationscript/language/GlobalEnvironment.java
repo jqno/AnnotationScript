@@ -1,5 +1,8 @@
 package nl.jqno.annotationscript.language;
 
+import static nl.jqno.annotationscript.language.Symbol.FALSE;
+import static nl.jqno.annotationscript.language.Symbol.TRUE;
+
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -16,6 +19,8 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
     private static final List<Tuple2<Symbol, Fn>> GLOBAL = List.of(
+        builtin(TRUE.name, TRUE),
+        builtin(FALSE.name, FALSE),
         builtin("+", params -> params.foldLeft((Object)0, (acc, curr) -> wideningOp((x, y) -> x + y, acc, curr))),
         builtin("-", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x - y, acc, curr))),
         builtin("*", params -> params.foldLeft((Object)1, (acc, curr) -> wideningOp((x, y) -> x * y, acc, curr))),
@@ -36,7 +41,7 @@ public final class GlobalEnvironment {
         builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
         builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
-        builtin("else", 1),
+        builtin("else", TRUE),
         builtin("empty?", params -> {
             var p = params.get(0);
             if (p instanceof String) { return bool(toString(p).isEmpty()); }
@@ -123,8 +128,8 @@ public final class GlobalEnvironment {
         return Tuple.of(new Symbol(name), Fn.val(name, value));
     }
 
-    private static int bool(boolean b) {
-        return b ? 1 : 0;
+    private static Symbol bool(boolean b) {
+        return b ? TRUE : FALSE;
     }
 
     private static boolean isEquals(List<Object> params) {
@@ -149,7 +154,7 @@ public final class GlobalEnvironment {
     }
 
     private static boolean isTruthy(Object x) {
-        return !(x.equals(0.0) || x.equals(0));
+        return !(x.equals(FALSE) || x.equals(0.0) || x.equals(0));
     }
 
     private static Double toDouble(Object x) {

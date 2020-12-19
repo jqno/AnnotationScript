@@ -101,7 +101,7 @@ public class Evaluator {
     }
 
     private boolean isTruthy(Object x) {
-        return !(x.equals(0) || x.equals(0.0));
+        return !(x.equals(Symbol.FALSE) || x.equals(0) || x.equals(0.0));
     }
 
     private String symbolName(Object symbol) {

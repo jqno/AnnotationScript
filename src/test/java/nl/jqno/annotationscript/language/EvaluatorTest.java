@@ -1,5 +1,7 @@
 package nl.jqno.annotationscript.language;
 
+import static nl.jqno.annotationscript.language.Symbol.FALSE;
+import static nl.jqno.annotationscript.language.Symbol.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -14,6 +16,8 @@ public class EvaluatorTest {
 
     private final Evaluator sut = new Evaluator();
     private final Environment env = new Environment(HashMap.of(
+        TRUE, Fn.val(TRUE.name, TRUE),
+        FALSE, Fn.val(FALSE.name, FALSE),
         new Symbol("begin"), Fn.builtin("begin", params -> params.last()),
         new Symbol("pi"), Fn.val("pi", Math.PI),
         new Symbol("+"), Fn.builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + Double.valueOf(curr.toString())))
@@ -44,6 +48,12 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void successfullyEvaluateIfTrue() {
+        var actual = sut.eval(List.of(new Symbol("if"), TRUE, 1, 2), env);
+        assertEquals(1, actual);
+    }
+
+    @Test
     public void successfullyEvaluateIf1() {
         var actual = sut.eval(List.of(new Symbol("if"), 1, 1, 2), env);
         assertEquals(1, actual);
@@ -53,6 +63,12 @@ public class EvaluatorTest {
     public void successfullyEvaluateIfWhatever() {
         var actual = sut.eval(List.of(new Symbol("if"), new Symbol("pi"), 1, 2), env);
         assertEquals(1, actual);
+    }
+
+    @Test
+    public void successfullyEvaluateIfFalse() {
+        var actual = sut.eval(List.of(new Symbol("if"), FALSE, 1, 2), env);
+        assertEquals(2, actual);
     }
 
     @Test
@@ -69,13 +85,13 @@ public class EvaluatorTest {
 
     @Test
     public void successfullyEvaluateIfWithSymbols() {
-        var actual = sut.eval(List.of(new Symbol("if"), 1, new Symbol("pi"), new Symbol("pi")), env);
+        var actual = sut.eval(List.of(new Symbol("if"), TRUE, new Symbol("pi"), new Symbol("pi")), env);
         assertEquals(Math.PI, actual);
     }
 
     @Test
     public void successfullyEvaluateSimpleCond() {
-        var actual = sut.eval(List.of(new Symbol("cond"), 1, 42), env);
+        var actual = sut.eval(List.of(new Symbol("cond"), TRUE, 42), env);
         assertEquals(42, actual);
     }
 
@@ -83,11 +99,12 @@ public class EvaluatorTest {
     public void successfullyEvaluateBigCond() {
         var expression = List.of(
             new Symbol("cond"),
-            0, 1,
+            FALSE, 1,
             0.0, 2,
             List.of(new Symbol("+"), 0, 0), 3,
             "yeah", 4,
-            0, 5);
+            TRUE, 5,
+            0, 6);
         var actual = sut.eval(expression, env);
         assertEquals(4, actual);
     }

@@ -1,5 +1,7 @@
 package nl.jqno.annotationscript.meta;
 
+import static nl.jqno.annotationscript.language.Symbol.FALSE;
+import static nl.jqno.annotationscript.language.Symbol.TRUE;
 import static nl.jqno.annotationscript.AnnotationScript.run;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -215,16 +217,16 @@ public class EvaluatorTest {
 
         @Test
         public void t() {
-            var initialValues = input("e", true, "table", List.empty());
+            var initialValues = input("e", TRUE, "table", List.empty());
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void f() {
-            var initialValues = input("e", false, "table", List.empty());
+            var initialValues = input("e", FALSE, "table", List.empty());
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
 
         @Test
@@ -317,34 +319,34 @@ public class EvaluatorTest {
         @Test
         public void firstCase() {
             var lines = List.of(
-                List.of(new Symbol("#t"), 1),
-                List.of(new Symbol("#f"), 2),
+                List.of(TRUE, 1),
+                List.of(FALSE, 2),
                 List.of(new Symbol("else"), 3));
             var initialValues = input("lines", lines, "table", null);
             var actual = run(Sut.class, initialValues);
-            assertEquals(actual, 1);
+            assertEquals(1, actual);
         }
 
         @Test
         public void middleCase() {
             var lines = List.of(
-                List.of(new Symbol("#f"), 1),
-                List.of(new Symbol("#t"), 2),
+                List.of(FALSE, 1),
+                List.of(TRUE, 2),
                 List.of(new Symbol("else"), 3));
             var initialValues = input("lines", lines, "table", null);
             var actual = run(Sut.class, initialValues);
-            assertEquals(actual, 1);
+            assertEquals(2, actual);
         }
         
         @Test
         public void elseCase() {
             var lines = List.of(
-                List.of(new Symbol("#f"), 1),
-                List.of(new Symbol("#f"), 2),
+                List.of(FALSE, 1),
+                List.of(FALSE, 2),
                 List.of(new Symbol("else"), 3));
             var initialValues = input("lines", lines, "table", null);
             var actual = run(Sut.class, initialValues);
-            assertEquals(actual, 1);
+            assertEquals(3, actual);
         }
     }
 
@@ -450,14 +452,14 @@ public class EvaluatorTest {
         public void primitive() {
             var initialValues = input("l", List.of(new Symbol("primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void nonPrimitive() {
             var initialValues = input("l", List.of(new Symbol("non-primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
     }
 
@@ -473,14 +475,14 @@ public class EvaluatorTest {
         public void nonPrimitive() {
             var initialValues = input("l", List.of(new Symbol("non-primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void primitive() {
             var initialValues = input("l", List.of(new Symbol("primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
     }
 
@@ -579,7 +581,7 @@ public class EvaluatorTest {
                 "name", new Symbol("null?"),
                 "vals", List.of(List.empty()));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
@@ -588,7 +590,7 @@ public class EvaluatorTest {
                 "name", new Symbol("eq?"),
                 "vals", List.of(1, 2));
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
 
         @Test
@@ -597,7 +599,7 @@ public class EvaluatorTest {
                 "name", new Symbol("atom?"),
                 "vals", List.of(1));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
@@ -606,7 +608,7 @@ public class EvaluatorTest {
                 "name", new Symbol("zero?"),
                 "vals", List.of(1));
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
 
         @Test
@@ -633,7 +635,7 @@ public class EvaluatorTest {
                 "name", new Symbol("number?"),
                 "vals", List.of(1));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
     }
 
@@ -648,35 +650,35 @@ public class EvaluatorTest {
         public void atom() {
             var initialValues = input("x", 1);
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void empty() {
             var initialValues = input("x", List.empty());
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
 
         @Test
         public void primitive() {
             var initialValues = input("x", List.of(new Symbol("primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void nonPrimitive() {
             var initialValues = input("x", List.of(new Symbol("non-primitive"), new Symbol("something")));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(TRUE, actual);
         }
 
         @Test
         public void list() {
             var initialValues = input("x", List.of(1, 2, 3));
             var actual = run(Sut.class, initialValues);
-            assertEquals(false, actual);
+            assertEquals(FALSE, actual);
         }
     }
 
@@ -763,7 +765,7 @@ public class EvaluatorTest {
                     List.of(new Symbol("cond"),
                         List.of(List.of(new Symbol("x")), List.of(new Symbol("quote"), new Symbol("true"))),
                         List.of(List.of(new Symbol("else"), List.of(new Symbol("quote"), new Symbol("false")))))),
-                new Symbol("#t")));
+                Symbol.TRUE));
             var actual = run(Sut.class, initialValues);
             assertEquals(true, actual);
         }
