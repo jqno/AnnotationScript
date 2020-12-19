@@ -763,11 +763,11 @@ public class EvaluatorTest {
                     new Symbol("lambda"),
                     List.of(new Symbol("x")),
                     List.of(new Symbol("cond"),
-                        List.of(List.of(new Symbol("x")), List.of(new Symbol("quote"), new Symbol("true"))),
-                        List.of(List.of(new Symbol("else"), List.of(new Symbol("quote"), new Symbol("false")))))),
+                        List.of(new Symbol("x"), List.of(new Symbol("quote"), new Symbol("true"))),
+                        List.of(new Symbol("else"), List.of(new Symbol("quote"), new Symbol("false"))))),
                 Symbol.TRUE));
             var actual = run(Sut.class, initialValues);
-            assertEquals(true, actual);
+            assertEquals(new Symbol("true"), actual);
         }
     }
 
