@@ -597,10 +597,10 @@ public class Evaluator {
                 @Three(list={@Four("second"), @Four("fun")}),
                 @Three("vals")}),
             @Two(list={@Three("non-primitive?"), @Three("fun")}),
-                @Two(list={
-                    @Three("apply-closure"),
-                    @Three(list={@Four("second"), @Four("fun")}),
-                    @Three("vals")})})})
+            @Two(list={
+                @Three("apply-closure"),
+                @Three(list={@Four("second"), @Four("fun")}),
+                @Three("vals")})})})
     public static class Apply {}
 
     /*
