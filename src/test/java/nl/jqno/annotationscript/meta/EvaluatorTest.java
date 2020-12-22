@@ -372,7 +372,7 @@ public class EvaluatorTest {
         public void cond() {
             var initialValues = input("e", List.of(new Symbol("cond"), 1, 2, 3, 4), "table", table);
             var actual = run(Sut.class, initialValues);
-            assertEquals(actual, "List(1, 2, 3, 4)List(1, 2, 3)");
+            assertEquals("List(1, 2, 3, 4)List(1, 2, 3)", actual);
         }
     }
 
