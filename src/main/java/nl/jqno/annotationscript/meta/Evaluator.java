@@ -23,6 +23,7 @@ import nl.jqno.annotationscript.Annotations.*;
     Evaluator.AnswerOf.class,
     Evaluator.TypeCond.class,
     Evaluator.CondLinesOf.class,
+    Evaluator.TypeDefine.class,
     Evaluator.Evlis.class,
     Evaluator.TypeApplication.class,
     Evaluator.FunctionOf.class,
@@ -128,6 +129,7 @@ public class Evaluator {
      *         (= (head e) (quote quote)) *quote
      *         (= (head e) (quote lambda)) *lambda
      *         (= (head e) (quote cond)) *cond
+     *         (= (head e) (quote define)) *define
      *         else *application)
      *       else *application)))
      */
@@ -156,6 +158,11 @@ public class Evaluator {
                     @Four(list={@Five("head"), @Five("e")}),
                     @Four(list={@Five("quote"), @Five("cond")})}),
                 @Three("*cond"),
+                @Three(list={
+                    @Four("="),
+                    @Four(list={@Five("head"), @Five("e")}),
+                    @Four(list={@Five("quote"), @Five("define")})}),
+                @Three("*define"),
                 @Three("else"),
                 @Three("*application")}),
             @Two("else"),
@@ -190,8 +197,7 @@ public class Evaluator {
         @One("lambda"),
         @One(list={@Two("e"), @Two("table")}),
         @One(list={
-            @Two(list={
-                @Three("expression-to-action"), @Three("e")}),
+            @Two(list={@Three("expression-to-action"), @Three("e")}),
             @Two("e"),
             @Two("table")})})
     public static class Meaning {}
@@ -457,6 +463,40 @@ public class Evaluator {
     @Zero("cond-lines-of")
     @Zero("tail")
     public static class CondLinesOf {}
+
+    /*
+     * Generated from:
+     *
+     * (define *define
+     *   (lambda (e table)
+     *     (meaning
+     *       (third e)
+     *       (extend-table
+     *         (new-entry
+     *           (list (first (second e)))
+     *           (list (second (second e))))
+     *         table))))
+     */
+    @Zero("define")
+    @Zero("*define")
+    @Zero(list={
+        @One("lambda"),
+        @One(list={@Two("e"), @Two("table")}),
+        @One(list={
+            @Two("meaning"),
+            @Two(list={@Three("third"), @Three("e")}),
+            @Two(list={
+                @Three("extend-table"),
+                @Three(list={
+                    @Four("new-entry"),
+                    @Four(list={
+                        @Five("list"),
+                        @Five(list={@Six("first"), @Six(list={@Seven("second"), @Seven("e")})})}),
+                    @Four(list={
+                        @Five("list"),
+                        @Five(list={@Six("second"), @Six(list={@Seven("second"), @Seven("e")})})})}),
+                @Three("table")})})})
+    public static class TypeDefine {}
 
     /*
      * Generated from:

@@ -42,4 +42,11 @@ public class MetaScriptTest {
         var actual = MetaScript.run(input);
         assertEquals(new Symbol("true"), actual);
     }
+
+    @Test
+    public void definePrimitive() {
+        var input = "(define (r 10) (add1 r))";
+        var actual = MetaScript.run(input);
+        assertEquals(11, actual);
+    }
 }

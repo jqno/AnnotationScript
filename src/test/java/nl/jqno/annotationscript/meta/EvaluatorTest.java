@@ -103,6 +103,7 @@ public class EvaluatorTest {
         @Zero(list={@One("define"), @One("*quote"), @One("'*quote'")})
         @Zero(list={@One("define"), @One("*lambda"), @One("'*lambda'")})
         @Zero(list={@One("define"), @One("*cond"), @One("'*cond'")})
+        @Zero(list={@One("define"), @One("*define"), @One("'*define'")})
         @Zero(list={@One("define"), @One("*application"), @One("'*application'")})
         @Zero(list={@One("list-to-action"), @One("e")})
         class Sut {}
@@ -373,6 +374,32 @@ public class EvaluatorTest {
             var initialValues = input("e", List.of(new Symbol("cond"), 1, 2, 3, 4), "table", table);
             var actual = run(Sut.class, initialValues);
             assertEquals("List(1, 2, 3, 4)List(1, 2, 3)", actual);
+        }
+    }
+
+    @Nested
+    class TypeDefine {
+        @Zero("begin")
+        @Zero(include=Helpers.class)
+        @Zero(include=Table.class)
+        @Zero(include=Evaluator.TypeDefine.class)
+        @Zero(list={
+            @One("define"),
+            @One("meaning"),
+            @One(list={
+                @Two("lambda"),
+                @Two(list={@Three("e"), @Three("table")}),
+                @Two(list={@Three("str/concat"), @Three("e"), @Three("' - '"), @Three("table")})})})
+        @Zero(list={@One("*define"), @One("e"), @One("table")})
+        class Sut {}
+
+        @Test
+        public void define() {
+            var initialValues = input(
+                "e", List.of("define", List.of("r", 10), List.of(new Symbol("r"))),
+                "table", List.empty());
+            var actual = run(Sut.class, initialValues);
+            assertEquals("List('r) - List(List(List(r), List(10)))", actual);
         }
     }
 
