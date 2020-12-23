@@ -474,7 +474,7 @@ public class Evaluator {
      *       (extend-table
      *         (new-entry
      *           (list (first (second e)))
-     *           (list (second (second e))))
+     *           (list (meaning (second (second e)))))
      *         table))))
      */
     @Zero("define")
@@ -494,7 +494,11 @@ public class Evaluator {
                         @Five(list={@Six("first"), @Six(list={@Seven("second"), @Seven("e")})})}),
                     @Four(list={
                         @Five("list"),
-                        @Five(list={@Six("second"), @Six(list={@Seven("second"), @Seven("e")})})})}),
+                        @Five(list={
+                            @Six("meaning"),
+                            @Six(list={
+                                @Seven("second"),
+                                @Seven(list={@Eight("second"), @Eight("e")})})})})}),
                 @Three("table")})})})
     public static class TypeDefine {}
 

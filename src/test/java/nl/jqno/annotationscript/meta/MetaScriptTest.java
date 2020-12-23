@@ -49,4 +49,11 @@ public class MetaScriptTest {
         var actual = MetaScript.run(input);
         assertEquals(11, actual);
     }
+
+    @Test
+    public void defineLambda() {
+        var input = "(define (f (lambda (n) (add1 n))) (f 10))";
+        var actual = MetaScript.run(input);
+        assertEquals(11, actual);
+    }
 }

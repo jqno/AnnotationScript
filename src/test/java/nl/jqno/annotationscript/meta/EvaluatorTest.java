@@ -399,7 +399,7 @@ public class EvaluatorTest {
                 "e", List.of("define", List.of("r", 10), List.of(new Symbol("r"))),
                 "table", List.empty());
             var actual = run(Sut.class, initialValues);
-            assertEquals("List('r) - List(List(List(r), List(10)))", actual);
+            assertEquals("List('r) - List(List(List(r), List(10 - List())))", actual);
         }
     }
 
