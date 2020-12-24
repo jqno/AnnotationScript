@@ -56,4 +56,11 @@ public class MetaScriptTest {
         var actual = MetaScript.run(input);
         assertEquals(11, actual);
     }
+
+    @Test
+    public void recursion() {
+        var input = "(define (recurse (lambda (n rec) (cond ((eq? n 0) 0) (else (add1 (rec (sub1 n) rec)))))) (recurse 10 recurse))";
+        var actual = MetaScript.run(input);
+        assertEquals(10, actual);
+    }
 }
