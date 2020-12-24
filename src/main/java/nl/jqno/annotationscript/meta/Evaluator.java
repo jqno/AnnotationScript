@@ -78,6 +78,7 @@ public class Evaluator {
      *       (= e (quote zero?)) *const
      *       (= e (quote add1)) *const
      *       (= e (quote sub1)) *const
+     *       (= e (quote mod)) *const
      *       (= e (quote number?)) *const
      *       else *identifier)))
      */
@@ -111,6 +112,8 @@ public class Evaluator {
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("add1")})}),
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("sub1")})}),
+            @Two("*const"),
+            @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("mod")})}),
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two("*const"),
@@ -671,6 +674,8 @@ public class Evaluator {
      *       (+ (first vals) 1)
      *       (= name (quote sub1))
      *       (- (first vals) 1)
+     *       (= name (quote mod))
+     *       (% (first vals) (second vals))
      *       (= name (quote number?))
      *       (number? (first vals)))))
      */
@@ -699,6 +704,8 @@ public class Evaluator {
             @Two(list={@Three("+"), @Three(list={@Four("first"), @Four("vals")}), @Three("1")}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("sub1")})}),
             @Two(list={@Three("-"), @Three(list={@Four("first"), @Four("vals")}), @Three("1")}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("mod")})}),
+            @Two(list={@Three("%"), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two(list={@Three("number?"), @Three(list={@Four("first"), @Four("vals")})})})})
     public static class ApplyPrimitive {}

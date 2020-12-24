@@ -657,6 +657,15 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void modulo() {
+            var initialValues = input(
+                "name", new Symbol("mod"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(2, actual);
+        }
+
+        @Test
         public void numberp() {
             var initialValues = input(
                 "name", new Symbol("number?"),
