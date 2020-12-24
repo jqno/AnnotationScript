@@ -30,6 +30,13 @@ public class MetaScriptTest {
     }
 
     @Test
+    public void emptyList() {
+        var input = "(cons (quote 1) (quote ()))";
+        var actual = MetaScript.run(input);
+        assertEquals(List.of(1), actual);
+    }
+
+    @Test
     public void lists() {
         var input = "(cons (car (quote (1 2 3))) (cdr (quote (a b c))))";
         var actual = MetaScript.run(input);
