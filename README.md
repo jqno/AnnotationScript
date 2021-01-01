@@ -4,6 +4,10 @@
 
 AnnotationScript is a functional, dynamically typed language that [starts numbering at zero](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html), and is contained within annotations placed on a Java class.
 
+Read why I built this ridiculous thing [on my blog](https://jqno.nl/post/2021/01/01/annotationscript-abusing-java-annotations-to-the-extreme/)!
+
+## A brief tutorial
+
 A top-level expression may look like this:
 
 ```java
