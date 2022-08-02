@@ -1,8 +1,6 @@
 ![AnnotationScript](https://github.com/jqno/AnnotationScript/workflows/AnnotationScript/badge.svg)
 
-# AnnotationScript
-
-<img src='annotationscript.png' alt='logo' width=200 height=200/>
+<img src='annotationscript.png' alt='logo' width=300/>
 
 AnnotationScript is a functional, dynamically typed language that [starts numbering at zero](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html), and is contained within annotations placed on a Java class.
 
