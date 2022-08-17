@@ -1,8 +1,10 @@
-package nl.jqno.annotationscript.demo;
+//DEPS com.github.jqno:AnnotationScript:main-SNAPSHOT
+package nl.jqno.annotationscript.demo.meta;
 
 import nl.jqno.annotationscript.meta.MetaScript;
 
-public class MetaFizzBuzz {
+public class FizzBuzz {
+
     public static void main(String[] args) {
         var fizzbuzz =
             "(define" +
@@ -20,7 +22,7 @@ public class MetaFizzBuzz {
             "          ((eq? i end) (quote ()))" +
             "          (else" +
             "            (cons (fizzbuzz i) (recurse (add1 i) end recurse))))))" +
-            "    (run 1 31 run)))";
+            "    (run 1 50 run)))";
         var output = MetaScript.run(fizzbuzz);
         System.out.println(output); // CHECKSTYLE OFF: Regexp
     }
