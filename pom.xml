@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nl.jqno.annotationscript</groupId>
@@ -26,8 +26,8 @@
     <properties>
         <encoding>UTF-8</encoding>
 
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
         <coverage.threshold>1.0</coverage.threshold>
     </properties>
@@ -37,7 +37,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.1.2</version>
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
@@ -46,7 +46,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>0.8.10</version>
                 <configuration>
                     <excludes>
                         <exclude>nl/jqno/annotationscript/demo/**/*</exclude>
@@ -92,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
                 <configuration>
                     <configLocation>checkstyle-config.xml</configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -112,7 +112,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> 
+            </plugin>
         </plugins>
     </build>
 
@@ -120,25 +120,25 @@
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
-            <version>0.10.3</version>
+            <version>0.10.4</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.2</version>
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-console</artifactId>
-            <version>1.6.2</version>
+            <version>1.10.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.4.1</version>
+            <version>3.15.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
