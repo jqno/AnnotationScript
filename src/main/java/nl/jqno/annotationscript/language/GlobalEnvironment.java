@@ -19,8 +19,8 @@ import nl.jqno.annotationscript.language.fn.Fn;
 
 public final class GlobalEnvironment {
     private static final List<Tuple2<Symbol, Fn>> GLOBAL = List.of(
-        builtin(TRUE.name, TRUE),
-        builtin(FALSE.name, FALSE),
+        builtin(TRUE.name(), TRUE),
+        builtin(FALSE.name(), FALSE),
         builtin("+", params -> params.foldLeft((Object)0, (acc, curr) -> wideningOp((x, y) -> x + y, acc, curr))),
         builtin("-", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp((x, y) -> x - y, acc, curr))),
         builtin("*", params -> params.foldLeft((Object)1, (acc, curr) -> wideningOp((x, y) -> x * y, acc, curr))),
@@ -165,7 +165,7 @@ public final class GlobalEnvironment {
             return Double.valueOf(i);
         }
         if (x instanceof Symbol s) {
-            return Double.valueOf(s.name);
+            return Double.valueOf(s.name());
         }
         return Double.valueOf(x.toString());
     }

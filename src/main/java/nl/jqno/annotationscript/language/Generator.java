@@ -32,7 +32,7 @@ public class Generator {
     }
 
     private String generateSymbol(Symbol exp, int level) {
-        return prefix(level) + "\"" + exp.name + "\")";
+        return prefix(level) + "\"" + exp.name() + "\")";
     }
 
     private String generateList(List<?> exp, int level) {

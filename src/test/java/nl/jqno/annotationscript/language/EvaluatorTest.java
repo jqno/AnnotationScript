@@ -16,8 +16,8 @@ public class EvaluatorTest {
 
     private final Evaluator sut = new Evaluator();
     private final Environment env = new Environment(HashMap.of(
-        TRUE, Fn.val(TRUE.name, TRUE),
-        FALSE, Fn.val(FALSE.name, FALSE),
+        TRUE, Fn.val(TRUE.name(), TRUE),
+        FALSE, Fn.val(FALSE.name(), FALSE),
         new Symbol("begin"), Fn.builtin("begin", params -> params.last()),
         new Symbol("pi"), Fn.val("pi", Math.PI),
         new Symbol("+"), Fn.builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + Double.valueOf(curr.toString())))

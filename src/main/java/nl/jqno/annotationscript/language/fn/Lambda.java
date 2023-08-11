@@ -25,7 +25,7 @@ public final class Lambda implements Fn {
     public Object evaluate(List<Object> arguments, Environment currentEnv, Evaluator evaluator) {
         var zero = currentEnv.merge(capturedEnv);
         var combinedEnv = params.zip(arguments)
-            .foldLeft(zero, (acc, curr) -> acc.add(curr._1, Fn.val(curr._1.name, curr._2)));
+            .foldLeft(zero, (acc, curr) -> acc.add(curr._1, Fn.val(curr._1.name(), curr._2)));
         return evaluator.eval(body, combinedEnv);
     }
 
