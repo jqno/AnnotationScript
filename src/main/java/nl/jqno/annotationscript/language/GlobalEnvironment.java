@@ -158,14 +158,14 @@ public final class GlobalEnvironment {
     }
 
     private static Double toDouble(Object x) {
-        if (x instanceof Double) {
-            return (Double)x;
+        if (x instanceof Double d) {
+            return d;
         }
-        if (x instanceof Integer) {
-            return Double.valueOf((Integer)x);
+        if (x instanceof Integer i) {
+            return Double.valueOf(i);
         }
-        if (x instanceof Symbol) {
-            return Double.valueOf(((Symbol)x).name);
+        if (x instanceof Symbol s) {
+            return Double.valueOf(s.name);
         }
         return Double.valueOf(x.toString());
     }
@@ -175,8 +175,8 @@ public final class GlobalEnvironment {
     }
 
     private static int toInt(Object x) {
-        if (x instanceof Double) {
-            return ((Double)x).intValue();
+        if (x instanceof Double d) {
+            return d.intValue();
         }
         return Integer.valueOf(x.toString());
     }
@@ -185,8 +185,8 @@ public final class GlobalEnvironment {
     private static Option<List<Object>> toList(Supplier<Object> object) {
         try {
             var supplied = object.get();
-            if (supplied instanceof List) {
-                return Option.some((List<Object>)supplied);
+            if (supplied instanceof List lst) {
+                return Option.some(lst);
             }
             return Option.none();
         }
@@ -205,7 +205,7 @@ public final class GlobalEnvironment {
     }
 
     private static Symbol toSymbol(Object x) {
-        return x instanceof Symbol ? (Symbol)x : null;
+        return x instanceof Symbol s ? s : null;
     }
 
     private static Object wideningOp(Function2<Double, Double, Object> op, Object x, Object y) {

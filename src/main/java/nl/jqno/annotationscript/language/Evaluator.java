@@ -37,7 +37,7 @@ public class Evaluator {
         if (exp.isEmpty()) {
             return Tuple.of(exp, env);
         }
-        var head = exp.head() instanceof Symbol ? symbolName(exp.head()) : "";
+        var head = exp.head() instanceof Symbol h ? symbolName(h) : "";
         switch (head) {
             case "if":
                 return evaluateIf(exp, env);
@@ -73,7 +73,7 @@ public class Evaluator {
     private Tuple2<Object, Environment> evaluateDefine(List<?> list, Environment env) {
         var symbol = (Symbol)list.get(1);
         var exp = evaluate(list.get(2), env)._1;
-        var fn = exp instanceof Fn ? (Fn)exp : Fn.val(symbol.name, exp);
+        var fn = exp instanceof Fn expFn ? expFn : Fn.val(symbol.name, exp);
         return Tuple.of(exp, env.add(symbol, fn));
     }
 
@@ -104,7 +104,7 @@ public class Evaluator {
         return !(x.equals(Symbol.FALSE) || x.equals(0) || x.equals(0.0));
     }
 
-    private String symbolName(Object symbol) {
-        return ((Symbol)symbol).name;
+    private String symbolName(Symbol symbol) {
+        return symbol.name;
     }
 }

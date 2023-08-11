@@ -11,14 +11,14 @@ public class Generator {
     }
 
     private String generate(Object exp, int level) {
-        if (exp instanceof List<?>) {
-            return generateList((List<?>)exp, level);
+        if (exp instanceof List<?> l) {
+            return generateList(l, level);
         }
-        if (exp instanceof Symbol) {
-            return generateSymbol(exp, level);
+        if (exp instanceof Symbol s) {
+            return generateSymbol(s, level);
         }
-        if (exp instanceof String) {
-            return generateString(exp, level);
+        if (exp instanceof String s) {
+            return generateString(s, level);
         }
         return generateAtom(exp, level);
     }
@@ -27,12 +27,12 @@ public class Generator {
         return prefix(level) + "\"" + exp + "\")";
     }
 
-    private String generateString(Object exp, int level) {
+    private String generateString(String exp, int level) {
         return prefix(level) + "\"'" + exp + "'\")";
     }
 
-    private String generateSymbol(Object exp, int level) {
-        return prefix(level) + "\"" + ((Symbol)exp).name + "\")";
+    private String generateSymbol(Symbol exp, int level) {
+        return prefix(level) + "\"" + exp.name + "\")";
     }
 
     private String generateList(List<?> exp, int level) {

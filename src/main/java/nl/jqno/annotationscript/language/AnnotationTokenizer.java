@@ -30,62 +30,48 @@ public class AnnotationTokenizer implements Tokenizer {
     }
 
     // CHECKSTYLE OFF: CyclomaticComplexity
-    // CHECKSTYLE OFF: ExecutableStatementCount
     // CHECKSTYLE OFF: NPathComplexity
     private List<String> tokenizeAnnotation(Annotation a) {
-        if (a instanceof Zero) {
-            Zero ann = (Zero)a;
+        if (a instanceof Zero ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), ann.export(), ann.list());
         }
-        if (a instanceof One) {
-            One ann = (One)a;
+        if (a instanceof One ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Two) {
-            Two ann = (Two)a;
+        if (a instanceof Two ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Three) {
-            Three ann = (Three)a;
+        if (a instanceof Three ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Four) {
-            Four ann = (Four)a;
+        if (a instanceof Four ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Five) {
-            Five ann = (Five)a;
+        if (a instanceof Five ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Six) {
-            Six ann = (Six)a;
+        if (a instanceof Six ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Seven) {
-            Seven ann = (Seven)a;
+        if (a instanceof Seven ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Eight) {
-            Eight ann = (Eight)a;
+        if (a instanceof Eight ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Nine) {
-            Nine ann = (Nine)a;
+        if (a instanceof Nine ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Ten) {
-            Ten ann = (Ten)a;
+        if (a instanceof Ten ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
         }
-        if (a instanceof Eleven) {
-            Eleven ann = (Eleven)a;
+        if (a instanceof Eleven ann) {
             return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, new Annotation[] {});
         }
         return tokenizeListOfAnnotations(((ProgramHolder)a).value());
     }
-    // CHECKSTYLE OFF: NPathComplexity
-    // CHECKSTYLE OFF: ExecutableStatementCount
-    // CHECKSTYLE OFF: CyclomaticComplexity
+    // CHECKSTYLE ON: NPathComplexity
+    // CHECKSTYLE ON: CyclomaticComplexity
 
     private List<String> tokenizeListOfAnnotations(Annotation[] list) {
         var tokenized = List.of(list).flatMap(this::tokenizeAnnotation);
