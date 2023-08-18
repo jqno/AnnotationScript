@@ -18,7 +18,6 @@ public class EvaluatorTest {
     private final Environment env = new Environment(HashMap.of(
         TRUE, Fn.val(TRUE.name(), TRUE),
         FALSE, Fn.val(FALSE.name(), FALSE),
-        new Symbol("begin"), Fn.builtin("begin", params -> params.last()),
         new Symbol("pi"), Fn.val("pi", Math.PI),
         new Symbol("+"), Fn.builtin("+", params -> params.foldLeft(0.0, (acc, curr) -> acc + Double.valueOf(curr.toString())))
     ));
@@ -194,6 +193,18 @@ public class EvaluatorTest {
     public void successfullyEvaluateEmptyList() {
         var actual = sut.eval(List.empty(), env);
         assertEquals(List.empty(), actual);
+    }
+
+    @Test
+    public void successfullyEvaluateBegin() {
+        // Kind of also tests define and proc, but here we want to see that all definitions are actually accounted for.
+        var expression = List.of(
+            new Symbol("begin"),
+            List.of(new Symbol("define"), new Symbol("x"), 4),
+            List.of(new Symbol("define"), new Symbol("y"), 6),
+            List.of(new Symbol("+"), new Symbol("x"), new Symbol("y")));
+        var actual = sut.eval(expression, env);
+        assertEquals(10.0, actual);
     }
 
     @Test

@@ -154,13 +154,6 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
-    public void begin() {
-        assertEquals(1, evaluate("begin", 1));
-        assertEquals("z", evaluate("begin", "x", "y", "z"));
-        assertEquals(new Symbol("z"), evaluate("begin", new Symbol("x"), new Symbol("y"), new Symbol("z")));
-    }
-
-    @Test
     public void cons() {
         assertEquals(List.of(42, 1, 2, 3), evaluate("cons", 42, List.of(1, 2, 3)));
         assertEquals(List.of(42), evaluate("cons", 42, List.empty()));
@@ -402,7 +395,7 @@ public class GlobalEnvironmentTest {
 
     @Test
     public void procedurep() {
-        assertEquals(TRUE, evaluate("procedure?", new Symbol("begin")));
+        assertEquals(TRUE, evaluate("procedure?", new Symbol("cons")));
         assertEquals(TRUE, evaluate("procedure?", new Symbol("+")));
         assertEquals(FALSE, evaluate("procedure?", new Symbol("pi")));
         assertEquals(FALSE, evaluate("procedure?", new Symbol("undefined-symbol")));

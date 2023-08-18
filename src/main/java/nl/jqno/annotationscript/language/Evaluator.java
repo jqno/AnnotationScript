@@ -12,6 +12,7 @@ public class Evaluator {
     }
 
     // CHECKSTYLE OFF: NPathComplexity
+    // CHECKSTYLE OFF: CyclomaticComplexity
     private Tuple2<Object, Environment> evaluate(Object exp, Environment env) {
         Object x = exp;
         Environment e = env;
@@ -26,7 +27,8 @@ public class Evaluator {
                 return Tuple.of(x, e);
             }
             else if (isForm("if", x)) {
-                return evaluateIf(x, e);
+                var t = evaluateIf(x, e);
+                x = t._1;
             }
             else if (isForm("cond", x)) {
                 return evaluateCond(x, e);
@@ -40,11 +42,17 @@ public class Evaluator {
             else if (isForm("quote", x)) {
                 return evaluateQuote(x, e);
             }
+            else if (isForm("begin", x)) {
+                var t = evaluateBegin(x, e);
+                x = t._1;
+                e = t._2;
+            }
             else {
                 return evaluateProc(x, e);
             }
         }
     }
+    // CHECKSTYLE ON: CyclomaticComplexity
     // CHECKSTYLE ON: NPathComplexity
 
     private Tuple2<Object, Environment> evaluateSymbol(Symbol exp, Environment env) {
@@ -63,7 +71,7 @@ public class Evaluator {
         var list = (List<?>)exp;
         var test = evaluate(list.get(1), env)._1;
         var branch = isTruthy(test) ? list.get(2) : list.get(3);
-        return Tuple.of(evaluate(branch, env)._1, env);
+        return Tuple.of(branch, env);
     }
 
     private Tuple2<Object, Environment> evaluateCond(Object exp, Environment env) {
@@ -96,6 +104,18 @@ public class Evaluator {
     private Tuple2<Object, Environment> evaluateQuote(Object exp, Environment env) {
         var list = (List<?>)exp;
         return Tuple.of(list.get(1), env);
+    }
+
+    private Tuple2<Object, Environment> evaluateBegin(Object exp, Environment env) {
+        var list = (List<?>)exp;
+        var evaluated = list
+            .tail()
+            .dropRight(1)
+            .foldLeft(Tuple.<List<Object>, Environment>of(List.empty(), env), (acc, curr) -> {
+                var result = evaluate(curr, acc._2);
+                return Tuple.of(acc._1.append(result._1), result._2);
+            });
+        return Tuple.of(list.last(), evaluated._2);
     }
 
     private Tuple2<Object, Environment> evaluateProc(Object exp, Environment env) {

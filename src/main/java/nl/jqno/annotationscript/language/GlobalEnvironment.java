@@ -37,7 +37,6 @@ public final class GlobalEnvironment {
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
         builtin("apply", (params, env, eval) -> toFn(params.get(0)).evaluate(toList(() -> params.get(1)).get(), env, eval)),
         builtin("atom?", params -> bool(isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0)))),
-        builtin("begin", params -> params.last()),
         builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
         builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
