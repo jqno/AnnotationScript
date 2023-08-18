@@ -11,15 +11,41 @@ public class Evaluator {
         return evaluate(exp, env)._1;
     }
 
+    // CHECKSTYLE OFF: NPathComplexity
     private Tuple2<Object, Environment> evaluate(Object exp, Environment env) {
-        if (exp instanceof Symbol) {
-            return evaluateSymbol((Symbol)exp, env);
+        Object x = exp;
+        Environment e = env;
+        while (true) {
+            if (isSymbol(x)) {
+                return evaluateSymbol((Symbol)x, e);
+            }
+            else if (isAtom(x)) {
+                return evaluateAtom(x, e);
+            }
+            else if (isEmptyList(x)) {
+                return Tuple.of(x, e);
+            }
+            else if (isForm("if", x)) {
+                return evaluateIf(x, e);
+            }
+            else if (isForm("cond", x)) {
+                return evaluateCond(x, e);
+            }
+            else if (isForm("define", x)) {
+                return evaluateDefine(x, e);
+            }
+            else if (isForm("lambda", x)) {
+                return evaluateLambda(x, e);
+            }
+            else if (isForm("quote", x)) {
+                return evaluateQuote(x, e);
+            }
+            else {
+                return evaluateProc(x, e);
+            }
         }
-        if (exp instanceof Integer || exp instanceof Double || exp instanceof String) {
-            return evaluateAtom(exp, env);
-        }
-        return evaluateList((List<?>)exp, env);
     }
+    // CHECKSTYLE ON: NPathComplexity
 
     private Tuple2<Object, Environment> evaluateSymbol(Symbol exp, Environment env) {
         var fn = env.lookup(exp);
@@ -33,34 +59,15 @@ public class Evaluator {
         return Tuple.of(exp, env);
     }
 
-    private Tuple2<Object, Environment> evaluateList(List<?> exp, Environment env) {
-        if (exp.isEmpty()) {
-            return Tuple.of(exp, env);
-        }
-        var head = exp.head() instanceof Symbol h ? symbolName(h) : "";
-        switch (head) {
-            case "if":
-                return evaluateIf(exp, env);
-            case "cond":
-                return evaluateCond(exp, env);
-            case "define":
-                return evaluateDefine(exp, env);
-            case "lambda":
-                return evaluateLambda(exp, env);
-            case "quote":
-                return evaluateQuote(exp, env);
-            default:
-                return evaluateProc(exp, env);
-        }
-    }
-
-    private Tuple2<Object, Environment> evaluateIf(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateIf(Object exp, Environment env) {
+        var list = (List<?>)exp;
         var test = evaluate(list.get(1), env)._1;
         var branch = isTruthy(test) ? list.get(2) : list.get(3);
         return Tuple.of(evaluate(branch, env)._1, env);
     }
 
-    private Tuple2<Object, Environment> evaluateCond(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateCond(Object exp, Environment env) {
+        var list = (List<?>)exp;
         var branch = list
             .drop(1)
             .sliding(2, 2)
@@ -70,25 +77,29 @@ public class Evaluator {
         return Tuple.of(evaluate(branch, env)._1, env);
     }
 
-    private Tuple2<Object, Environment> evaluateDefine(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateDefine(Object exp, Environment env) {
+        var list = (List<?>)exp;
         var symbol = (Symbol)list.get(1);
-        var exp = evaluate(list.get(2), env)._1;
-        var fn = exp instanceof Fn expFn ? expFn : Fn.val(symbol.name(), exp);
-        return Tuple.of(exp, env.add(symbol, fn));
+        var def = evaluate(list.get(2), env)._1;
+        var fn = def instanceof Fn expFn ? expFn : Fn.val(symbol.name(), def);
+        return Tuple.of(def, env.add(symbol, fn));
     }
 
-    private Tuple2<Object, Environment> evaluateLambda(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateLambda(Object exp, Environment env) {
+        var list = (List<?>)exp;
         var params = ((List<?>)list.get(1)).map(v -> (Symbol)v);
         var body = list.get(2);
         var result = Fn.lambda(params, body, env);
         return Tuple.of(result, env);
     }
 
-    private Tuple2<Object, Environment> evaluateQuote(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateQuote(Object exp, Environment env) {
+        var list = (List<?>)exp;
         return Tuple.of(list.get(1), env);
     }
 
-    private Tuple2<Object, Environment> evaluateProc(List<?> list, Environment env) {
+    private Tuple2<Object, Environment> evaluateProc(Object exp, Environment env) {
+        var list = (List<?>)exp;
         var fn = (Fn)evaluate(list.head(), env)._1;
         var args = list
             .tail()
@@ -100,11 +111,23 @@ public class Evaluator {
         return Tuple.of(fn.evaluate(args, env, this), env);
     }
 
-    private boolean isTruthy(Object x) {
-        return !(x.equals(Symbol.FALSE) || x.equals(0) || x.equals(0.0));
+    private boolean isSymbol(Object exp) {
+        return exp instanceof Symbol;
     }
 
-    private String symbolName(Symbol symbol) {
-        return symbol.name();
+    private boolean isAtom(Object exp) {
+        return exp instanceof Integer || exp instanceof Double || exp instanceof String;
+    }
+
+    private boolean isEmptyList(Object exp) {
+        return ((List<?>)exp).isEmpty();
+    }
+
+    private boolean isForm(String name, Object exp) {
+        return new Symbol(name).equals(((List<?>)exp).head());
+    }
+
+    private boolean isTruthy(Object exp) {
+        return !(exp.equals(Symbol.FALSE) || exp.equals(0) || exp.equals(0.0));
     }
 }
