@@ -31,7 +31,8 @@ public class Evaluator {
                 x = t._1;
             }
             else if (isForm("cond", x)) {
-                return evaluateCond(x, e);
+                var t = evaluateCond(x, e);
+                x = t._1;
             }
             else if (isForm("define", x)) {
                 return evaluateDefine(x, e);
@@ -82,7 +83,7 @@ public class Evaluator {
             .find(lst -> isTruthy(evaluate(lst.get(0), env)._1))
             .getOrElseThrow(() -> new EvaluationException("cond has no true branch"))
             .get(1);
-        return Tuple.of(evaluate(branch, env)._1, env);
+        return Tuple.of(branch, env);
     }
 
     private Tuple2<Object, Environment> evaluateDefine(Object exp, Environment env) {
