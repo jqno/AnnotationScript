@@ -39,6 +39,24 @@ public class LambdaTest {
     }
 
     @Test
+    public void getBody() {
+        Object actual = sut.getBody();
+
+        assertEquals(List.of(new Symbol("-"), new Symbol("x"), new Symbol("y")), actual);
+    }
+
+    @Test
+    public void combine() {
+        var env = new Environment(HashMap.of(new Symbol("PI"), Fn.val("pi", Math.PI)));
+
+        var actual = sut.combine(List.of(10.0, 4.0), env);
+
+        assertEquals(10.0, actual.lookup(new Symbol("x")).value());
+        assertEquals(4.0, actual.lookup(new Symbol("y")).value());
+        assertEquals(Math.PI, actual.lookup(new Symbol("PI")).value());
+    }
+
+    @Test
     public void tostring() {
         var actual = sut.toString();
         assertEquals("λ[('x,'y) → List('-, 'x, 'y)]", actual);

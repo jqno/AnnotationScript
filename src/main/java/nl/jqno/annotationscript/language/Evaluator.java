@@ -49,7 +49,17 @@ public class Evaluator {
                 e = t._2;
             }
             else {
-                return evaluateProc(x, e);
+                var t = evaluateProc(x, e);
+                var fn = t._1;
+                var args = t._2;
+
+                if (fn instanceof Lambda l) {
+                    x = l.getBody();
+                    e = l.combine(args, e);
+                }
+                else {
+                    return Tuple.of(fn.evaluate(args, e, this), e);
+                }
             }
         }
     }
@@ -119,17 +129,13 @@ public class Evaluator {
         return Tuple.of(list.last(), evaluated._2);
     }
 
-    private Tuple2<Object, Environment> evaluateProc(Object exp, Environment env) {
+    private Tuple2<Fn, List<Object>> evaluateProc(Object exp, Environment env) {
         var list = (List<?>)exp;
-        var fn = (Fn)evaluate(list.head(), env)._1;
-        var args = list
-            .tail()
-            .foldLeft(Tuple.<List<Object>, Environment>of(List.empty(), env), (acc, curr) -> {
-                var result = evaluate(curr, acc._2);
-                return Tuple.of(acc._1.append(result._1), result._2);
-            })
-            ._1;
-        return Tuple.of(fn.evaluate(args, env, this), env);
+        var exps = list.map(q -> evaluate(q, env)._1);
+        var fn = (Fn)exps.head();
+        var args = exps.tail();
+
+        return Tuple.of(fn, args);
     }
 
     private boolean isSymbol(Object exp) {
