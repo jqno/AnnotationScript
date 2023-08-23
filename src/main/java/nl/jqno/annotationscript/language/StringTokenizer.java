@@ -22,6 +22,7 @@ public class StringTokenizer implements Tokenizer {
         // we'll replace the character back to a normal space.
         var result = source
             .replace("\\ ", PUNCTUATION_SPACE)
+            .replace("\n", " ")
             .replace("(", " ( ")
             .replace(")", " ) ")
             .split(" ");

@@ -39,7 +39,11 @@ public class AnnotationScriptTest {
 
     @Test
     public void generateCalculation() {
-        var input = "(begin (define r 10) (* pi (* r r)))";
+        var input = """
+            (begin
+              (define r 10)
+              (* pi (* r r)))
+            """;
         var actual = AnnotationScript.generate(input);
         var expected = "@Zero(\"begin\")" +
             "@Zero(list={@One(\"define\"), @One(\"r\"), @One(\"10\")})" +

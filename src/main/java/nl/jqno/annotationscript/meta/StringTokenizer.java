@@ -8,14 +8,16 @@ import nl.jqno.annotationscript.Annotations.*;
  * Generated from:
  *
  * (define tokenize (lambda (input)
- *   (begin (define PUNCTUATION_SPACE '\\u2008')  
- *     (filter (lambda (s) (not (= s '')))  
- *       (map (lambda (s) (str/replace s PUNCTUATION_SPACE '\\ ')) 
- *         (str/split '\\ ' 
- *           (str/replace  
- *             (str/replace  
- *               (str/replace input '\\\\\\ ' PUNCTUATION_SPACE) 
- *             '[' '\\ [\\ ') 
+ *   (begin (define PUNCTUATION_SPACE '\\u2008')
+ *     (filter (lambda (s) (not (= s '')))
+ *       (map (lambda (s) (str/replace s PUNCTUATION_SPACE '\\ '))
+ *         (str/split '\\ '
+ *           (str/replace
+ *             (str/replace
+ *               (str/replace
+ *                 (str/replace input '\\\\\\ ' PUNCTUATION_SPACE)
+ *               '\\n' '\\ ')
+ *             '[' '\\ [\\ ')
  *           ']' '\\ ]\\ ')))))))
  *
  * NOTE: After generating, replace [ and ] literals above with ( and ) literals.
@@ -45,7 +47,9 @@ import nl.jqno.annotationscript.Annotations.*;
                     @Five("str/split"), @Five("' '"), @Five(list={
                         @Six("str/replace"), @Six(list={
                             @Seven("str/replace"), @Seven(list={
-                                @Eight("str/replace"), @Eight("input"), @Eight("'\\ '"), @Eight("PUNCTUATION_SPACE")}),
+                                @Eight("str/replace"), @Eight(list={
+                                    @Nine("str/replace"), @Nine("input"), @Nine("'\\ '"), @Nine("PUNCTUATION_SPACE")}),
+                                @Eight("'\n'"), @Eight("' '")}),
                             @Seven("'('"), @Seven("' ( '")}),
                         @Six("')'"), @Six("' ) '")})})})})})})
 public class StringTokenizer {}

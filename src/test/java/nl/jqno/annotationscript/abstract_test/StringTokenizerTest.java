@@ -25,6 +25,18 @@ public abstract class StringTokenizerTest {
     }
 
     @Test
+    public void tokenizeValidInputWithNewlines() {
+        var input = """
+            (if
+             1
+             'one'
+             )
+            """;
+        var actual = tokenize(input);
+        assertEquals(List.of("(", "if", "1", "'one'", ")"), actual);
+    }
+
+    @Test
     public void tokenizeRecursiveValidInput() {
         var input = "(begin (define r 10) (* pi (* r r)))";
         var actual = tokenize(input);
