@@ -5,6 +5,19 @@ package nl.jqno.annotationscript.demo;
 import nl.jqno.annotationscript.AnnotationScript;
 import nl.jqno.annotationscript.Annotations.*;
 
+/*
+ * Generated from:
+ *
+ * (begin
+ *   (define fizz-buzz
+ *     (lambda (n)
+ *       (cond
+ *         ((= (% n 15) 0) 'fizzbuzz')
+ *         ((= (% n 3) 0) 'fizz')
+ *         ((= (% n 5) 0) 'buzz')
+ *         (else n))))
+ *   (map println (map fizz-buzz (range 1 101))))
+ */
 @Zero("begin")
 @Zero(list={@One("define"), @One("fizz-buzz"), @One(list={@Two("lambda"), @Two(list=@Three("n")), @Two(list={
     @Three("cond"),

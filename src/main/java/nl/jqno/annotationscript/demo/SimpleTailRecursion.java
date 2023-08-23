@@ -13,6 +13,18 @@ import nl.jqno.annotationscript.Annotations.Zero;
 // Without tail call optimization, this demo throws a StackOverflowError after ~900 iterations on my machine.
 // With tail call optimization, it can run arbitrarily long. Try it!
 
+/*
+ * Generated from:
+ *
+ * (begin
+ *   (define loop
+ *     (lambda (n count)
+ *       (if
+ *         (= count n)
+ *         n
+ *         (loop n (+ count 1)))))
+ *   (println (loop 1000 0)))
+ */
 @Zero("begin")
 @Zero(list={
     @One("define"),

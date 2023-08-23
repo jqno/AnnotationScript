@@ -8,6 +8,18 @@ import nl.jqno.annotationscript.Annotations.*;
 @Zero(comment="Based on http://www.99-bottles-of-beer.net/language-clojure-2328.html")
 public class NinetyNineBottlesOfBeer {
 
+    /*
+     * Generated from:
+     *
+     * (define bottles-str
+     *   (lambda (n)
+     *     (str/concat
+     *       (cond
+     *         ((= 0 n) 'no more bottles')
+     *         ((= 1 n) '1 bottle')
+     *         (else (str/concat n ' bottles')))
+     *       ' of beer')))
+     */
     @Zero("define")
     @Zero("bottles-str")
     @Zero(list={@One("lambda"), @One(list=@Two("n")), @One(list={@Two("str/concat"),
@@ -18,6 +30,25 @@ public class NinetyNineBottlesOfBeer {
         @Two("' of beer'")})})
     public static class Bottles {}
 
+    /*
+     * Generated from:
+     *
+     * (define print-bottle
+     *   (lambda (n)
+     *     (begin
+     *       (println
+     *         (str/concat
+     *           (bottles-str n)
+     *           " on the wall, "
+     *           (bottles-str n)
+     *           "."))
+     *       (println
+     *         (str/concat
+     *           "Take one down and pass it around, "
+     *           (bottles-str (dec n))
+     *           " on the wall."))
+     *       (println))))
+     */
     @Zero("define")
     @Zero("print-bottle")
     @Zero(list={@One("lambda"), @One(list=@Two("n")), @One(list={
@@ -34,6 +65,20 @@ public class NinetyNineBottlesOfBeer {
         @Two(list={@Three("println")})})})
     public static class PrintBottle {}
 
+    /*
+     * Generated from:
+     *
+     * (define sing
+     *   (lambda (n)
+     *     (begin
+     *       (map print-bottle (reverse (range 1 (inc n))))
+     *       (println "No more bottles of beer on the wall, no more bottles of beer.")
+     *       (println
+     *         (str/concat
+     *           "Go to the store and buy some more, "
+     *           (bottles-str n)
+     *           " on the wall.")))))
+     */
     @Zero("define")
     @Zero("sing")
     @Zero(list={@One("lambda"), @One(list=@Two("n")), @One(list={
@@ -48,6 +93,15 @@ public class NinetyNineBottlesOfBeer {
             @Four("' on the wall.'")})})})})
     public static class Sing {}
 
+    /*
+     * Generated from:
+     *
+     * (begin
+     *   (include Bottles.class)
+     *   (include PrintBottle.class)
+     *   (include Sing.class)
+     *   (sing 99))
+     */
     @Zero("begin")
     @Zero(include=Bottles.class)
     @Zero(include=PrintBottle.class)

@@ -5,6 +5,11 @@ package nl.jqno.annotationscript.demo;
 import nl.jqno.annotationscript.AnnotationScript;
 import nl.jqno.annotationscript.Annotations.Zero;
 
+/*
+ * Generated from:
+ *
+ * (println 'Hello world!')
+ */
 @Zero("println")
 @Zero("'Hello world!'")
 public class HelloWorld {
