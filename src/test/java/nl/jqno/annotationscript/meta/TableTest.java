@@ -44,6 +44,7 @@ public class TableTest {
         private final Object entry = List.of(
             List.of("appetizer", "entree", "beverage"),
             List.of("pate", "boeuf", "vin"));
+
         @Test
         public void entree() {
             var initialValues = input("name", "entree", "entry", entry, "entry-f", IDENTITY);
