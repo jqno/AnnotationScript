@@ -145,12 +145,23 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void ascii() {
+        assertEquals(65, evaluate("ascii", "A"));
+        assertEquals(65, evaluate("ascii", "AB"));
+    }
+
+    @Test
     public void atomp() {
         assertEquals(TRUE, evaluate("atom?", 42));
         assertEquals(TRUE, evaluate("atom?", 42.0));
         assertEquals(TRUE, evaluate("atom?", "string"));
         assertEquals(TRUE, evaluate("atom?", new Symbol("symbol")));
         assertEquals(FALSE, evaluate("atom?", List.empty()));
+    }
+
+    @Test
+    public void chr() {
+        assertEquals("A", evaluate("chr", 65));
     }
 
     @Test
@@ -381,6 +392,11 @@ public class GlobalEnvironmentTest {
     @Test
     public void pi() {
         assertEquals(Math.PI, evaluate("pi"));
+    }
+
+    @Test
+    public void print() {
+        assertNull(evaluate("print", "We're just going to assume", "that this actually printed something"));
     }
 
     @Test

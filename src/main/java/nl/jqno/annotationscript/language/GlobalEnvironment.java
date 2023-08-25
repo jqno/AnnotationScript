@@ -36,7 +36,9 @@ public final class GlobalEnvironment {
         builtin("and", params -> bool(params.foldLeft(true, (acc, curr) -> acc && isTruthy(curr)))),
         builtin("append", params -> toList(() -> params.get(1)).map(l -> l.append(params.get(0))).getOrNull()),
         builtin("apply", (params, env, eval) -> toFn(params.get(0)).evaluate(toList(() -> params.get(1)).get(), env, eval)),
+        builtin("ascii", params -> (int)toString(params.get(0)).charAt(0)),
         builtin("atom?", params -> bool(isNumber(params.get(0)) || isString(params.get(0)) || isSymbol(params.get(0)))),
+        builtin("chr", params -> Character.toString((char)toInt(params.get(0)))),
         builtin("cons", params -> toList(() -> params.get(1)).map(l -> l.prepend(params.get(0))).getOrNull()),
         builtin("contains?", params -> bool(toList(() -> params.get(0)).get().contains(params.get(1)))),
         builtin("dec", params -> wideningOp((x, y) -> x - y, params.get(0), 1)),
@@ -82,6 +84,7 @@ public final class GlobalEnvironment {
             { try { return Integer.parseInt(toString(params.get(0))); } catch (NumberFormatException e) { return null; } }),
         builtin("pi", Math.PI),
         // CHECKSTYLE OFF: Regexp
+        builtin("print", params -> { System.out.print(params.map(p -> toString(p)).mkString(" ")); return null; }),
         builtin("println", params -> { System.out.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
         builtin("println-err", params -> { System.err.println(params.map(p -> toString(p)).mkString(" ")); return null; }),
         // CHECKSTYLE ON: Regexp
