@@ -666,6 +666,42 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void plus() {
+            var initialValues = input(
+                "name", new Symbol("+"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(8, actual);
+        }
+
+        @Test
+        public void minus() {
+            var initialValues = input(
+                "name", new Symbol("-"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(2, actual);
+        }
+
+        @Test
+        public void lessThan() {
+            var initialValues = input(
+                "name", new Symbol("<"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(new Symbol("#f"), actual);
+        }
+
+        @Test
+        public void greaterThan() {
+            var initialValues = input(
+                "name", new Symbol(">"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(new Symbol("#t"), actual);
+        }
+
+        @Test
         public void numberp() {
             var initialValues = input(
                 "name", new Symbol("number?"),
