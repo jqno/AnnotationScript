@@ -720,6 +720,15 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void length() {
+            var initialValues = input(
+                "name", new Symbol("length!"),
+                "vals", List.of(List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(4, actual);
+        }
+
+        @Test
         public void numberp() {
             var initialValues = input(
                 "name", new Symbol("number?"),

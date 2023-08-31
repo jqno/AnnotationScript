@@ -51,46 +51,54 @@ public class Brainfuck {
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
             )))
 
+            (define (execute
+              (lambda (state cmd)
+                (define (tape (car state))
+                (define (pointer (car (cdr state)))
+                (define (program-counter (car (cdr (cdr state))))
+                (define (output (car (cdr (cdr (cdr state)))))
+                (define (stack (car (cdr (cdr (cdr (cdr state))))))
+
+                (cond
+                  ((eq? cmd (quote >))
+                   (create-state tape (+ pointer 1) (+ program-counter 1) output stack))
+                  ((eq? cmd (quote <))
+                   (create-state tape (- pointer 1) (+ program-counter 1) output stack))
+                  ((eq? cmd (quote +))
+                   (create-state (update-nth! pointer (+ 1 (nth! pointer tape)) tape) pointer (+ program-counter 1) output stack))
+                  ((eq? cmd (quote -))
+                   (create-state (update-nth! pointer (- (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
+                  ((eq? cmd (quote .))
+                   (create-state tape pointer (+ program-counter 1) (cons (nth! pointer tape) output) stack))
+                  ((eq? cmd (quote [))
+                   (cond
+                     ((zero? (nth! pointer tape))
+                      (create-state tape pointer (🤪) output (cons program-counter stack)))
+                     (else
+                      (create-state tape pointer (+ program-counter 1) output (cons program-counter stack)))))
+                  ((eq? cmd (quote ]))
+                   (cond
+                     ((zero? (nth! pointer tape))
+                      (create-state tape pointer (+ program-counter 1) output (cdr stack)))
+                     (else
+                      (create-state tape pointer (+ 1 (car stack)) output (cdr stack)))))
+                  (else
+                   state)))))))))
+
+            (define (helper
+              (lambda (recurse prg state)
+                (define (program-counter (car (cdr (cdr state))))
+                (cond
+                  ((< program-counter (length! prg))
+                   (recurse recurse prg (execute state (nth! program-counter prg))))
+                  (else
+                   (car (cdr (cdr (cdr state)))))))))
+
             (define (bf-interpreter
               (lambda (prg)
-                (car (cdr (cdr (cdr
-                  (fold-left
-                    (lambda (state cmd)
-                      (define (tape (car state))
-                      (define (pointer (car (cdr state)))
-                      (define (program-counter (car (cdr (cdr state))))
-                      (define (output (car (cdr (cdr (cdr state)))))
-                      (define (stack (car (cdr (cdr (cdr (cdr state))))))
+                (helper helper prg (create-state initial-tape 0 0 (quote ()) (quote ())))))
 
-                      (cond
-                        ((eq? cmd (quote >))
-                         (create-state tape (+ pointer 1) (+ program-counter 1) output stack))
-                        ((eq? cmd (quote <))
-                         (create-state tape (- pointer 1) (+ program-counter 1) output stack))
-                        ((eq? cmd (quote +))
-                         (create-state (update-nth! pointer (+ 1 (nth! pointer tape)) tape) pointer (+ program-counter 1) output stack))
-                        ((eq? cmd (quote -))
-                         (create-state (update-nth! pointer (- (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
-                        ((eq? cmd (quote .))
-                         (create-state tape pointer (+ program-counter 1) (cons (nth! pointer tape) output) stack))
-                        ((eq? cmd (quote [))
-                         (cond
-                           ((zero? (nth! pointer tape))
-                            (create-state tape pointer (🤪) output (cons program-counter stack)))
-                           (else
-                            (create-state tape pointer (+ program-counter 1) output (cons program-counter stack)))))
-                        ((eq? cmd (quote ]))
-                         (cond
-                           ((zero? (nth! pointer tape))
-                            (create-state tape pointer (+ program-counter 1) output (cdr stack)))
-                           (else
-                            (create-state tape pointer (+ 1 (car stack)) output (cdr stack)))))
-                        (else
-                         state))))))))
-                    (create-state initial-tape 0 0 (quote ()) (quote ()))
-                    prg)))))))
-
-            (bf-interpreter program))))))
+            (bf-interpreter program))))))))
             """;
         var output = MetaScript.run(brainfuck);
         System.out.println(output); // CHECKSTYLE OFF: Regexp
