@@ -22,37 +22,6 @@ public class Brainfuck {
                     ((null? lst) init)
                     (else (recurse recurse func (func init (car lst)) (cdr lst))))))))
 
-            (define (reverse
-                (lambda (lst)
-                    (fold-left
-                      (lambda (acc elem)
-                        (cons elem acc))
-                      (quote ())
-                      lst)))
-
-            (define (nth
-                (lambda (n lst)
-                  (car (cdr
-                    (fold-left
-                      (lambda (acc elem)
-                        (cond
-                          ((eq? (car acc) n) (cons elem (cons elem (quote ()))))
-                          (else (cons (+ 1 (car acc)) (cons (car (cdr acc)) (quote ()))))))
-                      (cons 0 (cons 0 (quote ())))
-                      lst)))))
-
-            (define (update-nth
-                (lambda (n val lst)
-                  (reverse
-                    (car (cdr
-                      (fold-left
-                        (lambda (acc elem)
-                          (cond
-                            ((eq? (car acc) n) (cons (+ 1 (car acc)) (cons (cons val (car (cdr acc))) (quote ()))))
-                            (else (cons (+ 1 (car acc)) (cons (cons elem (car (cdr acc))) (quote ()))))))
-                        (cons 0 (cons (quote ()) (quote ())))
-                        lst))))))
-
             (define (create-state
               (lambda (tape pointer program-counter output stack)
                 (cons tape (cons pointer (cons program-counter (cons output (cons stack (quote ()))))))))
@@ -74,20 +43,20 @@ public class Brainfuck {
                         ((eq? cmd '<')
                          (create-state tape (- pointer 1) (+ program-counter 1) output stack))
                         ((eq? cmd '+')
-                         (create-state (update-nth pointer (+ 1 (nth pointer tape)) tape) pointer (+ program-counter 1) output stack))
+                         (create-state (update-nth! pointer (+ 1 (nth! pointer tape)) tape) pointer (+ program-counter 1) output stack))
                         ((eq? cmd '-')
-                         (create-state (update-nth pointer (- (nth pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
+                         (create-state (update-nth! pointer (- (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
                         ((eq? cmd '.')
-                         (create-state tape pointer (+ program-counter 1) (cons (nth pointer tape) output) stack))
+                         (create-state tape pointer (+ program-counter 1) (cons (nth! pointer tape) output) stack))
                         ((eq? cmd '[')
                          (cond
-                           ((zero? (nth pointer tape))
-                            (create-state tape pointer (nth (car stack) stack) output (cdr stack)))
+                           ((zero? (nth! pointer tape))
+                            (create-state tape pointer (nth! (car stack) stack) output (cdr stack)))
                            (else
                             (create-state tape pointer (+ program-counter 1) output (cons program-counter stack)))))
                         ((eq? cmd ']')
                          (cond
-                           ((zero? (nth pointer tape))
+                           ((zero? (nth! pointer tape))
                             (create-state tape pointer (+ program-counter 1) output (cdr stack)))
                            (else
                             (create-state tape pointer (car stack) output stack))))
@@ -120,7 +89,7 @@ public class Brainfuck {
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
             )))
 
-            (bf-interpreter program)))))))))
+            (bf-interpreter program))))))
             """;
         var output = MetaScript.run(brainfuck);
         System.out.println(output); // CHECKSTYLE OFF: Regexp
