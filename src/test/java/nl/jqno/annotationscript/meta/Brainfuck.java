@@ -51,7 +51,7 @@ public class Brainfuck {
 
             (define (bf-interpreter
               (lambda (prg)
-                (define (final-state
+                (car (cdr (cdr (cdr
                   (fold-left
                     (lambda (state cmd)
                       (define (tape (car state))
@@ -86,8 +86,7 @@ public class Brainfuck {
                         (else
                          state))))))))
                     (create-state tape 0 0 (quote ()) (quote ()))
-                    prg)))
-                (car (cdr (cdr (cdr final-state))))))
+                    prg)))))))
 
             (bf-interpreter program))))))
             """;
