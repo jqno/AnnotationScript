@@ -81,7 +81,7 @@ public class Brainfuck {
                      ((zero? (nth! pointer tape))
                       (create-state tape pointer (+ program-counter 1) output (cdr stack)))
                      (else
-                      (create-state tape pointer (+ (car stack) 1) output (cdr stack)))))
+                      (create-state tape pointer (car stack) output (cdr stack)))))
                   (else
                    state)))))))))
 
