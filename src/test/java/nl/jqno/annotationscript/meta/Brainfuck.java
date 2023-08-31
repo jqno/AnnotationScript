@@ -28,7 +28,7 @@ public class Brainfuck {
               (lambda (tape pointer program-counter output stack)
                 (cons tape (cons pointer (cons program-counter (cons output (cons stack (quote ()))))))))
 
-            (define (tape (quote (
+            (define (initial-tape (quote (
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -87,7 +87,7 @@ public class Brainfuck {
                             (create-state tape pointer (car stack) output stack))))
                         (else
                          state))))))))
-                    (create-state tape 0 0 (quote ()) (quote ()))
+                    (create-state initial-tape 0 0 (quote ()) (quote ()))
                     prg)))))))
 
             (bf-interpreter program))))))
