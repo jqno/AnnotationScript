@@ -65,7 +65,7 @@ public class Brainfuck {
                   ((eq? cmd (quote <))
                    (create-state tape (- pointer 1) (+ program-counter 1) output stack))
                   ((eq? cmd (quote +))
-                   (create-state (update-nth! pointer (+ 1 (nth! pointer tape)) tape) pointer (+ program-counter 1) output stack))
+                   (create-state (update-nth! pointer (+ (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
                   ((eq? cmd (quote -))
                    (create-state (update-nth! pointer (- (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
                   ((eq? cmd (quote .))
@@ -81,7 +81,7 @@ public class Brainfuck {
                      ((zero? (nth! pointer tape))
                       (create-state tape pointer (+ program-counter 1) output (cdr stack)))
                      (else
-                      (create-state tape pointer (+ 1 (car stack)) output (cdr stack)))))
+                      (create-state tape pointer (+ (car stack) 1) output (cdr stack)))))
                   (else
                    state)))))))))
 
