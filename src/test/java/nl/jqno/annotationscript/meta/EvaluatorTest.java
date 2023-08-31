@@ -720,12 +720,29 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void reverse() {
+            var initialValues = input(
+                "name", new Symbol("reverse!"),
+                "vals", List.of(List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(3, 2, 1, 0), actual);
+        }
+
+        @Test
         public void length() {
             var initialValues = input(
                 "name", new Symbol("length!"),
                 "vals", List.of(List.of(0, 1, 2, 3)));
             var actual = run(Sut.class, initialValues);
             assertEquals(4, actual);
+        }
+
+        @Test
+        public void println() {
+            var initialValues = input(
+                "name", new Symbol("println!"),
+                "vals", List.of(List.of('a', 's', 's', 'u', 'm', 'e', ' ', 'p', 'r', 'i', 'n', 't')));
+            run(Sut.class, initialValues);
         }
 
         @Test

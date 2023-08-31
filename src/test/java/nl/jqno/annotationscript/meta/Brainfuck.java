@@ -92,7 +92,7 @@ public class Brainfuck {
                   ((< program-counter (length! prg))
                    (recurse recurse prg (execute state (nth! program-counter prg))))
                   (else
-                   (car (cdr (cdr (cdr state)))))))))
+                   (reverse! (car (cdr (cdr (cdr state))))))))))
 
             (define (bf-interpreter
               (lambda (prg)

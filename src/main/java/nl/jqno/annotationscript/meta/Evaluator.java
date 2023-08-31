@@ -85,7 +85,9 @@ public class Evaluator {
      *       (= e (quote >)) *const
      *       (= e (quote nth!)) *const
      *       (= e (quote update-nth!)) *const
+     *       (= e (quote reverse!)) *const
      *       (= e (quote length!)) *const
+     *       (= e (quote println!)) *const
      *       (= e (quote number?)) *const
      *       else *identifier)))
      */
@@ -134,7 +136,11 @@ public class Evaluator {
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("update-nth!")})}),
             @Two("*const"),
+            @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("reverse!")})}),
+            @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("length!")})}),
+            @Two("*const"),
+            @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("println!")})}),
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two("*const"),
@@ -709,8 +715,12 @@ public class Evaluator {
      *       (nth (first vals) (second vals))
      *       (= name (quote update-nth!))
      *       (update-nth (first vals) (second vals) (third vals))
+     *       (= name (quote reverse!))
+     *       (reverse (first vals))
      *       (= name (quote length!))
      *       (length (first vals))
+     *       (= name (quote println!))
+     *       (println (first vals))
      *       (= name (quote number?))
      *       (number? (first vals)))))
      */
@@ -757,8 +767,12 @@ public class Evaluator {
                 @Three(list={@Four("first"), @Four("vals")}),
                 @Three(list={@Four("second"), @Four("vals")}),
                 @Three(list={@Four("third"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("reverse!")})}),
+            @Two(list={@Three("reverse"), @Three(list={@Four("first"), @Four("vals")})}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("length!")})}),
             @Two(list={@Three("length"), @Three(list={@Four("first"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("println!")})}),
+            @Two(list={@Three("println"), @Three(list={@Four("first"), @Four("vals")})}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two(list={@Three("number?"), @Three(list={@Four("first"), @Four("vals")})})})})
     public static class ApplyPrimitive {}
