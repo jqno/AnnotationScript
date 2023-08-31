@@ -61,23 +61,23 @@ public class Brainfuck {
                       (define (stack (car (cdr (cdr (cdr (cdr state))))))
 
                       (cond
-                        ((eq? cmd '>')
+                        ((eq? cmd (quote >))
                          (create-state tape (+ pointer 1) (+ program-counter 1) output stack))
-                        ((eq? cmd '<')
+                        ((eq? cmd (quote <))
                          (create-state tape (- pointer 1) (+ program-counter 1) output stack))
-                        ((eq? cmd '+')
+                        ((eq? cmd (quote +))
                          (create-state (update-nth! pointer (+ 1 (nth! pointer tape)) tape) pointer (+ program-counter 1) output stack))
-                        ((eq? cmd '-')
+                        ((eq? cmd (quote -))
                          (create-state (update-nth! pointer (- (nth! pointer tape) 1) tape) pointer (+ program-counter 1) output stack))
-                        ((eq? cmd '.')
+                        ((eq? cmd (quote .))
                          (create-state tape pointer (+ program-counter 1) (cons (nth! pointer tape) output) stack))
-                        ((eq? cmd '[')
+                        ((eq? cmd (quote [))
                          (cond
                            ((zero? (nth! pointer tape))
                             (create-state tape pointer (nth! (car stack) stack) output (cdr stack)))
                            (else
                             (create-state tape pointer (+ program-counter 1) output (cons program-counter stack)))))
-                        ((eq? cmd ']')
+                        ((eq? cmd (quote ]))
                          (cond
                            ((zero? (nth! pointer tape))
                             (create-state tape pointer (+ program-counter 1) output (cdr stack)))
