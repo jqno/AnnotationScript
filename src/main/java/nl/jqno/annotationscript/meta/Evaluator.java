@@ -83,6 +83,8 @@ public class Evaluator {
      *       (= e (quote -)) *const
      *       (= e (quote <)) *const
      *       (= e (quote >)) *const
+     *       (= e (quote nth!)) *const
+     *       (= e (quote update-nth!)) *const
      *       (= e (quote number?)) *const
      *       else *identifier)))
      */
@@ -126,6 +128,10 @@ public class Evaluator {
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("<")})}),
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four(">")})}),
+            @Two("*const"),
+            @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("nth!")})}),
+            @Two("*const"),
+            @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("update-nth!")})}),
             @Two("*const"),
             @Two(list={@Three("="), @Three("e"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two("*const"),
@@ -696,6 +702,10 @@ public class Evaluator {
      *       (< (first vals) (second vals))
      *       (= name (quote >))
      *       (> (first vals) (second vals))
+     *       (= name (quote nth!))
+     *       (nth (first vals) (second vals))
+     *       (= name (quote update-nth!))
+     *       (update-nth (first vals) (second vals) (third vals))
      *       (= name (quote number?))
      *       (number? (first vals)))))
      */
@@ -734,6 +744,14 @@ public class Evaluator {
             @Two(list={@Three("<"), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four(">")})}),
             @Two(list={@Three(">"), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("nth!")})}),
+            @Two(list={@Three("nth"), @Three(list={@Four("first"), @Four("vals")}), @Three(list={@Four("second"), @Four("vals")})}),
+            @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("update-nth!")})}),
+            @Two(list={
+                @Three("update-nth"),
+                @Three(list={@Four("first"), @Four("vals")}),
+                @Three(list={@Four("second"), @Four("vals")}),
+                @Three(list={@Four("third"), @Four("vals")})}),
             @Two(list={@Three("="), @Three("name"), @Three(list={@Four("quote"), @Four("number?")})}),
             @Two(list={@Three("number?"), @Three(list={@Four("first"), @Four("vals")})})})})
     public static class ApplyPrimitive {}

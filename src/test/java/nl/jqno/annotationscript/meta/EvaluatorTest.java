@@ -702,6 +702,24 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void nth() {
+            var initialValues = input(
+                "name", new Symbol("nth!"),
+                "vals", List.of(2, List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(2, actual);
+        }
+
+        @Test
+        public void updateNth() {
+            var initialValues = input(
+                "name", new Symbol("update-nth!"),
+                "vals", List.of(2, 42, List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(0, 1, 42, 3), actual);
+        }
+
+        @Test
         public void numberp() {
             var initialValues = input(
                 "name", new Symbol("number?"),
