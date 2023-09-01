@@ -9,6 +9,8 @@ import nl.jqno.annotationscript.meta.MetaScript;
  * just for use in this program.
  *
  * As a consequence, though, it's fast enough to use in demos 😉
+ *
+ * Note that the `,` input operation is not supported.
  */
 public class Brainfuck {
 
