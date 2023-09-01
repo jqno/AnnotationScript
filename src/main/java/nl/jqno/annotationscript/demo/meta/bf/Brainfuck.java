@@ -12,7 +12,7 @@ import nl.jqno.annotationscript.meta.MetaScript;
  */
 public class Brainfuck {
 
-    public void main() {
+    public static void main(String[] args) {
         var brainfuck = """
             (define (program (quote (
                 > + + + + + + + + + [ < + + + + + + + + > - ] < . > + + + + + + + [ < + + + + > - ] < + . + + + + + + + . . + + + . > > > +
