@@ -32,8 +32,24 @@ public class Brainfuck {
 
             (define (initial-tape (quote (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)))
 
+            (define (find-corresponding-bracket-helper
+              (lambda (recurse counter program-counter prg)
+                (cond
+                  ((zero? counter)
+                   program-counter)
+                  ((eq? (nth! program-counter prg) (quote [))
+                   (recurse recurse (+ counter 1) (+ program-counter 1) prg))
+                  ((eq? (nth! program-counter prg) (quote ]))
+                   (recurse recurse (- counter 1) (+ program-counter 1) prg))
+                  (else
+                   (recurse recurse counter (+ program-counter 1) prg)))))
+
+            (define (find-corresponding-bracket
+              (lambda (prg program-counter)
+                (find-corresponding-bracket-helper find-corresponding-bracket-helper 1 (+ program-counter 1) prg)))
+
             (define (execute
-              (lambda (state cmd)
+              (lambda (state cmd prg)
                 (define (tape (car state))
                 (define (pointer (car (cdr state)))
                 (define (program-counter (car (cdr (cdr state))))
@@ -54,7 +70,7 @@ public class Brainfuck {
                   ((eq? cmd (quote [))
                    (cond
                      ((zero? (nth! pointer tape))
-                      (create-state tape pointer (🤪) output (cons program-counter stack)))
+                      (create-state tape pointer (find-corresponding-bracket prg program-counter) output (cons program-counter stack)))
                      (else
                       (create-state tape pointer (+ program-counter 1) output (cons program-counter stack)))))
                   ((eq? cmd (quote ]))
@@ -66,20 +82,20 @@ public class Brainfuck {
                   (else
                    state)))))))))
 
-            (define (helper
+            (define (bf-interpreter-helper
               (lambda (recurse prg state)
                 (define (program-counter (car (cdr (cdr state))))
                 (cond
                   ((< program-counter (length! prg))
-                   (recurse recurse prg (execute state (nth! program-counter prg))))
+                   (recurse recurse prg (execute state (nth! program-counter prg) prg)))
                   (else
                    (reverse! (car (cdr (cdr (cdr state))))))))))
 
             (define (bf-interpreter
               (lambda (prg)
-                (helper helper prg (create-state initial-tape 0 0 (quote ()) (quote ())))))
+                (bf-interpreter-helper bf-interpreter-helper prg (create-state initial-tape 0 0 (quote ()) (quote ())))))
 
-            (bf-interpreter program))))))))
+            (bf-interpreter program))))))))))
             """;
         var output = MetaScript.run(brainfuck);
         System.out.println(output); // CHECKSTYLE OFF: Regexp
