@@ -342,6 +342,12 @@ public class GlobalEnvironmentTest {
     }
 
     @Test
+    public void nth() {
+        assertEquals(2, evaluate("nth", 2, List.of(0, 1, 2, 3)));
+        assertNull(evaluate("nth", 9, List.of(0, 1, 2, 3)));
+    }
+
+    @Test
     public void null_() {
         assertNull(evaluate("null"));
     }
@@ -549,6 +555,12 @@ public class GlobalEnvironmentTest {
     public void throwException() {
         var rte = assertThrows(RuntimeException.class, () -> evaluate("throw", "some-exception"));
         assertEquals("some-exception", rte.getMessage());
+    }
+
+    @Test
+    public void updateNth() {
+        assertEquals(List.of(0, 1, 42, 3), evaluate("update-nth", 2, 42, List.of(0, 1, 2, 3)));
+        assertEquals(List.of(0, 1, 2, 3), evaluate("update-nth", 9, 42, List.of(0, 1, 2, 3)));
     }
 
     private Object evaluate(String symbol, Object... params) {

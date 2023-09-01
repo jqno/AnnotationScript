@@ -74,6 +74,10 @@ public final class GlobalEnvironment {
         builtin("max", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::max, acc, curr))),
         builtin("min", params -> params.tail().foldLeft(params.head(), (acc, curr) -> wideningOp(Math::min, acc, curr))),
         builtin("not", params -> bool(!isTruthy(params.get(0)))),
+        builtin("nth", params -> toList(() -> params.get(1)).map(l -> {
+            int i = toInt(params.get(0));
+            return i < l.size() ? l.get(i) : null;
+        }).getOrNull()),
         builtin("null", (Object)null),
         builtin("null?", params -> bool(params.get(0) == null)),
         builtin("number?", params -> bool(isNumber(params.get(0)))),
@@ -109,7 +113,11 @@ public final class GlobalEnvironment {
         builtin("symbol", params -> new Symbol(toString(params.get(0)))),
         builtin("symbol?", params -> bool(isSymbol(params.get(0)))),
         builtin("tail", params -> toList(() -> params.get(0)).map(l -> !l.isEmpty() ? l.tail() : List.empty()).getOrNull()),
-        builtin("throw", params -> { throw new RuntimeException(toString(params.get(0))); })
+        builtin("throw", params -> { throw new RuntimeException(toString(params.get(0))); }),
+        builtin("update-nth", params -> toList(() -> params.get(2)).map(l -> {
+            int i = toInt(params.get(0));
+            return i < l.size() ? l.update(i, params.get(1)) : l;
+        }).getOrNull())
     );
 
     public static Environment build() {

@@ -666,6 +666,86 @@ public class EvaluatorTest {
         }
 
         @Test
+        public void plus() {
+            var initialValues = input(
+                "name", new Symbol("+"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(8, actual);
+        }
+
+        @Test
+        public void minus() {
+            var initialValues = input(
+                "name", new Symbol("-"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(2, actual);
+        }
+
+        @Test
+        public void lessThan() {
+            var initialValues = input(
+                "name", new Symbol("<"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(new Symbol("#f"), actual);
+        }
+
+        @Test
+        public void greaterThan() {
+            var initialValues = input(
+                "name", new Symbol(">"),
+                "vals", List.of(5, 3));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(new Symbol("#t"), actual);
+        }
+
+        @Test
+        public void nth() {
+            var initialValues = input(
+                "name", new Symbol("nth!"),
+                "vals", List.of(2, List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(2, actual);
+        }
+
+        @Test
+        public void updateNth() {
+            var initialValues = input(
+                "name", new Symbol("update-nth!"),
+                "vals", List.of(2, 42, List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(0, 1, 42, 3), actual);
+        }
+
+        @Test
+        public void reverse() {
+            var initialValues = input(
+                "name", new Symbol("reverse!"),
+                "vals", List.of(List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(List.of(3, 2, 1, 0), actual);
+        }
+
+        @Test
+        public void length() {
+            var initialValues = input(
+                "name", new Symbol("length!"),
+                "vals", List.of(List.of(0, 1, 2, 3)));
+            var actual = run(Sut.class, initialValues);
+            assertEquals(4, actual);
+        }
+
+        @Test
+        public void println() {
+            var initialValues = input(
+                "name", new Symbol("println!"),
+                "vals", List.of(List.of('a', 's', 's', 'u', 'm', 'e', ' ', 'p', 'r', 'i', 'n', 't')));
+            run(Sut.class, initialValues);
+        }
+
+        @Test
         public void numberp() {
             var initialValues = input(
                 "name", new Symbol("number?"),
