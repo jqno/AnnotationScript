@@ -23,7 +23,7 @@ public class FizzBuzz {
                       ((eq? i end) (quote ()))
                       (else
                         (cons (fizzbuzz i) (recurse (add1 i) end recurse))))))
-                (run 1 50 run)))
+                (run 1 101 run)))
             """;
         var output = MetaScript.run(fizzbuzz);
         System.out.println(output); // CHECKSTYLE OFF: Regexp
