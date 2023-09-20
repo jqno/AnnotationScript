@@ -23,6 +23,8 @@ import nl.jqno.annotationscript.Annotations.Zero;
  *        (lambda (f)
  *          (le (lambda (x) ((f f) x)))))))
  *
+ *
+ *
  *   -- The example from The Little Schemer
  *   (define length-fn
  *     (lambda (length)
@@ -32,6 +34,20 @@ import nl.jqno.annotationscript.Annotations.Zero;
  *           else (+ 1 (length (tail l)))))))
  *
  *   (println ((Y length-fn) (quote (1 2 3 4 5))))
+ *
+ *
+ *
+ *   -- The sum example from the presentation
+ *   (define sum-fn
+ *     (lambda (sum)
+ *       (lambda (n)
+ *         (cond
+ *           ((= n 0) 0)
+ *           (else (+ n (sum (- n 1))))))))
+ *
+ *   (println ((Y sum-fn) 4))
+ *
+ *
  *
  *   -- The example from the SimpleTailRecursion demo in this repo
  *   (define loop-fn
@@ -69,6 +85,8 @@ public class YCombinator {
                                 @Seven("x")})})})})})})})
     public static class Y {}
 
+
+
     @Zero("begin")
     @Zero(list={
         @One("define"),
@@ -97,6 +115,38 @@ public class YCombinator {
                 @Three(list={@Four("1"), @Four("2"), @Four("3"), @Four("4"), @Four("5")})})})})
     public static class TheLittleSchemerExample {}
 
+
+
+    @Zero("begin")
+    @Zero(list={
+        @One("define"),
+        @One("sum-fn"),
+        @One(list={
+            @Two("lambda"),
+            @Two(list={@Three("sum")}),
+            @Two(list={
+                @Three("lambda"),
+                @Three(list={@Four("n")}),
+                @Three(list={
+                    @Four("cond"),
+                    @Four(list={@Five("="), @Five("n"), @Five("0")}),
+                    @Four("0"),
+                    @Four("else"),
+                    @Four(list={
+                        @Five("+"),
+                        @Five("n"),
+                        @Five(list={@Six("sum"), @Six(list={@Seven("-"), @Seven("n"), @Seven("1")})})})})})})})
+    @Zero(list={
+        @One("println"),
+        @One(list={
+            @Two(list={@Three("Y"), @Three("sum-fn")}),
+            @Two(list={
+                @Three("quote"),
+                @Three("4")})})})
+    public static class SumExample {}
+
+
+
     @Zero("begin")
     @Zero(list={
         @One("define"),
@@ -119,11 +169,16 @@ public class YCombinator {
             @Two("1000")})})
     public static class SimpleTailRecursionExample {}
 
+
+
     @Zero("begin")
     @Zero(include=Y.class)
     @Zero(include=TheLittleSchemerExample.class)
+    @Zero(include=SumExample.class)
     @Zero(include=SimpleTailRecursionExample.class)
     public static class YCombinatorExample {}
+
+
 
     public static void main(String...args) {
         AnnotationScript.run(YCombinatorExample.class);
