@@ -31,45 +31,24 @@ public class AnnotationTokenizer implements Tokenizer {
 
     // CHECKSTYLE OFF: CyclomaticComplexity
     // CHECKSTYLE OFF: NPathComplexity
-    private List<String> tokenizeAnnotation(Annotation a) {
-        if (a instanceof Zero ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), ann.export(), ann.list());
-        }
-        if (a instanceof One ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Two ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Three ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Four ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Five ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Six ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Seven ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Eight ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Nine ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Ten ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, ann.list());
-        }
-        if (a instanceof Eleven ann) {
-            return tokenizeSingleAnnotation(ann.value(), ann.include(), NONE, new Annotation[] {});
-        }
-        return tokenizeListOfAnnotations(((ProgramHolder)a).value());
+    private List<String> tokenizeAnnotation(Annotation annotation) {
+        return switch (annotation) {
+            case Zero a   -> tokenizeSingleAnnotation(a.value(), a.include(), a.export(), a.list());
+            case One a    -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Two a    -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Three a  -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Four a   -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Five a   -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Six a    -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Seven a  -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Eight a  -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Nine a   -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Ten a    -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, a.list());
+            case Eleven a -> tokenizeSingleAnnotation(a.value(), a.include(), NONE, new Annotation[] {});
+            default       -> tokenizeListOfAnnotations(((ProgramHolder) annotation).value());
+        };
     }
+    //
     // CHECKSTYLE ON: NPathComplexity
     // CHECKSTYLE ON: CyclomaticComplexity
 

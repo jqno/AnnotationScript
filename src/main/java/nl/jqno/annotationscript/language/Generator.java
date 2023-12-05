@@ -11,16 +11,12 @@ public class Generator {
     }
 
     private String generate(Object exp, int level) {
-        if (exp instanceof List<?> l) {
-            return generateList(l, level);
-        }
-        if (exp instanceof Symbol s) {
-            return generateSymbol(s, level);
-        }
-        if (exp instanceof String s) {
-            return generateString(s, level);
-        }
-        return generateAtom(exp, level);
+        return switch(exp) {
+            case List<?> l -> generateList(l, level);
+            case Symbol s  -> generateSymbol(s, level);
+            case String s  -> generateString(s, level);
+            default        -> generateAtom(exp, level);
+        };
     }
 
     private String generateAtom(Object exp, int level) {
