@@ -6,6 +6,13 @@ AnnotationScript is a functional, dynamically typed language that [starts number
 
 Read why I built this ridiculous thing [on my blog](https://jqno.nl/post/2021/01/01/annotationscript-abusing-java-annotations-to-the-extreme/)!
 
+## Running the demos from the command line
+
+The easiest way to run the demos if from the IDE, but that would be no fun. Using Java 22 or higher, you can do this instead:
+
+- Run `mvn dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeScope=runtime`<br>This copies the dependencies into `target/lib` folder.
+- Run `java -cp "target/lib/*" src/main/java/nl/jqno/annotationscript/demo/<demofile>.java`<br>This compiles and runs the demo.
+
 ## A brief tutorial
 
 A top-level expression may look like this:
@@ -160,4 +167,3 @@ public class Example {
 ```
 
 This program prints `3`.
-

@@ -1,5 +1,3 @@
-//REPOS jitpack
-//DEPS com.github.jqno:AnnotationScript:main-SNAPSHOT
 package nl.jqno.annotationscript.demo.meta;
 
 import nl.jqno.annotationscript.meta.MetaScript;
